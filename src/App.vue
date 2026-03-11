@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="route.path != '/'">
+  <nav>
     <div class="title-frame">
       <img src="./assets/img/logo.png" />
       <div class="title">舊衣回收平台</div>
@@ -50,7 +50,7 @@ body {
 }
 
 nav {
-  background-color: #e7e9e6;
+  /* background-color: #e7e9e6; */
   padding: 20px;
   display: flex;
   justify-content: space-between;
