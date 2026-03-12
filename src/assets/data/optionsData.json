@@ -1,0 +1,32 @@
+[
+    {
+      "name": "全部",
+      "label": "all",
+      "click": false
+    },
+    {
+      "name": "上衣",
+      "label": "cloth",
+      "click": false
+    },
+    {
+      "name": "褲子",
+      "label": "pants",
+      "click": false
+    },
+    {
+      "name": "裙子",
+      "label": "skirt",
+      "click": false
+    },
+    {
+      "name": "外套",
+      "label": "coat",
+      "click": false
+    },
+    {
+      "name": "鞋子",
+      "label": "shoes",
+      "click": false
+    }
+]

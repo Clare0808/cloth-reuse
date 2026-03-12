@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="route.path != '/'">
+  <nav>
     <div class="title-frame">
       <img src="./assets/img/logo.png" />
       <div class="title">舊衣回收平台</div>
@@ -50,7 +50,6 @@ body {
 }
 
 nav {
-  background-color: #e7e9e6;
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -61,6 +60,12 @@ nav a {
   font-size: 22px;
   text-decoration: none;
   margin: 20px;
+  display: inline-block; // 讓動畫生效
+  transition: all 0.3s ease;
+}
+nav a:hover {
+  color: #849c7d;
+  transform: scale(1.1);
 }
 .title-frame {
   display: flex;
