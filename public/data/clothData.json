@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "火影忍者T-shirt",
+    "description": "全新未穿過的。",
+    "size": "M",
+    "image": "/img/cloth/火影忍者T-shirt.jpg",
+    "place": "台北市信義區xx路",
+    "time": "9:00~11:00 AM",
+    "category": "cloth"
+  },
+  {
+    "id": 2,
+    "name": "黑色T-shirt",
+    "description": "部分區域有些髒污，9成新。",
+    "size": "L",
+    "image": "/img/cloth/黑色T-shirt.jpg",
+    "place": "新北市板橋路xx路",
+    "time": "3:00~7:00 PM",
+    "category": "cloth"
+  },
+  {
+    "id": 3,
+    "name": "7分牛仔褲",
+    "description": "長度約到膝蓋，基本沒有穿過，有需要請申請!",
+    "size": "M",
+    "image": "/img/cloth/7分牛仔褲.jpg",
+    "place": "台北市信義區xx路",
+    "time": "9:00~11:00 AM",
+    "category": "pants"
+  },
+  {
+    "id": 4,
+    "name": "黑色長裙",
+    "description": "僅試穿過一次，是全新的!",
+    "size": "S",
+    "image": "/img/cloth/黑色長裙.jpg",
+    "place": "新北市板橋路xx路",
+    "time": "3:00~7:00 PM",
+    "category": "skirt"
+  },
+  {
+    "id": 5,
+    "name": "棕色外套",
+    "description": "穿過幾次，有些髒污，7成新。",
+    "size": "L",
+    "image": "/img/cloth/棕色外套.jpg",
+    "place": "台北市信義區xx路",
+    "time": "9:00~11:00 AM",
+    "category": "coat"
+  },
+  {
+    "id": 6,
+    "name": "黑色運動鞋",
+    "description": "僅試穿過一次，是全新的!",
+    "size": "23.5",
+    "image": "/img/cloth/黑色運動鞋.jpg",
+    "place": "新北市板橋路xx路",
+    "time": "3:00~7:00 PM",
+    "category": "shoes"
+  }
+]

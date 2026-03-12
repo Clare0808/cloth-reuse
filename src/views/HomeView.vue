@@ -92,14 +92,13 @@
           </div>
         </div>
         <div class="review-content">
-          Le Savor
-          的料理讓我在家也能享受餐廳級的美味，服務也非常貼心，強烈推薦！
+          以前不知道舊衣要丟哪裡，現在用這個網站就能快速找到回收點，讓衣服有第二次生命。
         </div>
         <div class="review-author-info">
           <i class="fa-solid fa-user"></i>
           <div class="review-text-frame">
             <div class="review-author-name">張小姐</div>
-            <div class="review-author-date">2025/10/30</div>
+            <div class="review-author-date">2026-03-12</div>
           </div>
         </div>
       </div>
@@ -123,7 +122,7 @@
 import { ref, onMounted } from "vue";
 
 export default {
-  name: "HomeView",
+  name: "HomePage",
   setup() {
     const showEle = ref(false);
 
