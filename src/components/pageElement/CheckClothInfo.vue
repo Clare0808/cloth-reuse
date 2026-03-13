@@ -4,10 +4,13 @@
     <div class="info-box">
       <img :src="selectedCloth.image" />
       <div class="cloth-info-frame">
-        <div class="cloth-name">{{ selectedCloth.name }}</div>
+        <div class="title-frame">
+          <div class="cloth-name">{{ selectedCloth.name }}</div>
+          <i class="fa-solid fa-heart"></i>
+        </div>
         <div class="cloth-info">類型: {{ selectedCloth.size }}</div>
         <div class="cloth-info">尺寸: {{ selectedCloth.size }}</div>
-        <div class="cloth-info">服飾狀況: {{ selectedCloth.description }}</div>
+        <div class="cloth-dis">服飾狀況: {{ selectedCloth.description }}</div>
         <div class="cloth-info">取衣地點: {{ selectedCloth.place }}</div>
         <div class="cloth-info">取衣時間: {{ selectedCloth.time }}</div>
       </div>
@@ -52,20 +55,41 @@ export default {
   width: 100%;
   text-align: left;
   display: flex;
+  grid-template-columns: 35% 65%;
+  gap: 30px;
   justify-content: center;
   align-items: center;
 }
+.cloth-info-frame {
+  width: 100%;
+}
 img {
-  width: 300px;
-  margin-right: 50px;
+  width: 280px;
+}
+.title-frame {
+  width: 100%;
+  border-bottom: 1px solid #3b5131;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title-frame i {
+  color: #849c7d;
+  font-size: 22px;
+  transition: all 0.3s ease;
+}
+.title-frame i:hover {
+  color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 .cloth-name {
   font-size: 30px;
-  border-bottom: 1px solid #3b5131;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
 }
-.cloth-info {
+.cloth-info,
+.cloth-dis {
   font-size: 20px;
   margin: 10px 0;
 }

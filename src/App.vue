@@ -18,6 +18,7 @@
       <router-link to="/user">
         <i class="fa-solid fa-user"></i>
       </router-link>
+      <router-link to="/login" class="login-sign-btn">登入/註冊 </router-link>
     </div>
   </nav>
   <router-view />
@@ -50,7 +51,7 @@ body {
 }
 
 nav {
-  padding: 20px;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -84,5 +85,23 @@ nav a:hover {
 .func-icon a {
   font-size: 20px;
   margin: 10px;
+}
+.login-sign-btn {
+  width: 120px;
+  height: 40px;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  line-height: 40px;
+  background-color: #849c7d;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.login-sign-btn:hover {
+  color: #ffffff;
+  background-color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 </style>

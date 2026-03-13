@@ -165,7 +165,7 @@ export default {
   color: #3b5131;
   font-size: 20px;
   background-color: #ffffff;
-  border: 1px solid #3b5131;
+  border: 1px solid #849c7d;
   border-radius: 20px;
   margin: 10px;
   padding: 10px;
@@ -217,7 +217,7 @@ export default {
   font-size: 24px;
   margin-top: 10px;
   padding-top: 15px;
-  border-top: 1px solid #3b5131;
+  border-top: 1px solid #849c7d;
   display: flex;
   justify-content: space-between;
   align-items: center;
