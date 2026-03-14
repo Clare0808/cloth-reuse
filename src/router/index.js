@@ -5,6 +5,7 @@ import WebReviewPage from "@/components/WebReviewPage.vue";
 import LikePage from "@/components/LikePage.vue";
 import UserPage from "@/components/UserPage.vue";
 import LoginPage from "@/components/LoginPage.vue";
+import MapPage from "@/components/MapPage.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: "/login",
     name: "LoginPage",
     component: LoginPage,
+  },
+  {
+    path: "/map",
+    name: "MapPage",
+    component: MapPage,
   },
 ];
 
