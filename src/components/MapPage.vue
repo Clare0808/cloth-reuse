@@ -4,7 +4,11 @@
 
     <div class="search-frame">
       <div class="search-box">
-        <input type="text" v-model.trim="inputText" />
+        <input
+          type="text"
+          v-model.trim="inputText"
+          @keydown.enter.exact="FilteredResult"
+        />
         <i
           class="fa-solid fa-search"
           id="search-icon"
@@ -13,7 +17,7 @@
       </div>
       <div class="result-outframe">
         <div v-for="(result, index) in filteredData" :key="index">
-          <div class="result-box">
+          <div class="result-box" @click="ClickSearchResult(result.name)">
             <div class="search-result">{{ result.name }}</div>
             <div class="search-info">{{ result.city }} {{ result.town }}</div>
           </div>
@@ -52,7 +56,7 @@
 <script>
 import { ref, onMounted } from "vue";
 
-// import { listClick } from "./ListPage.vue";
+import { listClick } from "./pageElement/CheckClothInfo.vue";
 
 export default {
   name: "MapPage",
@@ -74,35 +78,37 @@ export default {
       placeData.value = data;
     };
 
-    // const FilteredResult = () => {
-    //   filteredData.value = placeData.value.filter((rest) => {
-    //     return rest.name.includes(inputText.value);
-    //   });
-    // };
+    const FilteredResult = () => {
+      filteredData.value = placeData.value.filter((rest) => {
+        return rest.name.includes(inputText.value);
+      });
+    };
 
-    // const ClickSearchResult = (name) => {
-    //   let marker = markerList.value[name];
+    const ClickSearchResult = (name) => {
+      let marker = markerList.value[name];
 
-    //   const result = placeData.value.find((r) => r.name === name);
+      const result = placeData.value.find((r) => r.name === name);
 
-    //   if (!marker) {
-    //     const latlng = L.latLng(result.lat, result.lng);
-    //     marker = L.marker(latlng).addTo(map.value).bindPopup(result.name);
+      if (!marker) {
+        const latlng = L.latLng(result.lat, result.lng);
+        marker = L.marker(latlng).addTo(map.value).bindPopup(result.name);
 
-    //     markerList.value[name] = marker;
-    //   }
+        markerList.value[name] = marker;
+      }
 
-    //   map.value.flyTo(marker.getLatLng(), 16); // 平滑移動到 marker
-    //   marker.openPopup();
-    // };
+      map.value.flyTo(marker.getLatLng(), 16); // 平滑移動到 marker
+      marker.openPopup();
+    };
 
     onMounted(async () => {
       await GetPlaceData();
 
-      L = (await import("leaflet")).default; // 動態載入，避免 SSR
+      L = await import("leaflet"); // 動態載入，避免 SSR
       await import("leaflet/dist/leaflet.css");
 
-      map.value = L.map("map").setView([25.033, 121.5654], 13);
+      map.value = L.map("map", {
+        zoomAnimation: false, // 關閉縮放動畫避免 zoom 時出現 leaflet 錯誤
+      }).setView([25.033, 121.5654], 13);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
@@ -121,7 +127,14 @@ export default {
           if (r.lat && r.lng) {
             const latlng = L.latLng(r.lat, r.lng);
             if (bounds.contains(latlng)) {
-              const marker = L.marker(latlng)
+              const myIcon = L.icon({
+                iconUrl: require("../assets/img/marker.png"), // 圖片路徑
+                iconSize: [27, 40], // marker 大小
+                iconAnchor: [20, 40], // marker 底部對齊點
+                popupAnchor: [0, -40], // popup 顯示位置
+              });
+
+              const marker = L.marker(latlng, { icon: myIcon })
                 .addTo(markersLayer)
                 .bindPopup(r.name);
 
@@ -141,16 +154,16 @@ export default {
 
       map.value.on("moveend", MakeMark); // 每次地圖移動結束後更新標記
 
-      //   // 從 ListPage 點擊過來
-      //   if (listClick.value) {
-      //     ClickSearchResult(L, listClick.value);
+      // 從 ListPage 點擊過來
+      if (listClick && listClick.value) {
+        ClickSearchResult(listClick.value);
 
-      //     listClick.value = "";
-      //   }
+        listClick.value = "";
+      }
     });
 
     return {
-      //   listClick,
+      listClick,
       map,
       showSelected,
       selectedRestaurant,
@@ -159,8 +172,8 @@ export default {
       markerList,
       placeData,
       GetPlaceData,
-      //   FilteredResult,
-      //   ClickSearchResult,
+      FilteredResult,
+      ClickSearchResult,
     };
   },
 };
@@ -190,17 +203,17 @@ input {
   height: 30px;
   width: 230px;
   background-color: #ffffff;
-  border: 2px solid #5483b3;
+  border: 2px solid #849c7d;
   border-radius: 8px;
   margin-right: 40px;
   padding: 0 10px;
 }
 input:focus {
   outline: none;
-  border: 3px solid #5483b3;
+  border: 2px solid #3b5131;
 }
 #search-icon {
-  color: #5483b3;
+  color: #849c7d;
   font-size: 20px;
   position: absolute;
   top: 28px;
@@ -218,14 +231,14 @@ input:focus {
   padding-right: 10px;
 }
 .result-box {
-  border: 1px solid #5483b3;
+  border: 1px solid #3b5131;
   border-radius: 8px;
   margin: 20px 0;
   padding: 10px;
 }
 .result-box:hover {
   color: #ffffff;
-  background-color: #5483b3;
+  background-color: #849c7d;
   cursor: pointer;
 }
 .result-box:hover .search-info {
@@ -250,7 +263,7 @@ input:focus {
 }
 .info-outframe {
   background-color: #ffffff;
-  border: 2px solid #5483b3;
+  border: 2px solid #3b5131;
   border-radius: 8px;
   padding: 20px;
   position: fixed;
@@ -263,7 +276,7 @@ input:focus {
   font-size: 26px;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #5483b3;
+  border-bottom: 1px solid #3b5131;
 }
 .info-box {
   display: flex;
@@ -271,7 +284,7 @@ input:focus {
   align-items: center;
 }
 #info-icon {
-  color: #5483b3;
+  color: #849c7d;
   margin-right: 10px;
 }
 .info {

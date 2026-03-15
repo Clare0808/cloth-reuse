@@ -6,7 +6,13 @@
       <div class="cloth-info-frame">
         <div class="title-frame">
           <div class="cloth-name">{{ selectedCloth.name }}</div>
-          <i class="fa-solid fa-heart"></i>
+          <div class="icon-box">
+            <i class="fa-solid fa-heart"></i>
+            <i
+              class="fa-solid fa-map"
+              @click="ClickMap(selectedCloth.name)"
+            ></i>
+          </div>
         </div>
         <div class="cloth-info">類型: {{ selectedCloth.size }}</div>
         <div class="cloth-info">尺寸: {{ selectedCloth.size }}</div>
@@ -20,13 +26,29 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
+import { useRouter } from "vue-router";
+
 import { selectedCloth, showElePage } from "../../components/ClothPage.vue";
+
+export const listClick = ref("");
 
 export default {
   setup() {
+    const router = useRouter();
+
+    const ClickMap = (name) => {
+      listClick.value = name;
+
+      router.push("/map");
+    };
+
     return {
+      listClick,
       selectedCloth,
       showElePage,
+      ClickMap,
     };
   },
 };
@@ -87,6 +109,9 @@ img {
 }
 .cloth-name {
   font-size: 30px;
+}
+.icon-box i {
+  margin: 0 10px;
 }
 .cloth-info,
 .cloth-dis {
