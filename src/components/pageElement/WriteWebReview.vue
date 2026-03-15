@@ -1,5 +1,5 @@
 <template>
-  <div class="write-review">
+  <div class="page">
     <div class="title">回饋填寫</div>
     <div class="write-content">
       <div class="sec-title">評分：</div>
@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style scoped>
-.write-review {
+.page {
   width: 65%;
   background-color: #ffffff;
   border-radius: 20px;

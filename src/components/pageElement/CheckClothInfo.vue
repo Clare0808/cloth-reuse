@@ -4,10 +4,19 @@
     <div class="info-box">
       <img :src="selectedCloth.image" />
       <div class="cloth-info-frame">
-        <div class="cloth-name">{{ selectedCloth.name }}</div>
+        <div class="title-frame">
+          <div class="cloth-name">{{ selectedCloth.name }}</div>
+          <div class="icon-box">
+            <i class="fa-solid fa-heart"></i>
+            <i
+              class="fa-solid fa-map"
+              @click="ClickMap(selectedCloth.name)"
+            ></i>
+          </div>
+        </div>
         <div class="cloth-info">類型: {{ selectedCloth.size }}</div>
         <div class="cloth-info">尺寸: {{ selectedCloth.size }}</div>
-        <div class="cloth-info">服飾狀況: {{ selectedCloth.description }}</div>
+        <div class="cloth-dis">服飾狀況: {{ selectedCloth.description }}</div>
         <div class="cloth-info">取衣地點: {{ selectedCloth.place }}</div>
         <div class="cloth-info">取衣時間: {{ selectedCloth.time }}</div>
       </div>
@@ -17,13 +26,29 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
+import { useRouter } from "vue-router";
+
 import { selectedCloth, showElePage } from "../../components/ClothPage.vue";
+
+export const listClick = ref("");
 
 export default {
   setup() {
+    const router = useRouter();
+
+    const ClickMap = (name) => {
+      listClick.value = name;
+
+      router.push("/map");
+    };
+
     return {
+      listClick,
       selectedCloth,
       showElePage,
+      ClickMap,
     };
   },
 };
@@ -52,20 +77,44 @@ export default {
   width: 100%;
   text-align: left;
   display: flex;
+  grid-template-columns: 35% 65%;
+  gap: 30px;
   justify-content: center;
   align-items: center;
 }
+.cloth-info-frame {
+  width: 100%;
+}
 img {
-  width: 300px;
-  margin-right: 50px;
+  width: 280px;
+}
+.title-frame {
+  width: 100%;
+  border-bottom: 1px solid #3b5131;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title-frame i {
+  color: #849c7d;
+  font-size: 22px;
+  transition: all 0.3s ease;
+}
+.title-frame i:hover {
+  color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 .cloth-name {
   font-size: 30px;
-  border-bottom: 1px solid #3b5131;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
 }
-.cloth-info {
+.icon-box i {
+  margin: 0 10px;
+}
+.cloth-info,
+.cloth-dis {
   font-size: 20px;
   margin: 10px 0;
 }
