@@ -5,16 +5,16 @@
         <div class="title">登入</div>
         <div class="input-frame">
           <div class="sec-title">E-mail</div>
-          <input type="text" />
+          <input type="text" v-model.trim="email" />
         </div>
         <div class="input-frame">
           <div class="sec-title">密碼</div>
-          <input type="password" />
+          <input type="password" v-model.trim="password" />
         </div>
         <div class="btn-frame">
           <div class="local-btn-frame">
             <div class="sign-up-btn" @click="ClickChangeType()">註冊</div>
-            <div class="login-btn">登入</div>
+            <div class="login-btn" @click="ClickLogin()">登入</div>
           </div>
           <div class="text">or</div>
           <div class="google-btn">
@@ -31,30 +31,30 @@
         <div class="title">註冊</div>
         <div class="input-frame">
           <div class="sec-title">E-mail</div>
-          <input type="text" />
+          <input type="text" v-model.trim="email" />
         </div>
         <div class="input-frame-mix">
           <div class="input-frame">
             <div class="sec-title">名稱</div>
-            <input type="text" />
+            <input type="text" v-model.trim="name" />
           </div>
           <div class="input-frame">
             <div class="sec-title">電話號碼</div>
-            <input type="text" />
+            <input type="text" v-model.trim="phone" />
           </div>
         </div>
         <div class="input-frame">
           <div class="sec-title">密碼</div>
-          <input type="password" />
+          <input type="password" v-model.trim="password" />
         </div>
         <div class="input-frame">
           <div class="sec-title">確認密碼</div>
-          <input type="password" />
+          <input type="password" v-model.trim="conPassword" />
         </div>
         <div class="btn-frame">
           <div class="local-btn-frame">
             <div class="sign-up-btn" @click="ClickChangeType()">登入</div>
-            <div class="login-btn">註冊</div>
+            <div class="login-btn" @click="ClickSignUp()">註冊</div>
           </div>
           <div class="text">or</div>
           <div class="google-btn">
@@ -72,15 +72,116 @@
 <script>
 import { ref, onMounted } from "vue";
 
+import { useRouter } from "vue-router";
+import { loginUiStore } from "@/store/login";
+import { errorUiStore } from "@/store/error";
+
 export default {
   name: "LoginPage",
   setup() {
     const showLogin = ref(false);
     const showSignUp = ref(false);
 
+    const email = ref("");
+    const name = ref("");
+    const phone = ref("");
+    const password = ref("");
+    const conPassword = ref("");
+
+    const router = useRouter();
+
+    const loginStore = loginUiStore();
+    const errorStore = errorUiStore();
+
     const ClickChangeType = () => {
       showLogin.value = !showLogin.value;
       showSignUp.value = !showSignUp.value;
+    };
+
+    const ClickLogin = async () => {
+      ExamInputFrame();
+
+      if (!errorStore.errorType) {
+        try {
+          if (!errorStore.errorType) {
+            await loginStore.login({
+              email: email.value,
+              password: password.value,
+            });
+
+            if (loginStore.isAuthenticated) {
+              errorStore.LoadSuccess("登入成功!");
+
+              localStorage.setItem("userEmail", email.value);
+              localStorage.setItem("userName", name.value);
+              localStorage.setItem("inAdmin", loginStore.isAdmin);
+
+              CleanInput();
+
+              await errorStore.CloseLoadEle();
+              router.push("/");
+            }
+          }
+        } catch (err) {
+          errorStore.SetError(err.message);
+        }
+      }
+    };
+
+    const ClickSignUp = async () => {
+      ExamInputFrame();
+
+      if (!errorStore.errorType) {
+        try {
+          if (!errorStore.errorType) {
+            await loginStore.signup({
+              email: email.value,
+              name: name.value,
+              phone: phone.value,
+              password: password.value,
+            });
+
+            errorStore.SetSuccess("註冊成功!");
+
+            CleanInput();
+
+            setTimeout(() => {
+              ClickChangeType();
+            }, 2000);
+          }
+        } catch (err) {
+          errorStore.SetError(err.message);
+        }
+      }
+
+      errorStore.CloseEle();
+    };
+
+    const CleanInput = () => {
+      email.value = "";
+      name.value = "";
+      phone.value = "";
+      password.value = "";
+      conPassword.value = "";
+    };
+
+    const ExamInputFrame = () => {
+      if (email.value === "") {
+        errorStore.SetError("請輸入E-mail!");
+      } else if (name.value === "" && showSignUp.value) {
+        errorStore.SetError("請輸入名稱!");
+      } else if (phone.value === "" && showSignUp.value) {
+        errorStore.SetError("請輸入電話號碼!");
+      } else if (password.value === "") {
+        errorStore.SetError("請輸入密碼!");
+      } else if (conPassword.value === "" && showSignUp.value) {
+        errorStore.SetError("請再次輸入密碼!");
+      } else if (password.value !== conPassword.value && showSignUp.value) {
+        errorStore.SetError("密碼與確認密碼不相符!");
+      } else {
+        errorStore.errorType = false;
+        errorStore.showErrorMsg = false;
+      }
     };
 
     onMounted(() => {
@@ -90,7 +191,16 @@ export default {
     return {
       showLogin,
       showSignUp,
+      email,
+      name,
+      phone,
+      password,
+      conPassword,
       ClickChangeType,
+      ClickLogin,
+      ClickSignUp,
+      CleanInput,
+      ExamInputFrame,
     };
   },
 };

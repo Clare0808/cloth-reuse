@@ -22,17 +22,37 @@
     </div>
   </nav>
   <router-view />
+
+  <transition name="slide-x">
+    <StatusEle class="status-msg" v-show="errorStore.showErrorMsg" />
+  </transition>
+
+  <transition name="slide-ele">
+    <LoadingEle v-if="errorStore.showLoader" />
+  </transition>
 </template>
 
 <script>
 import { useRoute } from "vue-router";
 
+import { errorUiStore } from "./store/error";
+
+import StatusEle from "../src/components/pageElement/StatusEle.vue";
+import LoadingEle from "../src/components/pageElement/LoadingEle.vue";
+
 export default {
+  components: {
+    StatusEle,
+    LoadingEle,
+  },
   setup() {
     const route = useRoute();
 
+    const errorStore = errorUiStore();
+
     return {
       route,
+      errorStore,
     };
   },
 };
@@ -103,5 +123,41 @@ nav a:hover {
   background-color: #3b5131;
   cursor: pointer;
   transform: scale(1.1);
+}
+
+.status-msg {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 3;
+}
+
+.slide-ele-enter-active,
+.slide-ele-leave-active {
+  transition: all 1s ease;
+}
+.slide-ele-enter-from,
+.slide-ele-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -50%) translateY(20px);
+}
+.slide-ele-enter-to,
+.slide-ele-leave-from {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+}
+.slide-x-enter-active,
+.slide-x-leave-active {
+  transition: all 1s ease;
+}
+.slide-x-enter-from,
+.slide-x-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-x-enter-to,
+.slide-x-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>
