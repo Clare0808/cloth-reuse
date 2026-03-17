@@ -36,5 +36,12 @@ export const loginUiStore = defineStore("login", {
         throw new Error(msg);
       }
     },
+    async logout() {
+      this.user = null;
+      this.token = null;
+      this.isAuthenticated = false;
+
+      localStorage.removeItem("token");
+    },
   },
 });
