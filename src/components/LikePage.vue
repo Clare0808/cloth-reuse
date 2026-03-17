@@ -5,21 +5,24 @@
     </transition>
     <transition name="slide">
       <div class="like-outframe" v-if="showSlide">
-        <div class="like-frame" v-for="i in 8" :key="i">
+        <div class="like-frame" v-for="(data, index) in dataList" :key="index">
           <div class="like-box">
-            <img src="../assets/img/cloth1.jpg" />
+            <img :src="data.image" />
             <div class="cloth-info-frame">
               <div class="title-frame">
-                <div class="cloth-name">白色上衣</div>
-                <i class="fa-solid fa-heart"></i>
+                <div class="cloth-name">{{ data.name }}</div>
+                <div class="icon-box">
+                  <i class="fa-solid fa-heart"></i>
+                  <i class="fa-solid fa-trash" @click="DeleteData(data)"></i>
+                </div>
               </div>
               <div class="text-inframe">
-                <div class="cloth-info">類型: 上衣</div>
-                <div class="cloth-info">尺寸: L</div>
+                <div class="cloth-info">類型: {{ data.type }}</div>
+                <div class="cloth-info">尺寸: {{ data.size }}</div>
               </div>
-              <div class="cloth-info">服飾狀況: 稍微有汙漬沾染</div>
-              <div class="cloth-info">取衣地點: 台北市信義區xx路</div>
-              <div class="cloth-info">取衣時間: 9:00~11:00 AM</div>
+              <div class="cloth-info">服飾狀況: {{ data.situation }}</div>
+              <div class="cloth-info">取衣地點: {{ data.place }}</div>
+              <div class="cloth-info">取衣時間: {{ data.time }}</div>
             </div>
           </div>
         </div>
@@ -31,20 +34,45 @@
 <script>
 import { ref, onMounted } from "vue";
 
+import { errorUiStore } from "@/store/error";
+import { likeUiStore } from "@/store/like";
+
 export default {
   name: "LikePage",
   setup() {
     const showFade = ref(false);
     const showSlide = ref(false);
+    const dataList = ref([]);
 
-    onMounted(() => {
+    const errorStore = errorUiStore();
+    const likeStore = likeUiStore();
+
+    const GetData = async () => {
+      dataList.value = await likeStore.GetLikeData();
+    };
+
+    const DeleteData = async (data) => {
+      await likeStore.DeleteLike(data.name);
+
+      errorStore.LoadSuccess("成功刪除!");
+
+      await errorStore.CloseLoadEle();
+      window.location.reload();
+    };
+
+    onMounted(async () => {
       showFade.value = true;
       showSlide.value = true;
+
+      await GetData();
     });
 
     return {
       showFade,
       showSlide,
+      dataList,
+      GetData,
+      DeleteData,
     };
   },
 };
@@ -107,12 +135,15 @@ img {
   transition: all 0.3s ease;
 }
 .title-frame i:hover {
-  color: #849c7d;
+  color: #d3dcba;
   cursor: pointer;
   transform: scale(1.1);
 }
 .cloth-name {
   font-size: 30px;
+}
+.icon-box i {
+  margin: 0 10px;
 }
 .text-inframe {
   width: 100%;

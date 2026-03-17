@@ -7,7 +7,11 @@
         <div class="title-frame">
           <div class="cloth-name">{{ selectedCloth.name }}</div>
           <div class="icon-box">
-            <i class="fa-solid fa-heart"></i>
+            <i
+              class="fa-solid fa-heart"
+              @click="ClickHeart"
+              :class="{ inLikeCSS: inLike }"
+            ></i>
             <i
               class="fa-solid fa-map"
               @click="ClickMap(selectedCloth.name)"
@@ -26,11 +30,16 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 import { useRouter } from "vue-router";
 
+import { errorUiStore } from "@/store/error";
+import { likeUiStore } from "@/store/like";
+
 import { selectedCloth, showElePage } from "../../components/ClothPage.vue";
+
+import OptionData from "@/assets/data/optionsData.json";
 
 export const listClick = ref("");
 
@@ -38,17 +47,84 @@ export default {
   setup() {
     const router = useRouter();
 
+    const errorStore = errorUiStore();
+    const likeStore = likeUiStore();
+
+    const type = ref("");
+    const selectedList = ref({});
+    const inLike = ref(false);
+
     const ClickMap = (name) => {
       listClick.value = name;
 
       router.push("/map");
     };
 
+    const ClickHeart = async () => {
+      const data = await likeStore.GetLikeData();
+
+      const existData = data.find((item) => {
+        return item.name === selectedList.value.name;
+      });
+
+      if (existData) {
+        showElePage.value = false;
+
+        errorStore.SetError("已經在收藏清單!");
+      } else {
+        await likeStore.SendLikeData({
+          name: selectedList.value.name,
+          type: type.value,
+          size: selectedList.value.size,
+          situation: selectedList.value.description,
+          time: selectedList.value.time,
+          place: selectedList.value.place,
+          image: selectedList.value.image,
+        });
+
+        showElePage.value = false;
+
+        errorStore.LoadSuccess("收藏成功!");
+      }
+
+      await errorStore.CloseLoadEle();
+    };
+
+    const TransformType = (list) => {
+      type.value = OptionData.find((item) => {
+        return item.label === list.category;
+      }).name;
+    };
+
+    watch(selectedCloth, async (newVal) => {
+      selectedList.value = newVal;
+
+      TransformType(newVal);
+
+      const data = await likeStore.GetLikeData();
+
+      const existData = data.find((item) => {
+        return item.name === selectedList.value.name;
+      });
+
+      if (existData) {
+        inLike.value = true;
+      } else {
+        inLike.value = false;
+      }
+    });
+
     return {
       listClick,
       selectedCloth,
       showElePage,
+      OptionData,
+      type,
+      selectedList,
+      inLike,
       ClickMap,
+      ClickHeart,
+      TransformType,
     };
   },
 };
@@ -98,7 +174,7 @@ img {
   align-items: center;
 }
 .title-frame i {
-  color: #849c7d;
+  color: #d3dcba;
   font-size: 22px;
   transition: all 0.3s ease;
 }
@@ -135,5 +211,9 @@ img {
   background-color: #3b5131;
   cursor: pointer;
   transform: scale(1.1);
+}
+
+.title-frame i.inLikeCSS {
+  color: #3b5131;
 }
 </style>
