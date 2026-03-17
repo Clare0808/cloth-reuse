@@ -2,21 +2,42 @@ from flask import request, jsonify
 from . import api_bp
 from database import db
 from model.login import Login
+from flask_jwt_extended import create_access_token
 
-@api_bp.route("/login", methods=["GET"])
+@api_bp.route("/login", methods=["POST"])
 def login():
-    data = Login.query.all()
+    data = request.get_json()
+
+    email = data.get("email")
+    password = data.get("password")
+
+    existData = Login.query.all()
 
     data_list = [{
         "email": info.email, 
         "name": info.name, 
-        "phone": info.phone, 
+        "phone": info.phone,
         "password": info.password
-    } for info in data]
+    } for info in existData]
+
+    user = next((item for item in data_list if item["email"] == email), None)
+
+    if not user :
+        return jsonify({
+            "message": "該E-mail不存在!"
+        }), 400
+
+    if user["password"] != password :
+        return jsonify({
+            "message": "密碼錯誤!"
+        }), 400
+    
+    # 產生 JWT token
+    access_token = create_access_token(identity=email)
 
     return jsonify({
-        "data": data_list,
-        "message": "登入成功!"
+        "message": "登入成功!",
+        "token": access_token
     }), 200
 
 @api_bp.route("/signup", methods=["POST"])
@@ -31,12 +52,7 @@ def signup() :
     existing_user = Login.query.filter_by(email = email).first()
     if existing_user:
         return jsonify({
-            "message": "該E-mail已存在!",
-            "data": {
-                "email": email,
-                "name": name,
-                "phone": phone
-            }
+            "message": "該E-mail已存在!"
         }), 400
 
     login = Login(
@@ -50,10 +66,5 @@ def signup() :
     db.session.commit()
 
     return jsonify({
-        "message": "註冊成功!",
-        "data": {
-            "email": email,
-            "name": name,
-            "phone": phone
-        }
+        "message": "註冊成功!"
     }), 200

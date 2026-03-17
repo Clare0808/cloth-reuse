@@ -18,7 +18,17 @@
       <router-link to="/user">
         <i class="fa-solid fa-user"></i>
       </router-link>
-      <router-link to="/login" class="login-sign-btn">登入/註冊 </router-link>
+      <i
+        class="fa-solid fa-arrow-right-from-bracket"
+        id="logout"
+        v-if="loginStore.isAuthenticated"
+      ></i>
+      <router-link
+        to="/login"
+        class="login-sign-btn"
+        v-if="!loginStore.isAuthenticated"
+        >登入/註冊
+      </router-link>
     </div>
   </nav>
   <router-view />
@@ -35,6 +45,7 @@
 <script>
 import { useRoute } from "vue-router";
 
+import { loginUiStore } from "./store/login";
 import { errorUiStore } from "./store/error";
 
 import StatusEle from "../src/components/pageElement/StatusEle.vue";
@@ -48,10 +59,12 @@ export default {
   setup() {
     const route = useRoute();
 
+    const loginStore = loginUiStore();
     const errorStore = errorUiStore();
 
     return {
       route,
+      loginStore,
       errorStore,
     };
   },
@@ -103,6 +116,11 @@ nav a:hover {
   font-size: 28px;
 }
 .func-icon a {
+  font-size: 20px;
+  margin: 10px;
+}
+#logout {
+  color: #3b5131;
   font-size: 20px;
   margin: 10px;
 }

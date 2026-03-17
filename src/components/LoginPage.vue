@@ -96,6 +96,8 @@ export default {
     const ClickChangeType = () => {
       showLogin.value = !showLogin.value;
       showSignUp.value = !showSignUp.value;
+
+      CleanInput();
     };
 
     const ClickLogin = async () => {
@@ -126,6 +128,8 @@ export default {
           errorStore.SetError(err.message);
         }
       }
+
+      errorStore.CloseEle();
     };
 
     const ClickSignUp = async () => {
