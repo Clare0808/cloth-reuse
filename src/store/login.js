@@ -10,16 +10,17 @@ export const loginUiStore = defineStore("login", {
   actions: {
     async login(userData) {
       try {
-        const response = await axios.get("/api/login");
+        const response = await axios.post("/api/login", userData);
         const data = response.data;
 
-        this.user = data.data.filter((item) => {
-          return item.email === userData.email;
-        });
-
+        this.token = data.token;
         this.isAuthenticated = true;
+
+        localStorage.setItem("token", this.token);
+
+        return response;
       } catch (error) {
-        const msg = error.response?.message || "登入失敗!";
+        const msg = error.response?.data?.message || "登入失敗!";
 
         throw new Error(msg);
       }
@@ -27,14 +28,20 @@ export const loginUiStore = defineStore("login", {
     async signup(userData) {
       try {
         const response = await axios.post("/api/signup", userData);
-        const data = response.data;
 
-        this.user = data.data;
+        return response;
       } catch (error) {
-        const msg = error.response?.message || "註冊失敗!";
+        const msg = error.response?.data?.message || "註冊失敗!";
 
         throw new Error(msg);
       }
+    },
+    async logout() {
+      this.user = null;
+      this.token = null;
+      this.isAuthenticated = false;
+
+      localStorage.removeItem("token");
     },
   },
 });

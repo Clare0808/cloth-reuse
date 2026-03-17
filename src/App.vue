@@ -18,7 +18,18 @@
       <router-link to="/user">
         <i class="fa-solid fa-user"></i>
       </router-link>
-      <router-link to="/login" class="login-sign-btn">登入/註冊 </router-link>
+      <i
+        class="fa-solid fa-arrow-right-from-bracket"
+        id="logout"
+        v-if="loginStore.isAuthenticated"
+        @click="showLogoutCheck = true"
+      ></i>
+      <router-link
+        to="/login"
+        class="login-sign-btn"
+        v-if="!loginStore.isAuthenticated"
+        >登入/註冊
+      </router-link>
     </div>
   </nav>
   <router-view />
@@ -30,28 +41,47 @@
   <transition name="slide-ele">
     <LoadingEle v-if="errorStore.showLoader" />
   </transition>
+
+  <div
+    class="overlay"
+    v-show="showLogoutCheck"
+    @click="showLogoutCheck = false"
+  ></div>
+  <transition name="slide-ele">
+    <LogoutCheck class="logout-check" v-if="showLogoutCheck" />
+  </transition>
 </template>
 
 <script>
+import { ref } from "vue";
+
 import { useRoute } from "vue-router";
 
+import { loginUiStore } from "./store/login";
 import { errorUiStore } from "./store/error";
 
 import StatusEle from "../src/components/pageElement/StatusEle.vue";
 import LoadingEle from "../src/components/pageElement/LoadingEle.vue";
+import LogoutCheck from "../src/components/pageElement/LogoutCheck.vue";
+
+export const showLogoutCheck = ref(false);
 
 export default {
   components: {
     StatusEle,
     LoadingEle,
+    LogoutCheck,
   },
   setup() {
     const route = useRoute();
 
+    const loginStore = loginUiStore();
     const errorStore = errorUiStore();
 
     return {
+      showLogoutCheck,
       route,
+      loginStore,
       errorStore,
     };
   },
@@ -106,6 +136,14 @@ nav a:hover {
   font-size: 20px;
   margin: 10px;
 }
+#logout {
+  color: #3b5131;
+  font-size: 20px;
+  margin: 10px;
+}
+#logout:hover {
+  cursor: pointer;
+}
 .login-sign-btn {
   width: 120px;
   height: 40px;
@@ -130,6 +168,23 @@ nav a:hover {
   top: 90px;
   right: 20px;
   z-index: 3;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 98;
+}
+.logout-check {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
 }
 
 .slide-ele-enter-active,
