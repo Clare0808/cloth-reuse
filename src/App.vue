@@ -12,6 +12,9 @@
       <router-link to="/problem">問題回報</router-link>
     </div>
     <div class="func-icon">
+      <router-link to="/pickup">
+        <i class="fa-solid fa-shirt"></i>
+      </router-link>
       <router-link to="/like">
         <i class="fa-solid fa-heart"></i>
       </router-link>
@@ -167,7 +170,7 @@ nav a:hover {
   position: fixed;
   top: 90px;
   right: 20px;
-  z-index: 3;
+  z-index: 99;
 }
 
 .overlay {

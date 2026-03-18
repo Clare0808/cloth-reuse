@@ -69,7 +69,9 @@ export default {
       const response = await fetch("/data/clothData.json");
       const data = await response.json();
 
-      dataList.value = data;
+      dataList.value = data.filter((item) => {
+        return !item.lock;
+      });
     };
 
     const ClickOption = (opt) => {

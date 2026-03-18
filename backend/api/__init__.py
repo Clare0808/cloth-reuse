@@ -4,3 +4,5 @@ api_bp = Blueprint('api', __name__)
 
 from . import login
 from . import like
+from . import review
+from . import pickup

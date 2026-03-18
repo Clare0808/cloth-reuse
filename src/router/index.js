@@ -6,6 +6,7 @@ import LikePage from "@/components/LikePage.vue";
 import UserPage from "@/components/UserPage.vue";
 import LoginPage from "@/components/LoginPage.vue";
 import MapPage from "@/components/MapPage.vue";
+import PickupPage from "@/components/PickupPage.vue";
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: "/map",
     name: "MapPage",
     component: MapPage,
+  },
+  {
+    path: "/pickup",
+    name: "PickupPage",
+    component: PickupPage,
   },
 ];
 
