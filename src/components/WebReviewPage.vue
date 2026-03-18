@@ -5,21 +5,19 @@
     </transition>
     <transition name="slide">
       <div class="review-box-frame" v-if="showSlide">
-        <div v-for="i in 7" :key="i">
+        <div v-for="(review, index) in dataList" :key="index">
           <div class="review-box">
             <div class="review-stars">
-              <div v-for="s in 5" :key="s">
+              <div v-for="indexS in review.star" :key="indexS">
                 <i class="fa-solid fa-star"></i>
               </div>
             </div>
-            <div class="review-content">
-              以前不知道舊衣要丟哪裡，現在用這個網站就能快速找到回收點，讓衣服有第二次生命。
-            </div>
+            <div class="review-content">{{ review.content }}</div>
             <div class="review-author-info">
-              <i class="fa-solid fa-user"></i>
+              <img :src="review.image" />
               <div class="review-text-frame">
-                <div class="review-author-name">王小明</div>
-                <div class="review-author-date">2026-03-12</div>
+                <div class="review-author-name">{{ review.name }}</div>
+                <div class="review-author-date">{{ review.date }}</div>
               </div>
             </div>
           </div>
@@ -47,6 +45,8 @@
 <script>
 import { ref, onMounted } from "vue";
 
+import { reviewUiStore } from "@/store/review";
+
 import WriteWebReview from "./pageElement/WriteWebReview.vue";
 
 import { showWriteWebReview } from "./pageElement/WriteWebReview.vue";
@@ -59,16 +59,24 @@ export default {
   setup() {
     const showSlide = ref(false);
     const showFade = ref(false);
+    const dataList = ref([]);
 
-    onMounted(() => {
+    const reviewStore = reviewUiStore();
+
+    onMounted(async () => {
       showSlide.value = true;
       showFade.value = true;
+
+      dataList.value = await reviewStore.GetReviewData();
+
+      console.log(dataList.value);
     });
 
     return {
       showWriteWebReview,
       showSlide,
       showFade,
+      dataList,
     };
   },
 };
@@ -120,8 +128,9 @@ export default {
   justify-content: start;
   align-items: center;
 }
-.review-author-info i {
-  font-size: 30px;
+.review-author-info img {
+  width: 30px;
+  height: 30px;
   margin-right: 20px;
 }
 .review-text-frame {

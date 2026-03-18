@@ -21,7 +21,7 @@
     </div>
     <div class="btn-frame">
       <div class="cancel-btn" @click="showWriteWebReview = false">取消</div>
-      <div class="submit-btn">提交</div>
+      <div class="submit-btn" @click="ClickSend">提交</div>
     </div>
   </div>
 </template>
@@ -29,12 +29,20 @@
 <script>
 import { ref } from "vue";
 
+import { errorUiStore } from "@/store/error";
+import { reviewUiStore } from "@/store/review";
+
 export const showWriteWebReview = ref(false);
 
 export default {
   setup() {
     const starTouch = ref(Array(5).fill(false));
     const starClick = ref(0);
+    const reviewContent = ref("");
+    const reviewDate = ref("");
+
+    const errorStore = errorUiStore();
+    const reviewStore = reviewUiStore();
 
     const HandleStarTouch = (index) => {
       for (let i = 0; i < 5; i++) {
@@ -56,13 +64,68 @@ export default {
       }
     };
 
+    const ClickSend = async () => {
+      ExamInput();
+
+      if (!errorStore.errorType) {
+        const userEmail = localStorage.getItem("userEmail");
+        const userName = localStorage.getItem("userName");
+
+        CreateDate();
+
+        await reviewStore.SendReview({
+          email: userEmail,
+          name: userName,
+          content: reviewContent.value,
+          star: starClick.value,
+          date: reviewDate.value,
+          image: "/img/user.jpg",
+        });
+
+        showWriteWebReview.value = false;
+
+        errorStore.LoadSuccess("留言成功!");
+
+        await errorStore.CloseLoadEle();
+        window.location.reload();
+      }
+
+      errorStore.CloseEle();
+    };
+
+    const CreateDate = () => {
+      const date = new Date();
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      reviewDate.value = year + "-" + month + "-" + day;
+    };
+
+    const ExamInput = () => {
+      if (starClick.value === 0) {
+        errorStore.SetError("請選擇星星數!");
+      } else if (reviewContent.value === "") {
+        errorStore.SetError("請輸入回饋內容!");
+      } else {
+        errorStore.errorType = false;
+        errorStore.showErrorMsg = false;
+      }
+    };
+
     return {
       showWriteWebReview,
       starTouch,
       starClick,
+      reviewContent,
+      reviewDate,
       HandleStarTouch,
       HandleStarLeave,
       ClickStart,
+      ClickSend,
+      CreateDate,
+      ExamInput,
     };
   },
 };
