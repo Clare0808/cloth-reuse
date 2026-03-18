@@ -13,6 +13,10 @@
                 <div class="cloth-name">{{ data.name }}</div>
                 <div class="icon-box">
                   <i class="fa-solid fa-heart"></i>
+                  <i
+                    class="fa-solid fa-map"
+                    @click="mapStore.ClickMap(data.name)"
+                  ></i>
                   <i class="fa-solid fa-trash" @click="DeleteData(data)"></i>
                 </div>
               </div>
@@ -36,6 +40,7 @@ import { ref, onMounted } from "vue";
 
 import { errorUiStore } from "@/store/error";
 import { likeUiStore } from "@/store/like";
+import { mapUiStore } from "@/store/map";
 
 export default {
   name: "LikePage",
@@ -46,6 +51,7 @@ export default {
 
     const errorStore = errorUiStore();
     const likeStore = likeUiStore();
+    const mapStore = mapUiStore();
 
     const GetData = async () => {
       dataList.value = await likeStore.GetLikeData();
@@ -71,6 +77,7 @@ export default {
       showFade,
       showSlide,
       dataList,
+      mapStore,
       GetData,
       DeleteData,
     };
