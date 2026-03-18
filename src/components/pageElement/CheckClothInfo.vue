@@ -72,6 +72,8 @@ export default {
           situation: selectedList.value.description,
           time: selectedList.value.time,
           place: selectedList.value.place,
+          pEmail: selectedList.value.email,
+          pName: selectedCloth.value.pName,
           image: selectedList.value.image,
         });
 
