@@ -68,3 +68,17 @@ def signup() :
     return jsonify({
         "message": "註冊成功!"
     }), 200
+
+@api_bp.route("/get-user-info", methods=["GET"])
+def getData():
+    infos = Login.query.all()
+
+    data_list = [{
+        "email": info.email, 
+        "name": info.name, 
+        "phone": info.phone,
+    } for info in infos]
+
+    return jsonify({
+        "data": data_list,
+    }), 200
