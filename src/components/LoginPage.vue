@@ -87,6 +87,7 @@ export default {
     const phone = ref("");
     const password = ref("");
     const conPassword = ref("");
+    const userName = ref("");
 
     const router = useRouter();
 
@@ -114,8 +115,10 @@ export default {
             if (loginStore.isAuthenticated) {
               errorStore.LoadSuccess("登入成功!");
 
+              await GetUserInfo();
+
               localStorage.setItem("userEmail", email.value);
-              localStorage.setItem("userName", name.value);
+              localStorage.setItem("userName", userName.value);
               localStorage.setItem("inAdmin", loginStore.isAdmin);
 
               CleanInput();
@@ -188,6 +191,16 @@ export default {
       }
     };
 
+    const GetUserInfo = async () => {
+      const data = await loginStore.getUserInfo();
+
+      const userEmail = localStorage.getItem("userEmail");
+
+      userName.value = data.find((item) => {
+        return item.email === userEmail;
+      }).name;
+    };
+
     onMounted(() => {
       showLogin.value = true;
     });
@@ -205,6 +218,7 @@ export default {
       ClickSignUp,
       CleanInput,
       ExamInputFrame,
+      GetUserInfo,
     };
   },
 };

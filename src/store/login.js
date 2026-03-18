@@ -43,5 +43,11 @@ export const loginUiStore = defineStore("login", {
 
       localStorage.removeItem("token");
     },
+    async getUserInfo() {
+      const response = await axios.get("/api/get-user-info");
+      const data = response.data;
+
+      return data.data;
+    },
   },
 });
