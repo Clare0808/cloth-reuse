@@ -13,6 +13,8 @@ def storeLike():
     situation = data.get("situation")
     time = data.get("time")
     place = data.get("place")
+    pEmail = data.get("pEmail")
+    pName = data.get("pName")
     image = data.get("image")
 
     like = Like(
@@ -22,6 +24,8 @@ def storeLike():
         situation = situation,
         time = time,
         place = place,
+        pEmail = pEmail,
+        pName = pName,
         image = image
     )
 
@@ -43,6 +47,8 @@ def getLike():
         "situation": info.situation,
         "time": info.time,
         "place": info.place,
+        "pEmail": info.pEmail,
+        "pName": info.pName,
         "image": info.image
     } for info in infos]
 
