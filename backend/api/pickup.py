@@ -101,3 +101,18 @@ def deletePickup():
     return jsonify({
         "message": "刪除成功"
     }), 200
+
+@api_bp.route("/delete-pickup-not-rewrite", methods=["POST"])
+def deletePickupNotRewrite():
+    data = request.get_json()
+
+    name = data.get("name")
+
+    pickup = Pickup.query.filter_by(name = name).first()
+
+    db.session.delete(pickup)
+    db.session.commit()
+    
+    return jsonify({
+        "message": "刪除成功"
+    }), 200

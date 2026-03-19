@@ -13,11 +13,11 @@
                 <i class="fa-solid fa-pencil" id="pencil"></i>
               </div>
               <div class="user-info">
-                王小明 您好!
+                {{ userName }} 您好!
                 <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
               </div>
               <div class="user-info">
-                0912-345-678
+                {{ userPhone }}
                 <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
               </div>
             </div>
@@ -27,14 +27,16 @@
               <div class="order-outframe">
                 <div v-for="i in 5" :key="i">
                   <div class="order-frame">
-                    <div class="order-code">AA12345678</div>
+                    <div class="cloth-info">
+                      <div class="cloth-info">AA12345678</div>
+                      <div class="cloth-info">黑色T-shirt</div>
+                    </div>
                     <div class="cloth-date">2026-03-13 13:36</div>
-                    <div class="cloth-info-frame" v-for="j in 6" :key="j">
-                      <div class="cloth-info">
-                        <div class="cloth-info">衣服</div>
-                        <div class="cloth-info">尺寸: M</div>
-                        <div class="cloth-info">台北市信義區xx路</div>
-                      </div>
+                    <div class="cloth-info">
+                      <div class="cloth-info">衣服</div>
+                      <div class="cloth-info">尺寸: M</div>
+                      <div class="cloth-info">提供者: 楊先生</div>
+                      <div class="cloth-info">台北市信義區xx路</div>
                     </div>
                   </div>
                 </div>
@@ -53,20 +55,44 @@
 
 <script>
 import { ref, onMounted } from "vue";
+
+import { loginUiStore } from "@/store/login";
+
 export default {
   name: "UserPage",
   setup() {
     const showFade = ref(false);
     const showSlide = ref(false);
+    const userName = ref("");
+    const userPhone = ref("");
+
+    const loginStore = loginUiStore();
+
+    const GetUserInfo = async () => {
+      userName.value = localStorage.getItem("userName");
+
+      const data = await loginStore.getUserInfo();
+
+      const filteredData = data.find((item) => {
+        return item.name === userName.value;
+      });
+
+      userPhone.value = filteredData.phone;
+    };
 
     onMounted(async () => {
       showFade.value = true;
       showSlide.value = true;
+
+      await GetUserInfo();
     });
 
     return {
       showFade,
       showSlide,
+      userName,
+      userPhone,
+      GetUserInfo,
     };
   },
 };

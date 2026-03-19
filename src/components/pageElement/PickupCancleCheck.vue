@@ -19,8 +19,9 @@ export default {
     const errorStore = errorUiStore();
     const pickupStore = pickupUiStore();
 
-    const ClickYes = async (data) => {
-      await pickupStore.DeletePickup(data);
+    const ClickYes = async () => {
+      const deleteData = pickupStore.dataList;
+      await pickupStore.DeletePickup(deleteData);
 
       pickupStore.showElePage = false;
 
