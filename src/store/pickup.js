@@ -60,6 +60,20 @@ export const pickupUiStore = defineStore("pickup", () => {
     }
   };
 
+  const ModifyFile = async (data) => {
+    const responsePost = await fetch("http://localhost:5000/api/modify-file", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: data }),
+    });
+
+    if (!responsePost.ok) {
+      throw new Error("Network response was not ok");
+    }
+  };
+
   return {
     dataList,
     showElePage,
@@ -67,5 +81,6 @@ export const pickupUiStore = defineStore("pickup", () => {
     SendPickupData,
     DeletePickup,
     DeletePickupNotRewrite,
+    ModifyFile,
   };
 });

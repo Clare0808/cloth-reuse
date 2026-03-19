@@ -66,7 +66,6 @@ export default {
 
     const DeleteData = async (data) => {
       await likeStore.DeleteLike(data.name);
-      console.log(data.name);
 
       errorStore.LoadSuccess("成功刪除!");
 
@@ -93,7 +92,7 @@ export default {
       });
 
       await likeStore.DeleteLike(data.name);
-      console.log(data.name);
+      await pickupStore.ModifyFile(data.name);
 
       errorStore.LoadSuccess("取衣申請成功!");
 

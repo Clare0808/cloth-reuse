@@ -109,6 +109,8 @@ export default {
         image: selectedList.value.image,
       });
 
+      await pickupStore.ModifyFile(selectedList.value.name);
+
       showElePage.value = false;
 
       errorStore.LoadSuccess("取衣申請成功!");
