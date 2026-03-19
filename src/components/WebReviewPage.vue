@@ -3,6 +3,9 @@
     <transition name="fade">
       <div class="title" v-if="showFade">給我們的回饋</div>
     </transition>
+    <transition name="fade">
+      <div class="no-item" v-if="showNone">這裡是空的!</div>
+    </transition>
     <transition name="slide">
       <div class="review-box-frame" v-if="showSlide">
         <div v-for="(review, index) in dataList" :key="index">
@@ -62,6 +65,7 @@ export default {
     const showSlide = ref(false);
     const showFade = ref(false);
     const dataList = ref([]);
+    const showNone = ref(false);
 
     const reviewStore = reviewUiStore();
 
@@ -70,12 +74,17 @@ export default {
       showFade.value = true;
 
       dataList.value = await reviewStore.GetReviewData();
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     });
 
     return {
       showSlide,
       showFade,
       dataList,
+      showNone,
       reviewStore,
     };
   },
@@ -96,6 +105,11 @@ export default {
   font-size: 35px;
   font-weight: bold;
   margin: 20px 0;
+}
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
 }
 .review-box-frame {
   display: grid;

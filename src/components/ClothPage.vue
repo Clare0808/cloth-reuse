@@ -17,6 +17,9 @@
           </div>
         </div>
       </transition>
+      <transition name="fade">
+        <div class="no-item" v-if="showNone">這裡是空的!</div>
+      </transition>
       <transition name="slide">
         <div class="cloth-box-frame" v-if="showElement">
           <div
@@ -62,6 +65,7 @@ export default {
     const showElement = ref(false);
     const dataList = ref([]);
     const filteredList = ref([]);
+    const showNone = ref(false);
 
     const OptionsData = ref(OptionsDataRaw); // 修正成 reactive 狀態
 
@@ -97,6 +101,12 @@ export default {
           }
         });
       }
+
+      if (filteredList.value.length === 0) {
+        showNone.value = true;
+      } else {
+        showNone.value = false;
+      }
     };
 
     const ClickCloth = (cloth) => {
@@ -112,6 +122,10 @@ export default {
 
       filteredList.value = dataList.value;
 
+      if (filteredList.value.length === 0) {
+        showNone.value = true;
+      }
+
       OptionsData.value.forEach((data) => {
         if (data.label === "all") {
           data.click = true;
@@ -125,6 +139,7 @@ export default {
       showElement,
       dataList,
       filteredList,
+      showNone,
       OptionsData,
       GetDishData,
       ClickOption,
@@ -177,6 +192,11 @@ export default {
   color: #ffffff;
   background-color: #849c7d;
   cursor: pointer;
+}
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
 }
 .active {
   color: #ffffff;

@@ -2,7 +2,7 @@
   <div class="ele">
     <div class="title">聯絡客服</div>
     <div class="contact-content">
-      <div class="sec-title">寫下你的想說的話吧!</div>
+      <div class="sec-title">有任何問題請聯絡客服中心!</div>
       <textarea type="text" v-model.trim="content"></textarea>
     </div>
     <div class="btn-frame">

@@ -23,7 +23,7 @@
             </div>
             <div class="func-frame">
               <div class="sec-title">取衣紀錄</div>
-              <div class="non-content" v-if="showNonContent">尚無取衣紀錄</div>
+              <div class="no-item" v-if="showNone">這裡是空的!</div>
               <div class="order-outframe">
                 <div v-for="(finish, index) in dataList" :key="index">
                   <div class="order-frame">
@@ -63,6 +63,7 @@ export default {
     const userName = ref("");
     const userPhone = ref("");
     const dataList = ref([]);
+    const showNone = ref(false);
 
     const loginStore = loginUiStore();
     const finishStore = finishUiStore();
@@ -86,6 +87,10 @@ export default {
       await GetUserInfo();
 
       dataList.value = await finishStore.GetFinishData();
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     });
 
     return {
@@ -94,6 +99,7 @@ export default {
       userName,
       userPhone,
       dataList,
+      showNone,
       GetUserInfo,
     };
   },
@@ -193,10 +199,11 @@ img {
   font-size: 22px;
   margin-bottom: 10px;
 }
-.non-content {
-  font-size: 20px;
+.no-item {
+  color: #adadad;
+  font-size: 26px;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 .order-outframe {
   max-height: 370px;

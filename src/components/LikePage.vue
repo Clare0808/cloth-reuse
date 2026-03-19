@@ -3,6 +3,9 @@
     <transition name="fade">
       <div class="title" v-if="showFade">我的收藏</div>
     </transition>
+    <transition name="fade">
+      <div class="no-item" v-if="showNone">這裡是空的!</div>
+    </transition>
     <transition name="slide">
       <div class="like-outframe" v-if="showSlide">
         <div class="like-frame" v-for="(data, index) in dataList" :key="index">
@@ -54,6 +57,7 @@ export default {
     const showSlide = ref(false);
     const dataList = ref([]);
     const type = ref("");
+    const showNone = ref(false);
 
     const errorStore = errorUiStore();
     const likeStore = likeUiStore();
@@ -62,6 +66,10 @@ export default {
 
     const GetData = async () => {
       dataList.value = await likeStore.GetLikeData();
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     };
 
     const DeleteData = async (data) => {
@@ -114,6 +122,7 @@ export default {
       dataList,
       mapStore,
       type,
+      showNone,
       GetData,
       DeleteData,
       ClickPickup,
@@ -136,6 +145,11 @@ export default {
   font-size: 35px;
   font-weight: bold;
   margin: 20px 0;
+}
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
 }
 .like-outframe {
   width: 100%;

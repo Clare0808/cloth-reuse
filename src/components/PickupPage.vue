@@ -3,6 +3,9 @@
     <transition name="fade">
       <div class="title" v-if="showFade">取衣專區</div>
     </transition>
+    <transition name="fade">
+      <div class="no-item" v-if="showNone">這裡是空的!</div>
+    </transition>
     <transition name="slide">
       <div class="pickup-outframe" v-if="showSlide">
         <div
@@ -74,6 +77,7 @@ export default {
     const showFade = ref(false);
     const showSlide = ref(true);
     const dataList = ref([]);
+    const showNone = ref(false);
 
     const pickupStore = pickupUiStore();
     const finishStore = finishUiStore();
@@ -95,12 +99,17 @@ export default {
       showSlide.value = true;
 
       dataList.value = await pickupStore.GetPickupData();
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     });
 
     return {
       showFade,
       showSlide,
       dataList,
+      showNone,
       pickupStore,
       finishStore,
       DeleteData,
@@ -124,6 +133,11 @@ export default {
   font-size: 35px;
   font-weight: bold;
   margin: 20px 0;
+}
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
 }
 .pickup-outframe {
   width: 100%;
