@@ -45,7 +45,7 @@ export default {
         pName: finishStore.dataList.pName,
       });
 
-      await pickupStore.DeletePickupNotRewrite(finishStore.dataList.name);
+      await pickupStore.DeletePickup(finishStore.dataList.name);
 
       finishStore.showElePage = false;
 

@@ -54,7 +54,7 @@ def modifyFile():
 
     for item in cloths:
         if item["name"] == name:
-            item["lock"] = True 
+            item["lock"] = not item["lock"]
             break
 
     with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -88,21 +88,6 @@ def getPickup():
 
 @api_bp.route("/delete-pickup", methods=["POST"])
 def deletePickup():
-    data = request.get_json()
-
-    name = data.get("name")
-
-    pickup = Pickup.query.filter_by(name = name).first()
-
-    db.session.delete(pickup)
-    db.session.commit()
-
-    return jsonify({
-        "message": "刪除成功"
-    }), 200
-
-@api_bp.route("/delete-pickup-not-rewrite", methods=["POST"])
-def deletePickupNotRewrite():
     data = request.get_json()
 
     name = data.get("name")

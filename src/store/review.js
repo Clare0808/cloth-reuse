@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const reviewUiStore = defineStore("review", () => {
+  const showElePage = ref(false);
+
   const SendReview = async (inputData) => {
     const responsePost = await fetch("http://localhost:5000/api/send-review", {
       method: "POST",
@@ -23,6 +26,7 @@ export const reviewUiStore = defineStore("review", () => {
   };
 
   return {
+    showElePage,
     SendReview,
     GetReviewData,
   };

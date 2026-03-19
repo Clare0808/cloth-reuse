@@ -26,7 +26,11 @@
     </transition>
 
     <transition name="fade">
-      <div class="add-btn" @click="showWriteWebReview = true" v-if="showFade">
+      <div
+        class="add-btn"
+        @click="reviewStore.showElePage = true"
+        v-if="showFade"
+      >
         +
       </div>
     </transition>
@@ -34,11 +38,11 @@
 
   <div
     class="overlay"
-    v-show="showWriteWebReview"
-    @click="showWriteWebReview = false"
+    v-show="reviewStore.showElePage"
+    @click="reviewStore.showElePage = false"
   ></div>
   <transition name="slide-ele">
-    <WriteWebReview class="ele-page" v-show="showWriteWebReview" />
+    <WriteWebReview class="ele-page" v-show="reviewStore.showElePage" />
   </transition>
 </template>
 
@@ -48,8 +52,6 @@ import { ref, onMounted } from "vue";
 import { reviewUiStore } from "@/store/review";
 
 import WriteWebReview from "./pageElement/WriteWebReview.vue";
-
-import { showWriteWebReview } from "./pageElement/WriteWebReview.vue";
 
 export default {
   name: "ReviewPage",
@@ -68,15 +70,13 @@ export default {
       showFade.value = true;
 
       dataList.value = await reviewStore.GetReviewData();
-
-      console.log(dataList.value);
     });
 
     return {
-      showWriteWebReview,
       showSlide,
       showFade,
       dataList,
+      reviewStore,
     };
   },
 };
