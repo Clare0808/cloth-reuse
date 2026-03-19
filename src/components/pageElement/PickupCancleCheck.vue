@@ -3,7 +3,7 @@
     <div class="title">是否要取消取衣申請?</div>
     <div class="btn-frame">
       <div class="no-btn" @click="pickupStore.showElePage = false">取消</div>
-      <div class="yes-btn" @click="ClickYes">確定</div>
+      <div class="yes-btn" @click="ClickCancelPickup">確定</div>
     </div>
   </div>
 </template>
@@ -19,8 +19,10 @@ export default {
     const errorStore = errorUiStore();
     const pickupStore = pickupUiStore();
 
-    const ClickYes = async (data) => {
-      await pickupStore.DeletePickup(data);
+    const ClickCancelPickup = async () => {
+      const deleteData = pickupStore.dataList;
+      await pickupStore.DeletePickup(deleteData);
+      await pickupStore.ModifyFile(deleteData);
 
       pickupStore.showElePage = false;
 
@@ -32,7 +34,7 @@ export default {
     return {
       showLogoutCheck,
       pickupStore,
-      ClickYes,
+      ClickCancelPickup,
     };
   },
 };

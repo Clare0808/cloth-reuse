@@ -39,19 +39,29 @@ def sendPickup():
     db.session.add(pickup)
     db.session.commit()
 
+    return jsonify({
+        "message": "儲存成功!"
+    }), 200
+
+@api_bp.route("/modify-file", methods=["POST"])
+def modifyFile():
+    data = request.get_json()
+
+    name = data.get("name")
+    
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         cloths = json.load(f)
 
     for item in cloths:
         if item["name"] == name:
-            item["lock"] = True 
+            item["lock"] = not item["lock"]
             break
 
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(cloths, f, ensure_ascii=False, indent=2)
 
     return jsonify({
-        "message": "儲存成功!"
+        "message": "修改成功!"
     }), 200
 
 @api_bp.route("/get-pickup", methods=["GET"])
@@ -86,17 +96,6 @@ def deletePickup():
 
     db.session.delete(pickup)
     db.session.commit()
-
-    with open(DATA_FILE, "r", encoding="utf-8") as f:
-        cloths = json.load(f)
-
-    for item in cloths:
-        if item["name"] == name:
-            item["lock"] = False
-            break
-
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(cloths, f, ensure_ascii=False, indent=2)
 
     return jsonify({
         "message": "刪除成功"

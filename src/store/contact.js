@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const reviewUiStore = defineStore("review", () => {
+export const contactUiStore = defineStore("contact", () => {
   const showElePage = ref(false);
 
-  const SendReview = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/send-review", {
+  const SendContact = async (inputData) => {
+    const responsePost = await fetch("http://localhost:5000/api/send-contact", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,8 +18,8 @@ export const reviewUiStore = defineStore("review", () => {
     }
   };
 
-  const GetReviewData = async () => {
-    const response = await fetch("http://localhost:5000/api/get-review");
+  const GetContactData = async () => {
+    const response = await fetch("http://localhost:5000/api/get-contact");
     const data = await response.json();
 
     return data.data;
@@ -27,7 +27,7 @@ export const reviewUiStore = defineStore("review", () => {
 
   return {
     showElePage,
-    SendReview,
-    GetReviewData,
+    SendContact,
+    GetContactData,
   };
 });

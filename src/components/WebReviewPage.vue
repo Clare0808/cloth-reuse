@@ -3,6 +3,9 @@
     <transition name="fade">
       <div class="title" v-if="showFade">給我們的回饋</div>
     </transition>
+    <transition name="fade">
+      <div class="no-item" v-if="showNone">這裡是空的!</div>
+    </transition>
     <transition name="slide">
       <div class="review-box-frame" v-if="showSlide">
         <div v-for="(review, index) in dataList" :key="index">
@@ -26,7 +29,11 @@
     </transition>
 
     <transition name="fade">
-      <div class="add-btn" @click="showWriteWebReview = true" v-if="showFade">
+      <div
+        class="add-btn"
+        @click="reviewStore.showElePage = true"
+        v-if="showFade"
+      >
         +
       </div>
     </transition>
@@ -34,11 +41,11 @@
 
   <div
     class="overlay"
-    v-show="showWriteWebReview"
-    @click="showWriteWebReview = false"
+    v-show="reviewStore.showElePage"
+    @click="reviewStore.showElePage = false"
   ></div>
   <transition name="slide-ele">
-    <WriteWebReview class="ele-page" v-show="showWriteWebReview" />
+    <WriteWebReview class="ele-page" v-show="reviewStore.showElePage" />
   </transition>
 </template>
 
@@ -49,8 +56,6 @@ import { reviewUiStore } from "@/store/review";
 
 import WriteWebReview from "./pageElement/WriteWebReview.vue";
 
-import { showWriteWebReview } from "./pageElement/WriteWebReview.vue";
-
 export default {
   name: "ReviewPage",
   components: {
@@ -60,6 +65,7 @@ export default {
     const showSlide = ref(false);
     const showFade = ref(false);
     const dataList = ref([]);
+    const showNone = ref(false);
 
     const reviewStore = reviewUiStore();
 
@@ -69,14 +75,17 @@ export default {
 
       dataList.value = await reviewStore.GetReviewData();
 
-      console.log(dataList.value);
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     });
 
     return {
-      showWriteWebReview,
       showSlide,
       showFade,
       dataList,
+      showNone,
+      reviewStore,
     };
   },
 };
@@ -96,6 +105,11 @@ export default {
   font-size: 35px;
   font-weight: bold;
   margin: 20px 0;
+}
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
 }
 .review-box-frame {
   display: grid;

@@ -3,6 +3,9 @@
     <transition name="fade">
       <div class="title" v-if="showFade">取衣專區</div>
     </transition>
+    <transition name="fade">
+      <div class="no-item" v-if="showNone">這裡是空的!</div>
+    </transition>
     <transition name="slide">
       <div class="pickup-outframe" v-if="showSlide">
         <div
@@ -29,7 +32,7 @@
               <div class="cloth-info">尺寸: {{ pickup.size }}</div>
               <div class="cloth-info">服飾狀況: {{ pickup.description }}</div>
             </div>
-            <div class="btn">取衣完成</div>
+            <div class="btn" @click="ClickFinish(pickup)">取衣完成</div>
           </div>
         </div>
       </div>
@@ -42,7 +45,16 @@
     @click="pickupStore.showElePage = false"
   ></div>
   <transition name="slide-ele">
-    <pickup-cancle-check class="ele-page" v-show="pickupStore.showElePage" />
+    <PickupCancleCheck class="ele-page" v-show="pickupStore.showElePage" />
+  </transition>
+
+  <div
+    class="overlay"
+    v-show="finishStore.showElePage"
+    @click="finishStore.showElePage = false"
+  ></div>
+  <transition name="slide-ele">
+    <FinishCheck class="ele-page" v-show="finishStore.showElePage" />
   </transition>
 </template>
 
@@ -50,20 +62,25 @@
 import { ref, onMounted } from "vue";
 
 import { pickupUiStore } from "@/store/pickup";
+import { finishUiStore } from "@/store/finish";
 
 import PickupCancleCheck from "./pageElement/PickupCancleCheck.vue";
+import FinishCheck from "./pageElement/FinishCheck.vue";
 
 export default {
   name: "PickupPage",
   components: {
     PickupCancleCheck,
+    FinishCheck,
   },
   setup() {
     const showFade = ref(false);
     const showSlide = ref(true);
     const dataList = ref([]);
+    const showNone = ref(false);
 
     const pickupStore = pickupUiStore();
+    const finishStore = finishUiStore();
 
     const DeleteData = async (data) => {
       pickupStore.dataList = data;
@@ -71,19 +88,32 @@ export default {
       pickupStore.showElePage = true;
     };
 
+    const ClickFinish = async (data) => {
+      finishStore.dataList = data;
+
+      finishStore.showElePage = true;
+    };
+
     onMounted(async () => {
       showFade.value = true;
       showSlide.value = true;
 
       dataList.value = await pickupStore.GetPickupData();
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     });
 
     return {
       showFade,
       showSlide,
       dataList,
+      showNone,
       pickupStore,
+      finishStore,
       DeleteData,
+      ClickFinish,
     };
   },
 };
@@ -103,6 +133,11 @@ export default {
   font-size: 35px;
   font-weight: bold;
   margin: 20px 0;
+}
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
 }
 .pickup-outframe {
   width: 100%;

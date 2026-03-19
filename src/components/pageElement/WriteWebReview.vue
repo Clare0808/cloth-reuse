@@ -20,7 +20,9 @@
       <textarea type="text" v-model.trim="reviewContent"></textarea>
     </div>
     <div class="btn-frame">
-      <div class="cancel-btn" @click="showWriteWebReview = false">取消</div>
+      <div class="cancel-btn" @click="reviewStore.showElePage = false">
+        取消
+      </div>
       <div class="submit-btn" @click="ClickSend">提交</div>
     </div>
   </div>
@@ -31,8 +33,6 @@ import { ref } from "vue";
 
 import { errorUiStore } from "@/store/error";
 import { reviewUiStore } from "@/store/review";
-
-export const showWriteWebReview = ref(false);
 
 export default {
   setup() {
@@ -82,7 +82,7 @@ export default {
           image: "/img/user.jpg",
         });
 
-        showWriteWebReview.value = false;
+        reviewStore.showElePage = false;
 
         errorStore.LoadSuccess("留言成功!");
 
@@ -115,11 +115,11 @@ export default {
     };
 
     return {
-      showWriteWebReview,
       starTouch,
       starClick,
       reviewContent,
       reviewDate,
+      reviewStore,
       HandleStarTouch,
       HandleStarLeave,
       ClickStart,

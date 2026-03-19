@@ -313,6 +313,7 @@ input:focus {
   background-color: #3b5131;
   border: 1px solid #3b5131;
   cursor: pointer;
+  transform: scale(1.1);
 }
 .login-btn {
   color: #ffffff;
@@ -322,6 +323,7 @@ input:focus {
   color: #ffffff;
   background-color: #3b5131;
   cursor: pointer;
+  transform: scale(1.1);
 }
 .text {
   color: #d0d0d0;

@@ -7,6 +7,7 @@ import UserPage from "@/components/UserPage.vue";
 import LoginPage from "@/components/LoginPage.vue";
 import MapPage from "@/components/MapPage.vue";
 import PickupPage from "@/components/PickupPage.vue";
+import ProblemPage from "@/components/ProblemPage.vue";
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: "/pickup",
     name: "PickupPage",
     component: PickupPage,
+  },
+  {
+    path: "/problem",
+    name: "ProblemPage",
+    component: ProblemPage,
   },
 ];
 
