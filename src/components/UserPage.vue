@@ -25,18 +25,18 @@
               <div class="sec-title">取衣紀錄</div>
               <div class="non-content" v-if="showNonContent">尚無取衣紀錄</div>
               <div class="order-outframe">
-                <div v-for="i in 5" :key="i">
+                <div v-for="(finish, index) in dataList" :key="index">
                   <div class="order-frame">
                     <div class="cloth-info">
-                      <div class="cloth-info">AA12345678</div>
-                      <div class="cloth-info">黑色T-shirt</div>
+                      <div class="cloth-info">{{ finish.code }}</div>
+                      <div class="cloth-info">{{ finish.name }}</div>
                     </div>
-                    <div class="cloth-date">2026-03-13 13:36</div>
+                    <div class="cloth-date">{{ finish.time }}</div>
                     <div class="cloth-info">
-                      <div class="cloth-info">衣服</div>
-                      <div class="cloth-info">尺寸: M</div>
-                      <div class="cloth-info">提供者: 楊先生</div>
-                      <div class="cloth-info">台北市信義區xx路</div>
+                      <div class="cloth-info">{{ finish.type }}</div>
+                      <div class="cloth-info">尺寸: {{ finish.size }}</div>
+                      <div class="cloth-info">提供者: {{ finish.pName }}</div>
+                      <div class="cloth-info">{{ finish.place }}</div>
                     </div>
                   </div>
                 </div>
@@ -47,16 +47,13 @@
       </div>
     </transition>
   </div>
-  <!-- <div class="overlay" v-show="showElePage" @click="showElePage = false"></div>
-  <transition name="slide-ele">
-    <ModifyUserInfo class="modify-page" v-if="showElePage" />
-  </transition> -->
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 
 import { loginUiStore } from "@/store/login";
+import { finishUiStore } from "@/store/finish";
 
 export default {
   name: "UserPage",
@@ -65,8 +62,10 @@ export default {
     const showSlide = ref(false);
     const userName = ref("");
     const userPhone = ref("");
+    const dataList = ref([]);
 
     const loginStore = loginUiStore();
+    const finishStore = finishUiStore();
 
     const GetUserInfo = async () => {
       userName.value = localStorage.getItem("userName");
@@ -85,6 +84,8 @@ export default {
       showSlide.value = true;
 
       await GetUserInfo();
+
+      dataList.value = await finishStore.GetFinishData();
     });
 
     return {
@@ -92,6 +93,7 @@ export default {
       showSlide,
       userName,
       userPhone,
+      dataList,
       GetUserInfo,
     };
   },

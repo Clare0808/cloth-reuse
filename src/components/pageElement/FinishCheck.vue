@@ -65,7 +65,8 @@ export default {
       const min = String(date.getMinutes()).padStart(2, "0");
 
       codeData.value = "CR" + String(year - 2000) + month + day + hour + min;
-      timeData.value = String(year) + "-" + month + "-" + day;
+      timeData.value =
+        String(year) + "-" + month + "-" + day + " " + hour + ":" + min;
     };
 
     return {
