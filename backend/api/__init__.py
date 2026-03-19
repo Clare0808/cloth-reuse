@@ -7,3 +7,4 @@ from . import like
 from . import review
 from . import pickup
 from . import finish
+from . import contact
