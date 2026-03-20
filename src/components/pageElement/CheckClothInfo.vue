@@ -18,7 +18,7 @@
             ></i>
           </div>
         </div>
-        <div class="cloth-info">類型: {{ selectedCloth.size }}</div>
+        <div class="cloth-info">類型: {{ type }}</div>
         <div class="cloth-info">尺寸: {{ selectedCloth.size }}</div>
         <div class="cloth-dis">服飾狀況: {{ selectedCloth.description }}</div>
         <div class="cloth-info">提供者: {{ selectedCloth.pName }}</div>
