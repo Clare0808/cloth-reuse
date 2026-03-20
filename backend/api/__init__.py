@@ -8,3 +8,4 @@ from . import review
 from . import pickup
 from . import finish
 from . import contact
+from . import cloth

@@ -76,5 +76,31 @@
     "time": "3:00~7:00 PM",
     "category": "shoes",
     "lock": false
+  },
+  {
+    "id": 7,
+    "name": "test",
+    "description": "test",
+    "size": "L",
+    "image": "test.jpg",
+    "email": "test111@gmail.com",
+    "pName": "111",
+    "place": "test",
+    "time": "test",
+    "category": "cloth",
+    "lock": false
+  },
+  {
+    "id": 8,
+    "name": "test1",
+    "description": "test1",
+    "size": "L",
+    "image": "/img/cloth/test1.jpg",
+    "email": "test111@gmail.com",
+    "pName": "111",
+    "place": "test1",
+    "time": "test1",
+    "category": "cloth",
+    "lock": false
   }
 ]

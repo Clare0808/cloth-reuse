@@ -39,18 +39,40 @@
     </div>
   </div>
 
+  <transition name="fade">
+    <div
+      class="add-btn"
+      @click="clothStore.showElePage = true"
+      v-if="showElement"
+    >
+      +
+    </div>
+  </transition>
+
   <div class="overlay" v-show="showElePage" @click="showElePage = false"></div>
   <transition name="slide-ele">
     <CheckClothInfo class="ele-page" v-show="showElePage" />
+  </transition>
+
+  <div
+    class="overlay"
+    v-show="clothStore.showElePage"
+    @click="clothStore.showElePage = false"
+  ></div>
+  <transition name="slide-ele">
+    <UploadCloth class="ele-page" v-show="clothStore.showElePage" />
   </transition>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 
+import { clothUiStore } from "@/store/cloth";
+
 import OptionsDataRaw from "@/assets/data/optionsData.json";
 
 import CheckClothInfo from "./pageElement/CheckClothInfo.vue";
+import UploadCloth from "./pageElement/UploadCloth.vue";
 
 export const selectedCloth = ref({});
 export const showElePage = ref(false);
@@ -59,6 +81,7 @@ export default {
   name: "ClothPage",
   components: {
     CheckClothInfo,
+    UploadCloth,
   },
   setup() {
     const showText = ref(false);
@@ -66,6 +89,8 @@ export default {
     const dataList = ref([]);
     const filteredList = ref([]);
     const showNone = ref(false);
+
+    const clothStore = clothUiStore();
 
     const OptionsData = ref(OptionsDataRaw); // 修正成 reactive 狀態
 
@@ -140,6 +165,7 @@ export default {
       dataList,
       filteredList,
       showNone,
+      clothStore,
       OptionsData,
       GetDishData,
       ClickOption,
@@ -246,6 +272,27 @@ export default {
 }
 .cloth-size {
   color: #849c7d;
+}
+
+.add-btn {
+  width: 60px;
+  height: 60px;
+  color: #ffffff;
+  font-size: 40px;
+  text-align: center;
+  line-height: 60px;
+  background-color: #849c7d;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: all 0.3s ease;
+}
+.add-btn:hover {
+  color: #ffffff;
+  background-color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 
 .ele-page {
