@@ -20,7 +20,7 @@
               <img :src="review.image" />
               <div class="review-text-frame">
                 <div class="review-author-name">{{ review.name }}</div>
-                <div class="review-author-date">{{ review.date }}</div>
+                <div class="review-author-date">{{ review.data }}</div>
               </div>
             </div>
           </div>

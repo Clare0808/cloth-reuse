@@ -8,6 +8,10 @@ import LoginPage from "@/components/LoginPage.vue";
 import MapPage from "@/components/MapPage.vue";
 import PickupPage from "@/components/PickupPage.vue";
 import ProblemPage from "@/components/ProblemPage.vue";
+import BackHomePage from "@/components/backstage/BackHomePage.vue";
+import BackClothPage from "@/components/backstage/BackClothPage.vue";
+import BackPickupPage from "@/components/backstage/BackPickupPage.vue";
+import BackWebReviewPage from "@/components/backstage/BeckWebReviewPage.vue";
 
 const routes = [
   {
@@ -54,6 +58,28 @@ const routes = [
     path: "/problem",
     name: "ProblemPage",
     component: ProblemPage,
+  },
+  {
+    path: "/back-home",
+    name: "BackHomePage",
+    component: BackHomePage,
+    children: [
+      {
+        path: "/back-cloth",
+        name: "BackClothPage",
+        component: BackClothPage,
+      },
+      {
+        path: "/back-pickup",
+        name: "BackPickupPage",
+        component: BackPickupPage,
+      },
+      {
+        path: "/back-web-review",
+        name: "BackWebReviewPage",
+        component: BackWebReviewPage,
+      },
+    ],
   },
 ];
 

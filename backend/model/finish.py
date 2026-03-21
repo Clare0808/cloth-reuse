@@ -11,9 +11,11 @@ class Finish(db.Model):
     type = db.Column(db.Text, nullable=True)
     size = db.Column(db.Text, nullable=True)
     time = db.Column(db.Text, nullable=True)
+    oTime = db.Column(db.Text, nullable=False)
     place = db.Column(db.Text, nullable=True)
     pEmail = db.Column(db.Text, nullable=False)
     pName = db.Column(db.Text, nullable=False)
+    image = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
         return f'<Finish {self.finish_id}>'

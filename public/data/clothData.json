@@ -79,28 +79,28 @@
   },
   {
     "id": 7,
-    "name": "test",
-    "description": "test",
-    "size": "L",
-    "image": "test.jpg",
-    "email": "test111@gmail.com",
-    "pName": "111",
-    "place": "test",
-    "time": "test",
-    "category": "cloth",
-    "lock": false
-  },
-  {
-    "id": 8,
     "name": "test1",
     "description": "test1",
     "size": "L",
-    "image": "/img/cloth/test1.jpg",
+    "image": "/img/cloth/test1.png",
     "email": "test111@gmail.com",
     "pName": "111",
     "place": "test1",
     "time": "test1",
     "category": "cloth",
-    "lock": false
+    "lock": true
+  },
+  {
+    "id": 8,
+    "name": "test2",
+    "description": "test2",
+    "size": "L",
+    "image": "/img/cloth/test2.png",
+    "email": "test111@gmail.com",
+    "pName": "111",
+    "place": "test2",
+    "time": "test2",
+    "category": "skirt",
+    "lock": true
   }
 ]
