@@ -23,7 +23,26 @@
         </div>
         <div class="text-frame">
           <div class="sec-title">類型</div>
-          <input type="text" v-model.trim="type" />
+          <div class="type-select-outframe">
+            <div
+              class="type-select-prompt"
+              @click="showSelector = !showSelector"
+            >
+              {{ typeName }}
+            </div>
+            <transition name="slide-down">
+              <div class="type-select-box" v-if="showSelector">
+                <div
+                  v-for="(option, index) in OptionsData.slice(1)"
+                  :key="index"
+                >
+                  <div class="type-selector" @click="ClickOption(option.name)">
+                    {{ option.name }}
+                  </div>
+                </div>
+              </div>
+            </transition>
+          </div>
         </div>
         <div class="text-frame">
           <div class="sec-title">尺寸</div>
@@ -56,6 +75,8 @@ import { ref, onMounted } from "vue";
 import { errorUiStore } from "@/store/error";
 import { clothUiStore } from "@/store/cloth";
 
+import OptionsDataRaw from "@/assets/data/optionsData.json";
+
 export default {
   setup() {
     const name = ref("");
@@ -68,9 +89,14 @@ export default {
 
     const fileInput = ref(null);
     const tempImage = ref(null);
+    const tempImageName = ref("");
+    const showSelector = ref(false);
+    const typeName = ref("");
 
     const errorStore = errorUiStore();
     const clothStore = clothUiStore();
+
+    const OptionsData = ref(OptionsDataRaw);
 
     const SendAdd = async () => {
       ExamEmptyInput();
@@ -84,12 +110,12 @@ export default {
           name: name.value,
           situation: situation.value,
           size: size.value,
-          image: tempImage.value,
+          image: tempImageName.value,
           pEmail: userEmail,
           pName: userName,
           place: place.value,
           time: time.value,
-          type: "cloth",
+          type: type.value,
           lock: false,
         });
 
@@ -121,7 +147,8 @@ export default {
       fd.append("image", e.target.files[0]);
 
       const data = await clothStore.UploadClothImage(fd);
-      tempImage.value = "./upload/cloth/" + data;
+      tempImage.value = "http://localhost:5000/upload/cloth/" + data;
+      tempImageName.value = data;
 
       ExamImage();
     };
@@ -179,8 +206,25 @@ export default {
       newId.value = maxId + 1;
     };
 
+    const ClickOption = (option) => {
+      const filteredData = OptionsData.value.find((item) => {
+        return item.name === option;
+      });
+
+      type.value = filteredData.label;
+      typeName.value = filteredData.name;
+
+      showSelector.value = false;
+
+      const optionEle = document.querySelector(".type-select-prompt");
+      optionEle.style.color = "#ffffff";
+      optionEle.style.backgroundColor = "#849c7d";
+    };
+
     onMounted(() => {
       CleanInput();
+
+      typeName.value = "請選擇";
 
       ExamImage();
 
@@ -197,7 +241,12 @@ export default {
       newId,
       fileInput,
       tempImage,
+      tempImageName,
+      showSelector,
+      typeName,
       clothStore,
+      OptionsDataRaw,
+      OptionsData,
       SendAdd,
       CleanInput,
       TriggleFileInput,
@@ -206,6 +255,7 @@ export default {
       ExamEmptyInput,
       ExamImage,
       FindNewId,
+      ClickOption,
     };
   },
 };
@@ -277,6 +327,50 @@ input:focus {
   outline: none;
   border-bottom: 1px solid #3b5131;
 }
+.type-select-outframe {
+  position: relative;
+}
+.type-select-prompt {
+  width: 150px;
+  background-color: #ffffff;
+  border: 1px solid #849c7d;
+  border-radius: 20px;
+  padding: 10px;
+  position: relative;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+.type-select-prompt:hover {
+  color: #ffffff;
+  background-color: #849c7d;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+.type-select-box {
+  width: 150px;
+  background-color: #ffffff;
+  color: #3b5131;
+  border: 1px solid #3b5131;
+  border-top: none;
+  border-radius: 8px;
+  padding: 10px;
+  padding-top: 20px;
+  position: absolute;
+  top: 30px;
+  left: 0px;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+.type-selector {
+  margin: 5px 0;
+}
+.type-selector:hover {
+  color: #ffffff;
+  background-color: #849c7d;
+  border-radius: 20px;
+  cursor: pointer;
+  transform: scale(1.1);
+}
 textarea {
   width: 95%;
   font-size: 20px;
@@ -326,5 +420,20 @@ textarea:focus {
   color: #ffffff;
   background-color: #3b5131;
   cursor: pointer;
+}
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-down-enter-from,
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.slide-down-enter-to,
+.slide-down-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
