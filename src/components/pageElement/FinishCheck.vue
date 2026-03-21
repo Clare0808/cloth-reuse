@@ -40,9 +40,11 @@ export default {
         type: finishStore.dataList.type,
         size: finishStore.dataList.size,
         time: timeData.value,
+        oTime: finishStore.dataList.time,
         place: finishStore.dataList.place,
         pEmail: finishStore.dataList.pEmail,
         pName: finishStore.dataList.pName,
+        image: finishStore.dataList.image,
       });
 
       await pickupStore.DeletePickup(finishStore.dataList.name);

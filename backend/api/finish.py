@@ -14,9 +14,11 @@ def sendFinish():
     type = data.get("type")
     size = data.get("size")
     time = data.get("time")
+    oTime = data.get("oTime")
     place = data.get("place")
     pEmail = data.get("pEmail")
     pName = data.get("pName")
+    image = data.get("image")
 
 
     finish = Finish(
@@ -27,9 +29,11 @@ def sendFinish():
         type = type,
         size = size,
         time = time,
+        oTime = oTime,
         place = place,
         pEmail = pEmail,
         pName = pName,
+        image = image,
     )
 
     db.session.add(finish)
@@ -51,9 +55,11 @@ def getFinish():
         "type": info.type,
         "size": info.size,
         "time": info.time,
+        "oTime": info.oTime,
         "place": info.place,
         "pEmail": info.pEmail,
         "pName": info.pName,
+        "image": info.image
     } for info in infos]
 
     return jsonify({

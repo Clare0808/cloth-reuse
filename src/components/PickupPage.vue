@@ -30,7 +30,7 @@
               </div>
               <div class="cloth-info">類型: {{ pickup.type }}</div>
               <div class="cloth-info">尺寸: {{ pickup.size }}</div>
-              <div class="cloth-info">服飾狀況: {{ pickup.description }}</div>
+              <div class="cloth-info">服飾狀況: {{ pickup.situation }}</div>
             </div>
             <div class="btn" @click="ClickFinish(pickup)">取衣完成</div>
           </div>
