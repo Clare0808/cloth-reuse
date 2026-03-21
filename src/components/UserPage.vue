@@ -20,6 +20,7 @@
                 {{ userPhone }}
                 <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
               </div>
+              <div class="btn" @click="ClickBack">進入後台</div>
             </div>
             <div class="func-frame">
               <div class="sec-title">取衣紀錄</div>
@@ -52,6 +53,8 @@
 <script>
 import { ref, onMounted } from "vue";
 
+import { useRouter } from "vue-router";
+
 import { loginUiStore } from "@/store/login";
 import { finishUiStore } from "@/store/finish";
 
@@ -64,6 +67,8 @@ export default {
     const userPhone = ref("");
     const dataList = ref([]);
     const showNone = ref(false);
+
+    const router = useRouter();
 
     const loginStore = loginUiStore();
     const finishStore = finishUiStore();
@@ -78,6 +83,10 @@ export default {
       });
 
       userPhone.value = filteredData.phone;
+    };
+
+    const ClickBack = () => {
+      router.push("/back-home");
     };
 
     onMounted(async () => {
@@ -101,6 +110,7 @@ export default {
       dataList,
       showNone,
       GetUserInfo,
+      ClickBack,
     };
   },
 };
@@ -178,6 +188,23 @@ img {
 .user-info i:hover {
   color: #849c7d;
   cursor: pointer;
+}
+.btn {
+  width: 150px;
+  height: 40px;
+  color: #ffffff;
+  background-color: #849c7d;
+  font-size: 20px;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+.btn:hover {
+  background-color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 .text-frame {
   width: 100%;
