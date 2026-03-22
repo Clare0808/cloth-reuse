@@ -36,6 +36,7 @@ def getReview():
     infos = Review.query.all()
 
     data_list = [{
+        "id": info.review_id,
         "email": info.email,
         "name": info.name,
         "content": info.content,
@@ -46,4 +47,19 @@ def getReview():
 
     return jsonify({
         "data": data_list
+    }), 200
+
+@api_bp.route("delete-review", methods=["POST"])
+def deleteReview() :
+    data = request.get_json()
+
+    id = data.get("id")
+
+    review = Review.query.filter_by(review_id = id).first()
+
+    db.session.delete(review)
+    db.session.commit()
+
+    return jsonify({
+        "message": "刪除成功"
     }), 200

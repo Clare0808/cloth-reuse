@@ -23,7 +23,7 @@
     "place": "新北市板橋路xx路",
     "time": "3:00~7:00 PM",
     "category": "cloth",
-    "lock": false
+    "lock": true
   },
   {
     "id": 3,

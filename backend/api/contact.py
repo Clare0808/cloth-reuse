@@ -32,6 +32,7 @@ def getContact():
     infos = Contact.query.all()
 
     data_list = [{
+        "id": info.contact_id,
         "email": info.email,
         "name": info.name,
         "content": info.content,
@@ -40,4 +41,19 @@ def getContact():
 
     return jsonify({
         "data": data_list
+    }), 200
+
+@api_bp.route("/delete-contact", methods=["POST"])
+def deleteContact():
+    data = request.get_json()
+
+    id = data.get("id")
+
+    contact = Contact.query.filter_by(contact_id = id).first()
+
+    db.session.delete(contact)
+    db.session.commit()
+
+    return jsonify({
+        "message": "刪除成功"
     }), 200

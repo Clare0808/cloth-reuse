@@ -26,10 +26,28 @@ export const finishUiStore = defineStore("finish", () => {
     }
   };
 
+  const DeleteFinish = async (inputData) => {
+    const responsePost = await fetch(
+      "http://localhost:5000/api/delete-review",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: inputData }),
+      }
+    );
+
+    if (!responsePost.ok) {
+      throw new Error("Network response was not ok");
+    }
+  };
+
   return {
     dataList,
     showElePage,
     GetFinishData,
     SendFinishData,
+    DeleteFinish,
   };
 });
