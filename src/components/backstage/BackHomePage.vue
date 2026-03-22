@@ -22,15 +22,33 @@
       <router-view class="child-page" v-if="showSlide" />
     </transition>
   </div>
+
+  <div
+    class="overlay"
+    v-show="deleteStore.showCheck"
+    @click="deleteStore.showCheck = false"
+  ></div>
+  <transition name="slide-ele">
+    <DeleteCheckEle class="ele-page" v-if="deleteStore.showCheck" />
+  </transition>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 
+import { deleteUiStore } from "@/store/delete";
+
+import DeleteCheckEle from "../pageElement/DeleteCheckEle.vue";
+
 export default {
   name: "BackHomePage",
+  components: {
+    DeleteCheckEle,
+  },
   setup() {
     const showSlide = ref(false);
+
+    const deleteStore = deleteUiStore();
 
     onMounted(() => {
       showSlide.value = true;
@@ -38,6 +56,7 @@ export default {
 
     return {
       showSlide,
+      deleteStore,
     };
   },
 };
@@ -106,6 +125,23 @@ a:focus {
   padding: 20px;
 }
 
+.ele-page {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 98;
+}
+
 .slide-enter-active,
 .slide-leave-active {
   transition: all 1s ease;
@@ -119,5 +155,19 @@ a:focus {
 .slide-leave-from {
   opacity: 1;
   transform: translateY(0);
+}
+.slide-ele-enter-active,
+.slide-ele-leave-active {
+  transition: all 1s ease;
+}
+.slide-ele-enter-from,
+.slide-ele-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -50%) translateY(20px);
+}
+.slide-ele-enter-to,
+.slide-ele-leave-from {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
 }
 </style>

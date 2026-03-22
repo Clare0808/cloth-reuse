@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="btn-frame">
-            <i class="fa-solid fa-trash-can"></i>
+            <i class="fa-solid fa-trash-can" @click="ClickDelete(review)"></i>
           </div>
         </div>
       </div>
@@ -35,6 +35,7 @@
 import { ref, onMounted } from "vue";
 
 import { reviewUiStore } from "@/store/review";
+import { deleteUiStore } from "@/store/delete";
 
 export default {
   name: "BackWebReviewPage",
@@ -42,6 +43,11 @@ export default {
     const reviewData = ref([]);
 
     const reviewStore = reviewUiStore();
+    const deleteStore = deleteUiStore();
+
+    const ClickDelete = async (data) => {
+      deleteStore.open("review", data.id);
+    };
 
     onMounted(async () => {
       reviewData.value = await reviewStore.GetReviewData();
@@ -49,6 +55,7 @@ export default {
 
     return {
       reviewData,
+      ClickDelete,
     };
   },
 };

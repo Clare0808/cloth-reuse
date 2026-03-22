@@ -11,7 +11,10 @@ import ProblemPage from "@/components/ProblemPage.vue";
 import BackHomePage from "@/components/backstage/BackHomePage.vue";
 import BackClothPage from "@/components/backstage/BackClothPage.vue";
 import BackPickupPage from "@/components/backstage/BackPickupPage.vue";
-import BackWebReviewPage from "@/components/backstage/BeckWebReviewPage.vue";
+import BackWebReviewPage from "@/components/backstage/BackWebReviewPage.vue";
+import BackUserPage from "@/components/backstage/BackUserPage.vue";
+import BackContactPage from "@/components/backstage/BackContactPage.vue";
+import BackChartPage from "@/components/backstage/BackChartPage.vue";
 
 const routes = [
   {
@@ -78,6 +81,21 @@ const routes = [
         path: "/back-web-review",
         name: "BackWebReviewPage",
         component: BackWebReviewPage,
+      },
+      {
+        path: "/back-user",
+        name: "BackUserPage",
+        component: BackUserPage,
+      },
+      {
+        path: "/back-contact",
+        name: "BackContactPage",
+        component: BackContactPage,
+      },
+      {
+        path: "/back-chart",
+        name: "BackChartPage",
+        component: BackChartPage,
       },
     ],
   },

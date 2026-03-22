@@ -32,8 +32,7 @@
               </div>
             </div>
             <div class="btn-frame">
-              <i class="fa-solid fa-pencil"></i>
-              <i class="fa-solid fa-trash-can"></i>
+              <i class="fa-solid fa-trash-can" @click="ClickDelete(pickup)"></i>
             </div>
           </div>
         </div>
@@ -46,6 +45,7 @@
 import { ref, onMounted } from "vue";
 
 import { finishUiStore } from "@/store/finish";
+import { deleteUiStore } from "@/store/delete";
 
 export default {
   name: "BackPickupPage",
@@ -53,6 +53,11 @@ export default {
     const dataList = ref([]);
 
     const finishStore = finishUiStore();
+    const deleteStore = deleteUiStore();
+
+    const ClickDelete = async (data) => {
+      deleteStore.open("finish", data.id);
+    };
 
     onMounted(async () => {
       dataList.value = await finishStore.GetFinishData();
@@ -60,6 +65,7 @@ export default {
 
     return {
       dataList,
+      ClickDelete,
     };
   },
 };

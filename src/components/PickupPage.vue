@@ -24,7 +24,7 @@
                   <i class="fa-solid fa-map"></i>
                   <i
                     class="fa-solid fa-trash"
-                    @click="DeleteData(pickup.name)"
+                    @click="DeleteData(pickup.id)"
                   ></i>
                 </div>
               </div>

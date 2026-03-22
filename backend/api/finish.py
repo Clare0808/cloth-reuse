@@ -48,6 +48,7 @@ def getFinish():
     infos = Finish.query.all()
 
     data_list = [{
+        "id": info.finish_id,
         "rEmail": info.rEmail,
         "rName": info.rName,
         "name": info.name,
@@ -64,4 +65,19 @@ def getFinish():
 
     return jsonify({
         "data": data_list
+    }), 200
+
+@api_bp.route("/delete-finish", methods=["POST"])
+def deleteFinish() :
+    data = request.get_json()
+
+    id = data.get("id")
+
+    finish = Finish.query.filter_by(finish_id = id).first()
+
+    db.session.delete(finish)
+    db.session.commit()
+
+    return jsonify({
+        "message": "刪除成功"
     }), 200

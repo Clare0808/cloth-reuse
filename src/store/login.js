@@ -49,5 +49,10 @@ export const loginUiStore = defineStore("login", {
 
       return data.data;
     },
+    async removeUser(id) {
+      const response = await axios.post("/api/delete-user", { id: id });
+
+      return response;
+    },
   },
 });

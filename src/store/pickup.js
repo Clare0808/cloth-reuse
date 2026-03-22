@@ -34,7 +34,7 @@ export const pickupUiStore = defineStore("pickup", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name: data }),
+        body: JSON.stringify({ id: data }),
       }
     );
 

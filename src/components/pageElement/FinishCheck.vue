@@ -47,7 +47,7 @@ export default {
         image: finishStore.dataList.image,
       });
 
-      await pickupStore.DeletePickup(finishStore.dataList.name);
+      await pickupStore.DeletePickup(finishStore.dataList.id);
 
       finishStore.showElePage = false;
 
