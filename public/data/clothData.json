@@ -102,5 +102,18 @@
     "time": "test2",
     "category": "skirt",
     "lock": true
+  },
+  {
+    "id": 9,
+    "name": "tName1",
+    "description": "tDesc",
+    "size": "L",
+    "image": "/img/cloth/tName1.png",
+    "email": "test222@gmail.com",
+    "pName": "111",
+    "place": "tLocation1",
+    "time": "tTime",
+    "category": "pants",
+    "lock": true
   }
 ]
