@@ -41,6 +41,7 @@ def getLike():
     infos = Like.query.all()
 
     data_list = [{
+        "id": info.like_id,
         "name": info.name,
         "type": info.type,
         "size": info.size,
@@ -60,9 +61,9 @@ def getLike():
 def deleteLike():
     data = request.get_json()
 
-    name = data.get("name")
+    id = data.get("id")
 
-    like = Like.query.filter_by(name = name).first()
+    like = Like.query.filter_by(like_id = id).first()
 
     db.session.delete(like)
     db.session.commit()

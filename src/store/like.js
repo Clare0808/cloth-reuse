@@ -28,7 +28,7 @@ export const likeUiStore = defineStore("like", () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: likeData }),
+      body: JSON.stringify({ id: likeData }),
     });
 
     if (!responsePost.ok) {

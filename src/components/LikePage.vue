@@ -73,7 +73,7 @@ export default {
     };
 
     const DeleteData = async (data) => {
-      await likeStore.DeleteLike(data.name);
+      await likeStore.DeleteLike(data.id);
 
       errorStore.LoadSuccess("成功刪除!");
 

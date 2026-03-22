@@ -69,6 +69,7 @@ def getPickup():
     infos = Pickup.query.all()
 
     data_list = [{
+        "id": info.pickup_id,
         "rEmail": info.rEmail,
         "rName": info.rName,
         "name": info.name,
@@ -90,9 +91,9 @@ def getPickup():
 def deletePickup():
     data = request.get_json()
 
-    name = data.get("name")
+    id = data.get("id")
 
-    pickup = Pickup.query.filter_by(name = name).first()
+    pickup = Pickup.query.filter_by(pickup_id = id).first()
 
     db.session.delete(pickup)
     db.session.commit()
