@@ -99,21 +99,21 @@
     "email": "test111@gmail.com",
     "pName": "111",
     "place": "test2",
-    "time": "test2",
+    "time": "tTime2",
     "category": "skirt",
     "lock": true
   },
   {
     "id": 9,
-    "name": "tName1",
-    "description": "tDesc",
-    "size": "L",
-    "image": "/img/cloth/tName1.png",
+    "name": "tName2",
+    "description": "tDesc2",
+    "size": "S",
+    "image": "/img/cloth/.png",
     "email": "test222@gmail.com",
     "pName": "111",
     "place": "tLocation1",
     "time": "tTime",
-    "category": "pants",
+    "category": "cloth",
     "lock": true
   }
 ]
