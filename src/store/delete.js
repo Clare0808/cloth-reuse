@@ -5,6 +5,7 @@ import { loginUiStore } from "./login";
 import { reviewUiStore } from "./review";
 import { contactUiStore } from "./contact";
 import { finishUiStore } from "./finish";
+import { clothUiStore } from "./cloth";
 
 export const deleteUiStore = defineStore("delete", {
   state: () => ({
@@ -29,6 +30,7 @@ export const deleteUiStore = defineStore("delete", {
       const reviewStore = reviewUiStore();
       const contactStore = contactUiStore();
       const finishStore = finishUiStore();
+      const clothStore = clothUiStore();
 
       if (this.type === "review") {
         await reviewStore.DeleteReview(this.deleteData);
@@ -38,6 +40,8 @@ export const deleteUiStore = defineStore("delete", {
         await loginStore.removeUser(this.deleteData);
       } else if (this.type === "finish") {
         await finishStore.DeleteFinish(this.deleteData);
+      } else if (this.type === "cloth") {
+        await clothStore.DeleteCloth(this.deleteData);
       }
 
       this.cancel();

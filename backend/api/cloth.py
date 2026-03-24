@@ -64,3 +64,49 @@ def uploadClothImage():
         "data": new_filename
     }), 200
 
+@api_bp.route("/delete-cloth", methods=['POST'])
+def deleteCloth():
+    data = request.get_json()
+
+    id = data.get("id")
+
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
+        cloths = json.load(f)
+
+    new_cloths = [c for c in cloths if c.get("id") != id]
+
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(new_cloths, f, ensure_ascii=False, indent=2)
+
+    return jsonify({
+        "message": "刪除成功"
+    }), 200
+
+@api_bp.route("/modify-cloth", methods=['POST'])
+def modifyCloth():
+    data = request.get_json()
+
+    id = data.get("id")
+
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
+        cloths = json.load(f)
+
+    id = data.get("id")
+    for cloth in cloths:
+        if cloth.get("id") == id:
+            cloth["name"] = data.get("name", cloth["name"])
+            cloth["description"] = data.get("situation", cloth["description"])
+            cloth["size"] = data.get("size", cloth["size"])
+            cloth["image"] = data.get("image", cloth["image"])
+            cloth["place"] = data.get("place", cloth["place"])
+            cloth["time"] = data.get("time", cloth["time"])
+            cloth["category"] = data.get("category", cloth["category"])
+            
+            break
+
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(cloths, f, ensure_ascii=False, indent=2)
+
+    return jsonify({
+        "message": "修改成功"
+    }), 200

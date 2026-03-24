@@ -27,30 +27,82 @@
               </div>
             </div>
             <div class="btn-frame">
-              <i class="fa-solid fa-pencil"></i>
-              <i class="fa-solid fa-trash-can"></i>
+              <i class="fa-solid fa-pencil" @click="ClickModify(cloth)"></i>
+              <i class="fa-solid fa-trash-can" @click="ClickDelete(cloth)"></i>
             </div>
           </div>
         </div>
       </div>
-      <div class="add-btn">新增服飾 +</div>
+      <div class="add-btn" @click="clothStore.showElePage = true">
+        新增服飾 +
+      </div>
     </div>
+
+    <div
+      class="overlay"
+      v-show="clothStore.showElePage"
+      @click="clothStore.showElePage = false"
+    ></div>
+    <transition name="slide-ele">
+      <UploadCloth class="ele-page" v-show="clothStore.showElePage" />
+    </transition>
+
+    <div
+      class="overlay"
+      v-show="clothStore.showModifyPage"
+      @click="clothStore.showModifyPage = false"
+    ></div>
+    <transition name="slide-ele">
+      <ModifyCloth class="ele-page" v-show="clothStore.showModifyPage" />
+    </transition>
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 
+import { deleteUiStore } from "@/store/delete";
+import { clothUiStore } from "@/store/cloth";
+
+import UploadCloth from "../pageElement/UploadCloth.vue";
+import ModifyCloth from "../pageElement/ModifyCloth.vue";
+
+import OptionsDataRaw from "@/assets/data/optionsData.json";
+
 export default {
   name: "BackClothPage",
+  components: {
+    UploadCloth,
+    ModifyCloth,
+  },
   setup() {
     const dataList = ref([]);
+
+    const deleteStore = deleteUiStore();
+    const clothStore = clothUiStore();
+
+    const OptionsData = ref(OptionsDataRaw);
 
     const GetDishData = async () => {
       const response = await fetch("/data/clothData.json");
       const data = await response.json();
 
       dataList.value = data;
+
+      dataList.value.forEach((item) => {
+        const type = OptionsData.value.find((op) => op.label === item.category);
+
+        item.category = type.name;
+      });
+    };
+
+    const ClickDelete = async (data) => {
+      deleteStore.open("cloth", data.id);
+    };
+
+    const ClickModify = (data) => {
+      clothStore.modifyList = data;
+      clothStore.showModifyPage = true;
     };
 
     onMounted(async () => {
@@ -59,7 +111,11 @@ export default {
 
     return {
       dataList,
+      clothStore,
+      OptionsData,
       GetDishData,
+      ClickDelete,
+      ClickModify,
     };
   },
 };
@@ -152,17 +208,34 @@ i:hover {
   cursor: pointer;
 }
 
-.slide-child-enter-active,
-.slide-child-leave-active {
+.ele-page {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 98;
+}
+
+.slide-ele-enter-active,
+.slide-ele-leave-active {
   transition: all 1s ease;
 }
-.slide-child-enter-from,
-.slide-child-leave-to {
+.slide-ele-enter-from,
+.slide-ele-leave-to {
   opacity: 0;
   transform: translate(-50%, -50%) translateY(20px);
 }
-.slide-child-enter-to,
-.slide-child-leave-from {
+.slide-ele-enter-to,
+.slide-ele-leave-from {
   opacity: 1;
   transform: translate(-50%, -50%) translateY(0);
 }
