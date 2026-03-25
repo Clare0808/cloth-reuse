@@ -43,5 +43,16 @@ export const loginUiStore = defineStore("login", {
 
       localStorage.removeItem("token");
     },
+    async getUserInfo() {
+      const response = await axios.get("/api/get-user-info");
+      const data = response.data;
+
+      return data.data;
+    },
+    async removeUser(id) {
+      const response = await axios.post("/api/delete-user", { id: id });
+
+      return response;
+    },
   },
 });

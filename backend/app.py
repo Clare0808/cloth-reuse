@@ -3,8 +3,12 @@ from flask_cors import CORS
 from api import api_bp
 from database import init_db
 from flask_jwt_extended import JWTManager
+import os
 
-app = Flask(__name__)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # 根目錄
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'upload')
+
+app = Flask(__name__, static_url_path='/upload', static_folder=UPLOAD_FOLDER)
 init_db(app)
 CORS(app, origins="*") # 允許前端從發送請求
 

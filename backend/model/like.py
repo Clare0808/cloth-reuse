@@ -10,6 +10,8 @@ class Like(db.Model):
     situation = db.Column(db.Text, nullable=True)
     time = db.Column(db.Text, nullable=True)
     place = db.Column(db.Text, nullable=True)
+    pEmail = db.Column(db.Text, nullable=False)
+    pName = db.Column(db.Text, nullable=False)
     image = db.Column(db.Text, nullable=True)
 
     def __repr__(self):

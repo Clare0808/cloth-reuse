@@ -3,23 +3,24 @@
     <transition name="fade">
       <div class="title" v-if="showFade">給我們的回饋</div>
     </transition>
+    <transition name="fade">
+      <div class="no-item" v-if="showNone">這裡是空的!</div>
+    </transition>
     <transition name="slide">
       <div class="review-box-frame" v-if="showSlide">
-        <div v-for="i in 7" :key="i">
+        <div v-for="(review, index) in dataList" :key="index">
           <div class="review-box">
             <div class="review-stars">
-              <div v-for="s in 5" :key="s">
+              <div v-for="indexS in review.star" :key="indexS">
                 <i class="fa-solid fa-star"></i>
               </div>
             </div>
-            <div class="review-content">
-              以前不知道舊衣要丟哪裡，現在用這個網站就能快速找到回收點，讓衣服有第二次生命。
-            </div>
+            <div class="review-content">{{ review.content }}</div>
             <div class="review-author-info">
-              <i class="fa-solid fa-user"></i>
+              <img :src="review.image" />
               <div class="review-text-frame">
-                <div class="review-author-name">王小明</div>
-                <div class="review-author-date">2026-03-12</div>
+                <div class="review-author-name">{{ review.name }}</div>
+                <div class="review-author-date">{{ review.data }}</div>
               </div>
             </div>
           </div>
@@ -28,7 +29,11 @@
     </transition>
 
     <transition name="fade">
-      <div class="add-btn" @click="showWriteWebReview = true" v-if="showFade">
+      <div
+        class="add-btn"
+        @click="reviewStore.showElePage = true"
+        v-if="showFade"
+      >
         +
       </div>
     </transition>
@@ -36,20 +41,20 @@
 
   <div
     class="overlay"
-    v-show="showWriteWebReview"
-    @click="showWriteWebReview = false"
+    v-show="reviewStore.showElePage"
+    @click="reviewStore.showElePage = false"
   ></div>
   <transition name="slide-ele">
-    <WriteWebReview class="ele-page" v-show="showWriteWebReview" />
+    <WriteWebReview class="ele-page" v-show="reviewStore.showElePage" />
   </transition>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 
-import WriteWebReview from "./pageElement/WriteWebReview.vue";
+import { reviewUiStore } from "@/store/review";
 
-import { showWriteWebReview } from "./pageElement/WriteWebReview.vue";
+import WriteWebReview from "./pageElement/WriteWebReview.vue";
 
 export default {
   name: "ReviewPage",
@@ -59,16 +64,28 @@ export default {
   setup() {
     const showSlide = ref(false);
     const showFade = ref(false);
+    const dataList = ref([]);
+    const showNone = ref(false);
 
-    onMounted(() => {
+    const reviewStore = reviewUiStore();
+
+    onMounted(async () => {
       showSlide.value = true;
       showFade.value = true;
+
+      dataList.value = await reviewStore.GetReviewData();
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     });
 
     return {
-      showWriteWebReview,
       showSlide,
       showFade,
+      dataList,
+      showNone,
+      reviewStore,
     };
   },
 };
@@ -88,6 +105,11 @@ export default {
   font-size: 35px;
   font-weight: bold;
   margin: 20px 0;
+}
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
 }
 .review-box-frame {
   display: grid;
@@ -120,8 +142,9 @@ export default {
   justify-content: start;
   align-items: center;
 }
-.review-author-info i {
-  font-size: 30px;
+.review-author-info img {
+  width: 30px;
+  height: 30px;
   margin-right: 20px;
 }
 .review-text-frame {

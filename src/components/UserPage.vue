@@ -13,28 +13,31 @@
                 <i class="fa-solid fa-pencil" id="pencil"></i>
               </div>
               <div class="user-info">
-                王小明 您好!
+                {{ userName }} 您好!
                 <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
               </div>
               <div class="user-info">
-                0912-345-678
+                {{ userPhone }}
                 <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
               </div>
+              <div class="btn" @click="ClickBack">進入後台</div>
             </div>
             <div class="func-frame">
               <div class="sec-title">取衣紀錄</div>
-              <div class="non-content" v-if="showNonContent">尚無取衣紀錄</div>
+              <div class="no-item" v-if="showNone">這裡是空的!</div>
               <div class="order-outframe">
-                <div v-for="i in 5" :key="i">
+                <div v-for="(finish, index) in dataList" :key="index">
                   <div class="order-frame">
-                    <div class="order-code">AA12345678</div>
-                    <div class="cloth-date">2026-03-13 13:36</div>
-                    <div class="cloth-info-frame" v-for="j in 6" :key="j">
-                      <div class="cloth-info">
-                        <div class="cloth-info">衣服</div>
-                        <div class="cloth-info">尺寸: M</div>
-                        <div class="cloth-info">台北市信義區xx路</div>
-                      </div>
+                    <div class="cloth-info">
+                      <div class="cloth-info">{{ finish.code }}</div>
+                      <div class="cloth-info">{{ finish.name }}</div>
+                    </div>
+                    <div class="cloth-date">{{ finish.time }}</div>
+                    <div class="cloth-info">
+                      <div class="cloth-info">{{ finish.type }}</div>
+                      <div class="cloth-info">尺寸: {{ finish.size }}</div>
+                      <div class="cloth-info">提供者: {{ finish.pName }}</div>
+                      <div class="cloth-info">{{ finish.place }}</div>
                     </div>
                   </div>
                 </div>
@@ -45,28 +48,69 @@
       </div>
     </transition>
   </div>
-  <!-- <div class="overlay" v-show="showElePage" @click="showElePage = false"></div>
-  <transition name="slide-ele">
-    <ModifyUserInfo class="modify-page" v-if="showElePage" />
-  </transition> -->
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
+
+import { useRouter } from "vue-router";
+
+import { loginUiStore } from "@/store/login";
+import { finishUiStore } from "@/store/finish";
+
 export default {
   name: "UserPage",
   setup() {
     const showFade = ref(false);
     const showSlide = ref(false);
+    const userName = ref("");
+    const userPhone = ref("");
+    const dataList = ref([]);
+    const showNone = ref(false);
+
+    const router = useRouter();
+
+    const loginStore = loginUiStore();
+    const finishStore = finishUiStore();
+
+    const GetUserInfo = async () => {
+      userName.value = localStorage.getItem("userName");
+
+      const data = await loginStore.getUserInfo();
+
+      const filteredData = data.find((item) => {
+        return item.name === userName.value;
+      });
+
+      userPhone.value = filteredData.phone;
+    };
+
+    const ClickBack = () => {
+      router.push("/back-home");
+    };
 
     onMounted(async () => {
       showFade.value = true;
       showSlide.value = true;
+
+      await GetUserInfo();
+
+      dataList.value = await finishStore.GetFinishData();
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
     });
 
     return {
       showFade,
       showSlide,
+      userName,
+      userPhone,
+      dataList,
+      showNone,
+      GetUserInfo,
+      ClickBack,
     };
   },
 };
@@ -145,6 +189,23 @@ img {
   color: #849c7d;
   cursor: pointer;
 }
+.btn {
+  width: 150px;
+  height: 40px;
+  color: #ffffff;
+  background-color: #849c7d;
+  font-size: 20px;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+.btn:hover {
+  background-color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
+}
 .text-frame {
   width: 100%;
   background-color: #ffffff;
@@ -165,10 +226,11 @@ img {
   font-size: 22px;
   margin-bottom: 10px;
 }
-.non-content {
-  font-size: 20px;
+.no-item {
+  color: #adadad;
+  font-size: 26px;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 .order-outframe {
   max-height: 370px;

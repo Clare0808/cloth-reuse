@@ -13,6 +13,8 @@ def storeLike():
     situation = data.get("situation")
     time = data.get("time")
     place = data.get("place")
+    pEmail = data.get("pEmail")
+    pName = data.get("pName")
     image = data.get("image")
 
     like = Like(
@@ -22,6 +24,8 @@ def storeLike():
         situation = situation,
         time = time,
         place = place,
+        pEmail = pEmail,
+        pName = pName,
         image = image
     )
 
@@ -37,12 +41,15 @@ def getLike():
     infos = Like.query.all()
 
     data_list = [{
+        "id": info.like_id,
         "name": info.name,
         "type": info.type,
         "size": info.size,
         "situation": info.situation,
         "time": info.time,
         "place": info.place,
+        "pEmail": info.pEmail,
+        "pName": info.pName,
         "image": info.image
     } for info in infos]
 
@@ -54,9 +61,9 @@ def getLike():
 def deleteLike():
     data = request.get_json()
 
-    name = data.get("name")
+    id = data.get("id")
 
-    like = Like.query.filter_by(name = name).first()
+    like = Like.query.filter_by(like_id = id).first()
 
     db.session.delete(like)
     db.session.commit()

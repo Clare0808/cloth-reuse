@@ -68,3 +68,33 @@ def signup() :
     return jsonify({
         "message": "註冊成功!"
     }), 200
+
+@api_bp.route("/get-user-info", methods=["GET"])
+def getData():
+    infos = Login.query.all()
+
+    data_list = [{
+        "id": info.login_id,
+        "email": info.email, 
+        "name": info.name, 
+        "phone": info.phone,
+    } for info in infos]
+
+    return jsonify({
+        "data": data_list,
+    }), 200
+
+@api_bp.route("/delete-user", methods=["POST"])
+def deleteUser() :
+    data = request.get_json()
+
+    id = data.get("id")
+
+    login = Login.query.filter_by(login_id = id).first()
+
+    db.session.delete(login)
+    db.session.commit()
+
+    return jsonify({
+        "message": "刪除成功"
+    }), 200

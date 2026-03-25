@@ -5,9 +5,12 @@
     "description": "全新未穿過的。",
     "size": "M",
     "image": "/img/cloth/火影忍者T-shirt.jpg",
+    "email": "hung0213@gmail.com",
+    "pName": "黃先生",
     "place": "台北市信義區xx路",
     "time": "9:00~11:00 AM",
-    "category": "cloth"
+    "category": "cloth",
+    "lock": false
   },
   {
     "id": 2,
@@ -15,9 +18,12 @@
     "description": "部分區域有些髒污，9成新。",
     "size": "L",
     "image": "/img/cloth/黑色T-shirt.jpg",
+    "email": "yang0907@gmail.com",
+    "pName": "楊先生",
     "place": "新北市板橋路xx路",
     "time": "3:00~7:00 PM",
-    "category": "cloth"
+    "category": "cloth",
+    "lock": true
   },
   {
     "id": 3,
@@ -25,9 +31,12 @@
     "description": "長度約到膝蓋，基本沒有穿過，有需要請申請!",
     "size": "M",
     "image": "/img/cloth/7分牛仔褲.jpg",
+    "email": "yang0907@gmail.com",
+    "pName": "楊先生",
     "place": "台北市信義區xx路",
     "time": "9:00~11:00 AM",
-    "category": "pants"
+    "category": "pants",
+    "lock": false
   },
   {
     "id": 4,
@@ -35,9 +44,12 @@
     "description": "僅試穿過一次，是全新的!",
     "size": "S",
     "image": "/img/cloth/黑色長裙.jpg",
+    "email": "yang0907@gmail.com",
+    "pName": "楊先生",
     "place": "新北市板橋路xx路",
     "time": "3:00~7:00 PM",
-    "category": "skirt"
+    "category": "skirt",
+    "lock": false
   },
   {
     "id": 5,
@@ -45,9 +57,12 @@
     "description": "穿過幾次，有些髒污，7成新。",
     "size": "L",
     "image": "/img/cloth/棕色外套.jpg",
+    "email": "hung0213@gmail.com",
+    "pName": "黃先生",
     "place": "台北市信義區xx路",
     "time": "9:00~11:00 AM",
-    "category": "coat"
+    "category": "coat",
+    "lock": false
   },
   {
     "id": 6,
@@ -55,8 +70,50 @@
     "description": "僅試穿過一次，是全新的!",
     "size": "23.5",
     "image": "/img/cloth/黑色運動鞋.jpg",
+    "email": "hung0213@gmail.com",
+    "pName": "黃先生",
     "place": "新北市板橋路xx路",
     "time": "3:00~7:00 PM",
-    "category": "shoes"
+    "category": "shoes",
+    "lock": false
+  },
+  {
+    "id": 7,
+    "name": "test1",
+    "description": "test1",
+    "size": "L",
+    "image": "/img/cloth/test1.png",
+    "email": "test111@gmail.com",
+    "pName": "111",
+    "place": "test1",
+    "time": "test1",
+    "category": "cloth",
+    "lock": true
+  },
+  {
+    "id": 8,
+    "name": "test2",
+    "description": "test2",
+    "size": "L",
+    "image": "/img/cloth/test2.png",
+    "email": "test111@gmail.com",
+    "pName": "111",
+    "place": "test2",
+    "time": "tTime2",
+    "category": "skirt",
+    "lock": true
+  },
+  {
+    "id": 9,
+    "name": "tName2",
+    "description": "tDesc2",
+    "size": "S",
+    "image": "/img/cloth/.png",
+    "email": "test222@gmail.com",
+    "pName": "111",
+    "place": "tLocation1",
+    "time": "tTime",
+    "category": "cloth",
+    "lock": true
   }
 ]

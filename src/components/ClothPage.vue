@@ -17,6 +17,9 @@
           </div>
         </div>
       </transition>
+      <transition name="fade">
+        <div class="no-item" v-if="showNone">這裡是空的!</div>
+      </transition>
       <transition name="slide">
         <div class="cloth-box-frame" v-if="showElement">
           <div
@@ -36,18 +39,40 @@
     </div>
   </div>
 
+  <transition name="fade">
+    <div
+      class="add-btn"
+      @click="clothStore.showElePage = true"
+      v-if="showElement"
+    >
+      +
+    </div>
+  </transition>
+
   <div class="overlay" v-show="showElePage" @click="showElePage = false"></div>
   <transition name="slide-ele">
     <CheckClothInfo class="ele-page" v-show="showElePage" />
+  </transition>
+
+  <div
+    class="overlay"
+    v-show="clothStore.showElePage"
+    @click="clothStore.showElePage = false"
+  ></div>
+  <transition name="slide-ele">
+    <UploadCloth class="ele-page" v-show="clothStore.showElePage" />
   </transition>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 
+import { clothUiStore } from "@/store/cloth";
+
 import OptionsDataRaw from "@/assets/data/optionsData.json";
 
 import CheckClothInfo from "./pageElement/CheckClothInfo.vue";
+import UploadCloth from "./pageElement/UploadCloth.vue";
 
 export const selectedCloth = ref({});
 export const showElePage = ref(false);
@@ -56,12 +81,16 @@ export default {
   name: "ClothPage",
   components: {
     CheckClothInfo,
+    UploadCloth,
   },
   setup() {
     const showText = ref(false);
     const showElement = ref(false);
     const dataList = ref([]);
     const filteredList = ref([]);
+    const showNone = ref(false);
+
+    const clothStore = clothUiStore();
 
     const OptionsData = ref(OptionsDataRaw); // 修正成 reactive 狀態
 
@@ -69,7 +98,9 @@ export default {
       const response = await fetch("/data/clothData.json");
       const data = await response.json();
 
-      dataList.value = data;
+      dataList.value = data.filter((item) => {
+        return !item.lock;
+      });
     };
 
     const ClickOption = (opt) => {
@@ -95,6 +126,12 @@ export default {
           }
         });
       }
+
+      if (filteredList.value.length === 0) {
+        showNone.value = true;
+      } else {
+        showNone.value = false;
+      }
     };
 
     const ClickCloth = (cloth) => {
@@ -110,6 +147,10 @@ export default {
 
       filteredList.value = dataList.value;
 
+      if (filteredList.value.length === 0) {
+        showNone.value = true;
+      }
+
       OptionsData.value.forEach((data) => {
         if (data.label === "all") {
           data.click = true;
@@ -123,6 +164,8 @@ export default {
       showElement,
       dataList,
       filteredList,
+      showNone,
+      clothStore,
       OptionsData,
       GetDishData,
       ClickOption,
@@ -176,6 +219,11 @@ export default {
   background-color: #849c7d;
   cursor: pointer;
 }
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
+}
 .active {
   color: #ffffff;
   background-color: #849c7d;
@@ -224,6 +272,27 @@ export default {
 }
 .cloth-size {
   color: #849c7d;
+}
+
+.add-btn {
+  width: 60px;
+  height: 60px;
+  color: #ffffff;
+  font-size: 40px;
+  text-align: center;
+  line-height: 60px;
+  background-color: #849c7d;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: all 0.3s ease;
+}
+.add-btn:hover {
+  color: #ffffff;
+  background-color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 
 .ele-page {

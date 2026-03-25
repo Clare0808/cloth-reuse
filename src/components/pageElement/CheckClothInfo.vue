@@ -14,51 +14,44 @@
             ></i>
             <i
               class="fa-solid fa-map"
-              @click="ClickMap(selectedCloth.name)"
+              @click="mapStore.ClickMap(selectedCloth.name)"
             ></i>
           </div>
         </div>
-        <div class="cloth-info">類型: {{ selectedCloth.size }}</div>
+        <div class="cloth-info">類型: {{ type }}</div>
         <div class="cloth-info">尺寸: {{ selectedCloth.size }}</div>
         <div class="cloth-dis">服飾狀況: {{ selectedCloth.description }}</div>
+        <div class="cloth-info">提供者: {{ selectedCloth.pName }}</div>
         <div class="cloth-info">取衣地點: {{ selectedCloth.place }}</div>
         <div class="cloth-info">取衣時間: {{ selectedCloth.time }}</div>
       </div>
     </div>
-    <div class="btn">我要取衣</div>
+    <div class="btn" @click="ClickPickup">我要取衣</div>
   </div>
 </template>
 
 <script>
 import { ref, watch } from "vue";
 
-import { useRouter } from "vue-router";
-
 import { errorUiStore } from "@/store/error";
 import { likeUiStore } from "@/store/like";
+import { mapUiStore } from "@/store/map";
+import { pickupUiStore } from "@/store/pickup";
 
 import { selectedCloth, showElePage } from "../../components/ClothPage.vue";
 
 import OptionData from "@/assets/data/optionsData.json";
 
-export const listClick = ref("");
-
 export default {
   setup() {
-    const router = useRouter();
-
     const errorStore = errorUiStore();
     const likeStore = likeUiStore();
+    const mapStore = mapUiStore();
+    const pickupStore = pickupUiStore();
 
     const type = ref("");
     const selectedList = ref({});
     const inLike = ref(false);
-
-    const ClickMap = (name) => {
-      listClick.value = name;
-
-      router.push("/map");
-    };
 
     const ClickHeart = async () => {
       const data = await likeStore.GetLikeData();
@@ -79,6 +72,8 @@ export default {
           situation: selectedList.value.description,
           time: selectedList.value.time,
           place: selectedList.value.place,
+          pEmail: selectedList.value.email,
+          pName: selectedCloth.value.pName,
           image: selectedList.value.image,
         });
 
@@ -94,6 +89,34 @@ export default {
       type.value = OptionData.find((item) => {
         return item.label === list.category;
       }).name;
+    };
+
+    const ClickPickup = async () => {
+      const userEmail = localStorage.getItem("userEmail");
+      const userName = localStorage.getItem("userName");
+
+      await pickupStore.SendPickupData({
+        rEmail: userEmail,
+        rName: userName,
+        name: selectedList.value.name,
+        type: type.value,
+        size: selectedList.value.size,
+        situation: selectedList.value.description,
+        time: selectedList.value.time,
+        place: selectedList.value.place,
+        pEmail: selectedCloth.value.email,
+        pName: selectedCloth.value.pName,
+        image: selectedList.value.image,
+      });
+
+      await pickupStore.ModifyFile(selectedList.value.name);
+
+      showElePage.value = false;
+
+      errorStore.LoadSuccess("取衣申請成功!");
+
+      await errorStore.CloseLoadEle();
+      window.location.reload();
     };
 
     watch(selectedCloth, async (newVal) => {
@@ -115,16 +138,16 @@ export default {
     });
 
     return {
-      listClick,
       selectedCloth,
       showElePage,
       OptionData,
       type,
       selectedList,
       inLike,
-      ClickMap,
+      mapStore,
       ClickHeart,
       TransformType,
+      ClickPickup,
     };
   },
 };

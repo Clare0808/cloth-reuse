@@ -56,7 +56,7 @@
 <script>
 import { ref, onMounted } from "vue";
 
-import { listClick } from "./pageElement/CheckClothInfo.vue";
+import { mapUiStore } from "@/store/map";
 
 export default {
   name: "MapPage",
@@ -68,6 +68,9 @@ export default {
     const filteredData = ref([]);
     const markerList = ref({});
     const placeData = ref([]);
+    const listClick = ref("");
+
+    const mapStore = mapUiStore();
 
     let L;
 
@@ -154,8 +157,10 @@ export default {
 
       map.value.on("moveend", MakeMark); // 每次地圖移動結束後更新標記
 
-      // 從 ListPage 點擊過來
-      if (listClick && listClick.value) {
+      listClick.value = mapStore.mapData;
+
+      // 從其他頁面點擊過來
+      if (listClick.value) {
         ClickSearchResult(listClick.value);
 
         listClick.value = "";
@@ -163,7 +168,6 @@ export default {
     });
 
     return {
-      listClick,
       map,
       showSelected,
       selectedRestaurant,
@@ -171,6 +175,7 @@ export default {
       filteredData,
       markerList,
       placeData,
+      listClick,
       GetPlaceData,
       FilteredResult,
       ClickSearchResult,
