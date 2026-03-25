@@ -58,6 +58,7 @@ def signup() :
     login = Login(
         email = email,
         name = name,
+        role = "user",
         phone = phone,
         password = password
     )
@@ -77,6 +78,7 @@ def getData():
         "id": info.login_id,
         "email": info.email, 
         "name": info.name, 
+        "role": info.role,
         "phone": info.phone,
     } for info in infos]
 
@@ -98,3 +100,33 @@ def deleteUser() :
     return jsonify({
         "message": "刪除成功"
     }), 200
+
+@api_bp.route("/modify-user", methods=["POST"])
+def modifyUser() :
+    data = request.get_json()
+
+    id = data.get("id")
+
+    login = Login.query.filter_by(login_id = id).first()
+
+    login.role = data.get("role", login.role)
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "修改成功"
+    }), 200
+
+def init_admin() :
+    exist_user = Login.query.filter_by(email = "clothReuseAdmin@gmail.com").first()
+
+    if not exist_user :
+        login = Login (
+            email = "clothReuseAdmin@gmail.com",
+            name = "初始管理者",
+            role = "admin",
+            password = "clothreuseadmin"
+        )
+
+        db.session.add(login)
+        db.session.commit()
