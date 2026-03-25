@@ -65,7 +65,10 @@ export default {
 
         errorStore.SetError("已經在收藏清單!");
       } else {
+        const userEmail = localStorage.getItem("userEmail");
+
         await likeStore.SendLikeData({
+          email: userEmail,
           name: selectedList.value.name,
           type: type.value,
           size: selectedList.value.size,

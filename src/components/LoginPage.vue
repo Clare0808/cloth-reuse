@@ -194,10 +194,8 @@ export default {
     const GetUserInfo = async () => {
       const data = await loginStore.getUserInfo();
 
-      const userEmail = localStorage.getItem("userEmail");
-
       userName.value = data.find((item) => {
-        return item.email === userEmail;
+        return item.email === email.value;
       }).name;
     };
 

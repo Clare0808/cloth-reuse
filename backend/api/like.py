@@ -7,6 +7,7 @@ from model.like import Like
 def storeLike():
     data = request.get_json()
 
+    email = data.get("email")
     name = data.get("name")
     type = data.get("type")
     size = data.get("size")
@@ -18,6 +19,7 @@ def storeLike():
     image = data.get("image")
 
     like = Like(
+        email = email,
         name = name,
         type = type,
         size = size,
@@ -42,6 +44,7 @@ def getLike():
 
     data_list = [{
         "id": info.like_id,
+        "email": info.email,
         "name": info.name,
         "type": info.type,
         "size": info.size,

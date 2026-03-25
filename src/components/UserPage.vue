@@ -20,7 +20,9 @@
                 {{ userPhone }}
                 <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
               </div>
-              <div class="btn" @click="ClickBack">進入後台</div>
+              <div class="btn" @click="ClickBack" v-if="roleData == 'admin'">
+                進入後台
+              </div>
             </div>
             <div class="func-frame">
               <div class="sec-title">取衣紀錄</div>
@@ -67,11 +69,26 @@ export default {
     const userPhone = ref("");
     const dataList = ref([]);
     const showNone = ref(false);
+    const roleData = ref("");
 
     const router = useRouter();
 
     const loginStore = loginUiStore();
     const finishStore = finishUiStore();
+
+    const GetData = async () => {
+      const allData = await finishStore.GetFinishData();
+
+      const userEmail = localStorage.getItem("userEmail");
+
+      dataList.value = allData.filter((item) => {
+        return item.rEmail === userEmail;
+      });
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
+    };
 
     const GetUserInfo = async () => {
       userName.value = localStorage.getItem("userName");
@@ -83,6 +100,12 @@ export default {
       });
 
       userPhone.value = filteredData.phone;
+
+      if (!userPhone.value) {
+        userPhone.value = "未設定電話";
+      }
+
+      roleData.value = filteredData.role;
     };
 
     const ClickBack = () => {
@@ -95,11 +118,7 @@ export default {
 
       await GetUserInfo();
 
-      dataList.value = await finishStore.GetFinishData();
-
-      if (dataList.value.length === 0) {
-        showNone.value = true;
-      }
+      await GetData();
     });
 
     return {
@@ -109,8 +128,10 @@ export default {
       userPhone,
       dataList,
       showNone,
+      roleData,
       GetUserInfo,
       ClickBack,
+      GetData,
     };
   },
 };
