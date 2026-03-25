@@ -65,7 +65,13 @@ export default {
     const pickupStore = pickupUiStore();
 
     const GetData = async () => {
-      dataList.value = await likeStore.GetLikeData();
+      const allData = await likeStore.GetLikeData();
+
+      const userEmail = localStorage.getItem("userEmail");
+
+      dataList.value = allData.filter((item) => {
+        return item.email === userEmail;
+      });
 
       if (dataList.value.length === 0) {
         showNone.value = true;

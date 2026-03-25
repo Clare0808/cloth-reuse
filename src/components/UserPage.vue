@@ -73,6 +73,20 @@ export default {
     const loginStore = loginUiStore();
     const finishStore = finishUiStore();
 
+    const GetData = async () => {
+      const allData = await finishStore.GetFinishData();
+
+      const userEmail = localStorage.getItem("userEmail");
+
+      dataList.value = allData.filter((item) => {
+        return item.rEmail === userEmail;
+      });
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
+    };
+
     const GetUserInfo = async () => {
       userName.value = localStorage.getItem("userName");
 
@@ -95,11 +109,7 @@ export default {
 
       await GetUserInfo();
 
-      dataList.value = await finishStore.GetFinishData();
-
-      if (dataList.value.length === 0) {
-        showNone.value = true;
-      }
+      await GetData();
     });
 
     return {
@@ -111,6 +121,7 @@ export default {
       showNone,
       GetUserInfo,
       ClickBack,
+      GetData,
     };
   },
 };

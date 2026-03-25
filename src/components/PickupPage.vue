@@ -82,6 +82,20 @@ export default {
     const pickupStore = pickupUiStore();
     const finishStore = finishUiStore();
 
+    const GetData = async () => {
+      const allData = await pickupStore.GetPickupData();
+
+      const userEmail = localStorage.getItem("userEmail");
+
+      dataList.value = allData.filter((item) => {
+        return item.rEmail === userEmail;
+      });
+
+      if (dataList.value.length === 0) {
+        showNone.value = true;
+      }
+    };
+
     const DeleteData = async (data) => {
       pickupStore.dataList = data;
 
@@ -98,11 +112,7 @@ export default {
       showFade.value = true;
       showSlide.value = true;
 
-      dataList.value = await pickupStore.GetPickupData();
-
-      if (dataList.value.length === 0) {
-        showNone.value = true;
-      }
+      await GetData();
     });
 
     return {
@@ -114,6 +124,7 @@ export default {
       finishStore,
       DeleteData,
       ClickFinish,
+      GetData,
     };
   },
 };

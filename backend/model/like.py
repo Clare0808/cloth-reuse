@@ -4,6 +4,7 @@ class Like(db.Model):
     __tablename__ = 'like'
     
     like_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    email = db.Column(db.Text, nullable=False)
     name = db.Column(db.Text, nullable=False)
     type = db.Column(db.Text, nullable=True)
     size = db.Column(db.Text, nullable=True)
