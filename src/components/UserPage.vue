@@ -14,11 +14,17 @@
               </div>
               <div class="user-info">
                 {{ userName }} 您好!
-                <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
+                <i
+                  class="fa-solid fa-pencil"
+                  @click="ClickModify(userName, 'name')"
+                ></i>
               </div>
               <div class="user-info">
                 {{ userPhone }}
-                <i class="fa-solid fa-pencil" @click="ClickModify()"></i>
+                <i
+                  class="fa-solid fa-pencil"
+                  @click="ClickModify(userPhone, 'phone')"
+                ></i>
               </div>
               <div class="btn" @click="ClickBack" v-if="roleData == 'admin'">
                 進入後台
@@ -50,6 +56,15 @@
       </div>
     </transition>
   </div>
+
+  <div
+    class="overlay"
+    v-show="modifyStore.showModifyEle"
+    @click="modifyStore.showModifyEle = false"
+  ></div>
+  <transition name="slide-ele">
+    <ModifyUserInfo class="ele-page" v-show="modifyStore.showModifyEle" />
+  </transition>
 </template>
 
 <script>
@@ -59,9 +74,15 @@ import { useRouter } from "vue-router";
 
 import { loginUiStore } from "@/store/login";
 import { finishUiStore } from "@/store/finish";
+import { modifyUiStore } from "@/store/modify";
+
+import ModifyUserInfo from "./pageElement/ModifyUserInfo.vue";
 
 export default {
   name: "UserPage",
+  components: {
+    ModifyUserInfo,
+  },
   setup() {
     const showFade = ref(false);
     const showSlide = ref(false);
@@ -75,6 +96,7 @@ export default {
 
     const loginStore = loginUiStore();
     const finishStore = finishUiStore();
+    const modifyStore = modifyUiStore();
 
     const GetData = async () => {
       const allData = await finishStore.GetFinishData();
@@ -91,14 +113,15 @@ export default {
     };
 
     const GetUserInfo = async () => {
-      userName.value = localStorage.getItem("userName");
+      const userEmail = localStorage.getItem("userEmail");
 
       const data = await loginStore.getUserInfo();
 
       const filteredData = data.find((item) => {
-        return item.name === userName.value;
+        return item.email === userEmail;
       });
 
+      userName.value = filteredData.name;
       userPhone.value = filteredData.phone;
 
       if (!userPhone.value) {
@@ -110,6 +133,13 @@ export default {
 
     const ClickBack = () => {
       router.push("/back-home");
+    };
+
+    const ClickModify = (data, type) => {
+      modifyStore.modifyData = data;
+      modifyStore.modifyType = type;
+
+      modifyStore.showModifyEle = true;
     };
 
     onMounted(async () => {
@@ -129,9 +159,11 @@ export default {
       dataList,
       showNone,
       roleData,
+      modifyStore,
       GetUserInfo,
       ClickBack,
       GetData,
+      ClickModify,
     };
   },
 };
@@ -270,6 +302,13 @@ img {
   align-items: center;
 }
 
+.ele-page {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}
 .overlay {
   position: fixed;
   top: 0;
@@ -277,14 +316,7 @@ img {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1;
-}
-.modify-page {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: 98;
 }
 
 .slide-enter-active,

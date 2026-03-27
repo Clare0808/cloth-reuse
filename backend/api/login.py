@@ -110,6 +110,8 @@ def modifyUser() :
     login = Login.query.filter_by(login_id = id).first()
 
     login.role = data.get("role", login.role)
+    login.name = data.get("name", login.name)
+    login.phone = data.get("phone", login.phone)
 
     db.session.commit()
 
