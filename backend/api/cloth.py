@@ -101,6 +101,7 @@ def modifyCloth():
             cloth["place"] = data.get("place", cloth["place"])
             cloth["time"] = data.get("time", cloth["time"])
             cloth["category"] = data.get("category", cloth["category"])
+            cloth["lock"] = data.get("lock", cloth["lock"])
             
             break
 

@@ -4,6 +4,9 @@ import { ref } from "vue";
 export const modifyUiStore = defineStore("modify", () => {
   const showBackEle = ref(false);
   const backDataList = ref({});
+  const modifyType = ref("");
+  const modifyData = ref("");
+  const showModifyEle = ref(false);
 
   const ModifyUserRole = async (inputData) => {
     const responsePost = await fetch("http://localhost:5000/api/modify-user", {
@@ -22,6 +25,9 @@ export const modifyUiStore = defineStore("modify", () => {
   return {
     showBackEle,
     backDataList,
+    modifyType,
+    modifyData,
+    showModifyEle,
     ModifyUserRole,
   };
 });
