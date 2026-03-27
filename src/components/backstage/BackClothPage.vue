@@ -27,6 +27,11 @@
               </div>
             </div>
             <div class="btn-frame">
+              <i
+                class="fa-solid fa-lock"
+                :class="{ lock: cloth.lock, unlock: !cloth.lock }"
+                @click="ClickLock(cloth)"
+              ></i>
               <i class="fa-solid fa-pencil" @click="ClickModify(cloth)"></i>
               <i class="fa-solid fa-trash-can" @click="ClickDelete(cloth)"></i>
             </div>
@@ -63,6 +68,7 @@ import { ref, onMounted } from "vue";
 
 import { deleteUiStore } from "@/store/delete";
 import { clothUiStore } from "@/store/cloth";
+import { errorUiStore } from "@/store/error";
 
 import UploadCloth from "../pageElement/UploadCloth.vue";
 import ModifyCloth from "../pageElement/ModifyCloth.vue";
@@ -80,6 +86,7 @@ export default {
 
     const deleteStore = deleteUiStore();
     const clothStore = clothUiStore();
+    const errorStore = errorUiStore();
 
     const OptionsData = ref(OptionsDataRaw);
 
@@ -105,6 +112,17 @@ export default {
       clothStore.showModifyPage = true;
     };
 
+    const ClickLock = async (data) => {
+      await clothStore.ModifyCloth({
+        id: data.id,
+        lock: !data.lock,
+      });
+
+      clothStore.showModifyPage = false;
+
+      errorStore.LoadSuccess("修改成功!");
+    };
+
     onMounted(async () => {
       await GetDishData();
     });
@@ -116,6 +134,7 @@ export default {
       GetDishData,
       ClickDelete,
       ClickModify,
+      ClickLock,
     };
   },
 };
@@ -197,6 +216,15 @@ i {
 i:hover {
   color: #849c7d;
   cursor: pointer;
+}
+.unlock {
+  color: #d3dcba;
+}
+.unlock:hover {
+  color: #3b5131;
+}
+.lock {
+  color: #3b5131;
 }
 .add-btn {
   color: #3b5131;
