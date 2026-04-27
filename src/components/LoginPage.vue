@@ -17,7 +17,7 @@
             <div class="login-btn" @click="ClickLogin()">登入</div>
           </div>
           <div class="text">or</div>
-          <div class="google-btn">
+          <div class="google-btn" @click="LoginWithGoogle">
             以 <img src="@/assets/img/google.png" /><span class="google"
               >Google</span
             >
@@ -199,6 +199,10 @@ export default {
       }).name;
     };
 
+    const LoginWithGoogle = () => {
+      window.location.href = "http://localhost:5000/api/auth-google";
+    };
+
     onMounted(() => {
       showLogin.value = true;
     });
@@ -217,6 +221,7 @@ export default {
       CleanInput,
       ExamInputFrame,
       GetUserInfo,
+      LoginWithGoogle,
     };
   },
 };

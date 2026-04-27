@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 export const loginUiStore = defineStore("login", {
   state: () => ({
@@ -36,12 +37,38 @@ export const loginUiStore = defineStore("login", {
         throw new Error(msg);
       }
     },
+    async googleLogin() {
+      const router = useRouter();
+
+      // 從 URL query 讀取 token
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+
+      if (!token) throw new Error("登入失敗");
+
+      this.token = token;
+      this.isAuthenticated = true;
+      localStorage.setItem("token", token);
+
+      // 用 token 呼叫 /api/profile
+      const response = await axios.get("/api/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      this.user = response.data.user;
+
+      router.push("/");
+    },
     async logout() {
       this.user = null;
       this.token = null;
       this.isAuthenticated = false;
 
       localStorage.removeItem("token");
+
+      axios.post("/api/logout", { withCredentials: true });
     },
     async getUserInfo() {
       const response = await axios.get("/api/get-user-info");

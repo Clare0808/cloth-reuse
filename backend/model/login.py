@@ -8,7 +8,7 @@ class Login(db.Model):
     name = db.Column(db.Text, nullable=False)
     role = db.Column(db.Text, nullable=False)
     phone = db.Column(db.Text, nullable=True)
-    password = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
         return f'<Login {self.login_id}>'

@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { loginUiStore } from "./store/login";
 import { errorUiStore } from "./store/error";
@@ -77,9 +77,30 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
 
     const loginStore = loginUiStore();
     const errorStore = errorUiStore();
+
+    onMounted(async () => {
+      if (!loginStore.isAuthenticated) {
+        try {
+          await loginStore.googleLogin();
+
+          errorStore.LoadSuccess("登入成功!");
+
+          localStorage.setItem("userEmail", loginStore.user.email);
+          localStorage.setItem("userName", loginStore.user.name);
+          localStorage.setItem("inAdmin", loginStore.isAdmin);
+        } catch (err) {
+          errorStore.SetError(err.message);
+
+          router.push("/login");
+        }
+      }
+
+      await errorStore.CloseLoadEle();
+    });
 
     return {
       showLogoutCheck,
