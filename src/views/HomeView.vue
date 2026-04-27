@@ -15,34 +15,34 @@
   <div class="sub-page-info">
     <div class="page-title">服飾預覽</div>
     <div class="info-outframe" id="slide">
-      <div class="last-page">〈</div>
+      <div class="last-cloth-page" @click="ChangeClothPage(-1)">〈</div>
       <div class="info-frame">
-        <img src="../assets/img/cloth1.jpg" />
+        <img :src="clothData.image" />
         <div class="text-frame">
-          <div class="name">白色T-shirt</div>
+          <div class="name">{{ clothData.name }}</div>
           <div class="info-box">
             <div class="info-title">類型 :</div>
-            <div class="info-content">上衣</div>
+            <div class="info-content">{{ type }}</div>
           </div>
           <div class="info-box">
             <div class="info-title">尺寸 :</div>
-            <div class="info-content">M</div>
+            <div class="info-content">{{ clothData.size }}</div>
           </div>
           <div class="info-box">
             <div class="info-title">服飾狀況 :</div>
-            <div class="info-content">稍微有汙漬沾染</div>
+            <div class="info-content">{{ clothData.description }}</div>
           </div>
           <div class="info-box">
             <div class="info-title">取衣地點 :</div>
-            <div class="info-content">台北市信義區xx路</div>
+            <div class="info-content">{{ clothData.place }}</div>
           </div>
           <div class="info-box">
             <div class="info-title">取衣時間 :</div>
-            <div class="info-content">9:00~11:00 AM</div>
+            <div class="info-content">{{ clothData.time }}</div>
           </div>
         </div>
       </div>
-      <div class="next-page">〉</div>
+      <div class="next-cloth-page" @click="ChangeClothPage(1)">〉</div>
     </div>
   </div>
   <div class="sub-page">
@@ -84,25 +84,23 @@
   <div class="sub-page">
     <div class="page-title">使用者給我們的回饋!</div>
     <div class="review-outframe" id="slide">
-      <div class="last-page">〈</div>
+      <div class="last-review-page" @click="ChangeReviewPage(-1)">〈</div>
       <div class="review-box">
         <div class="review-stars">
-          <div v-for="i in 5" :key="i">
+          <div v-for="i in reviewData.star" :key="i">
             <i class="fa-solid fa-star"></i>
           </div>
         </div>
-        <div class="review-content">
-          以前不知道舊衣要丟哪裡，現在用這個網站就能快速找到回收點，讓衣服有第二次生命。
-        </div>
+        <div class="review-content">{{ reviewData.content }}</div>
         <div class="review-author-info">
           <i class="fa-solid fa-user"></i>
           <div class="review-text-frame">
-            <div class="review-author-name">張小姐</div>
-            <div class="review-author-date">2026-03-12</div>
+            <div class="review-author-name">{{ reviewData.name }}</div>
+            <div class="review-author-date">{{ reviewData.data }}</div>
           </div>
         </div>
       </div>
-      <div class="next-page">〉</div>
+      <div class="next-review-page" @click="ChangeReviewPage(1)">〉</div>
     </div>
     <div class="contact-frame">
       <div class="contact-title">有任何問題歡迎聯絡我們！</div>
@@ -121,10 +119,87 @@
 <script>
 import { ref, onMounted } from "vue";
 
+import { reviewUiStore } from "@/store/review";
+
+import OptionData from "@/assets/data/optionsData.json";
+
 export default {
   name: "HomePage",
   setup() {
     const showEle = ref(false);
+    const clothList = ref([]);
+    const clothData = ref({});
+    const pageCloth = ref(0);
+    const type = ref("");
+    const reviewList = ref([]);
+    const reviewData = ref({});
+    const pageReview = ref(0);
+
+    const reviewStore = reviewUiStore();
+
+    const GetClothData = async () => {
+      const response = await fetch("/data/clothData.json");
+      const data = await response.json();
+
+      clothList.value = data.filter((item) => {
+        return !item.lock;
+      });
+    };
+
+    const TransformType = (list) => {
+      type.value = OptionData.find((item) => {
+        return item.label === list.category;
+      }).name;
+    };
+
+    const ChangeClothPage = (num) => {
+      const listLen = clothList.value.length;
+
+      pageCloth.value = pageCloth.value + num;
+
+      const nextEle = document.querySelector(".next-cloth-page");
+      const lastEle = document.querySelector(".last-cloth-page");
+
+      if (pageCloth.value >= listLen) {
+        pageCloth.value = listLen - 1;
+
+        nextEle.classList.add("noChange");
+      } else if (pageCloth.value < 0) {
+        pageCloth.value = 0;
+
+        lastEle.classList.add("noChange");
+      } else {
+        nextEle.classList.remove("noChange");
+        lastEle.classList.remove("noChange");
+      }
+
+      clothData.value = clothList.value[pageCloth.value];
+      TransformType(clothData.value);
+    };
+
+    const ChangeReviewPage = (num) => {
+      const listLen = reviewList.value.length;
+
+      pageReview.value = pageReview.value + num;
+
+      const nextEle = document.querySelector(".next-review-page");
+      const lastEle = document.querySelector(".last-review-page");
+
+      if (pageReview.value >= listLen) {
+        pageReview.value = listLen - 1;
+
+        nextEle.classList.add("noChange");
+      } else if (pageReview.value < 0) {
+        pageReview.value = 0;
+
+        lastEle.classList.add("noChange");
+      } else {
+        nextEle.classList.remove("noChange");
+        lastEle.classList.remove("noChange");
+      }
+
+      reviewData.value = reviewList.value[pageReview.value];
+    };
 
     // 元素進入視窗後顯示動畫
     const CheckFadeIn = () => {
@@ -139,13 +214,32 @@ export default {
 
     window.addEventListener("scroll", CheckFadeIn); // 滾動畫面時進行檢查
 
-    onMounted(() => {
+    onMounted(async () => {
       showEle.value = true;
+
+      await GetClothData();
+
+      clothData.value = clothList.value[pageCloth.value];
+      TransformType(clothData.value);
+
+      reviewList.value = await reviewStore.GetReviewData();
+      reviewData.value = reviewList.value[pageReview.value];
     });
 
     return {
       showEle,
+      clothList,
+      clothData,
+      pageCloth,
+      type,
+      reviewList,
+      reviewData,
+      pageReview,
+      GetClothData,
       CheckFadeIn,
+      TransformType,
+      ChangeClothPage,
+      ChangeReviewPage,
     };
   },
 };
@@ -256,8 +350,10 @@ export default {
   grid-template-columns: 30% 70%;
   align-items: center;
 }
-.last-page,
-.next-page {
+.last-cloth-page,
+.next-cloth-page,
+.last-review-page,
+.next-review-page {
   width: 50px;
   height: 50px;
   font-size: 30px;
@@ -270,12 +366,23 @@ export default {
   margin: 30px;
   transition: all 0.3s ease;
 }
-.last-page:hover,
-.next-page:hover {
+.last-cloth-page:hover,
+.next-cloth-page:hover,
+.last-review-page:hover,
+.next-review-page:hover {
   cursor: pointer;
   background-color: #3b5131;
   box-shadow: 0px 0px 5px 5px #3b5131;
   transform: scale(1.05);
+}
+.noChange {
+  background-color: #adadad;
+  box-shadow: 0px 0px 5px 5px #adadad;
+}
+.noChange:hover {
+  cursor: not-allowed;
+  background-color: #adadad;
+  box-shadow: 0px 0px 5px 5px #adadad;
 }
 
 .sub-page {
