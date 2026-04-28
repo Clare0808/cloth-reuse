@@ -114,6 +114,6 @@
     "place": "tLocation1",
     "time": "tTime",
     "category": "cloth",
-    "lock": false
+    "lock": true
   }
 ]
