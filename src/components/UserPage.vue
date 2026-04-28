@@ -55,6 +55,12 @@
         </div>
       </div>
     </transition>
+
+    <i
+      class="fa-regular fa-message"
+      id="contact"
+      @click="chatStore.showElePage = true"
+    ></i>
   </div>
 
   <div
@@ -64,6 +70,15 @@
   ></div>
   <transition name="slide-ele">
     <ModifyUserInfo class="ele-page" v-show="modifyStore.showModifyEle" />
+  </transition>
+
+  <div
+    class="chat-overlay"
+    v-show="chatStore.showElePage"
+    @click="chatStore.showElePage = false"
+  ></div>
+  <transition name="slide-ele-right">
+    <FullChatEle class="chat-page" v-show="chatStore.showElePage" />
   </transition>
 </template>
 
@@ -75,13 +90,16 @@ import { useRouter } from "vue-router";
 import { loginUiStore } from "@/store/login";
 import { finishUiStore } from "@/store/finish";
 import { modifyUiStore } from "@/store/modify";
+import { chatUiStore } from "@/store/chat";
 
 import ModifyUserInfo from "./pageElement/ModifyUserInfo.vue";
+import FullChatEle from "./pageElement/FullChatEle.vue";
 
 export default {
   name: "UserPage",
   components: {
     ModifyUserInfo,
+    FullChatEle,
   },
   setup() {
     const showFade = ref(false);
@@ -97,6 +115,7 @@ export default {
     const loginStore = loginUiStore();
     const finishStore = finishUiStore();
     const modifyStore = modifyUiStore();
+    const chatStore = chatUiStore();
 
     const GetData = async () => {
       const allData = await finishStore.GetFinishData();
@@ -160,6 +179,7 @@ export default {
       showNone,
       roleData,
       modifyStore,
+      chatStore,
       GetUserInfo,
       ClickBack,
       GetData,
@@ -301,6 +321,26 @@ img {
   justify-content: space-between;
   align-items: center;
 }
+#contact {
+  width: 60px;
+  height: 60px;
+  color: #ffffff;
+  font-size: 26px;
+  text-align: center;
+  line-height: 60px;
+  background-color: #849c7d;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+#contact:hover {
+  background-color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
+}
 
 .ele-page {
   position: fixed;
@@ -309,7 +349,8 @@ img {
   transform: translate(-50%, -50%);
   z-index: 99;
 }
-.overlay {
+.overlay,
+.chat-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -317,6 +358,16 @@ img {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 98;
+}
+.chat-overlay {
+  z-index: 100;
+}
+.chat-page {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translate(0%, -50%);
+  z-index: 101;
 }
 
 .slide-enter-active,
@@ -358,5 +409,19 @@ img {
 .slide-ele-leave-from {
   opacity: 1;
   transform: translate(-50%, -50%) translateY(0);
+}
+.slide-ele-right-enter-active,
+.slide-ele-right-leave-active {
+  transition: all 1s ease;
+}
+.slide-ele-right-enter-from,
+.slide-ele-right-leave-to {
+  opacity: 0;
+  transform: translate(0%, -50%) translateX(20px);
+}
+.slide-ele-right-enter-to,
+.slide-ele-right-leave-from {
+  opacity: 1;
+  transform: translate(0%, -50%) translateX(0);
 }
 </style>

@@ -10,3 +10,4 @@ from . import finish
 from . import contact
 from . import cloth
 from . import auth
+from . import chat

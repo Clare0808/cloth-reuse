@@ -5,6 +5,7 @@ from database import init_db
 from flask_jwt_extended import JWTManager
 import os
 from api.login import init_admin
+from extensions import socketio
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # 根目錄
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'upload')
@@ -13,13 +14,15 @@ app = Flask(__name__, static_url_path='/upload', static_folder=UPLOAD_FOLDER)
 init_db(app)
 CORS(app, origins="*") # 允許前端從發送請求
 
-app.register_blueprint(api_bp, url_prefix="/api") # 將 API 藍圖註冊到 app 中
-
 app.config["JWT_SECRET_KEY"] = "6011f54da74acdb140a481f2a4ba57adc9e73429508cb9333e78945332baa1d9" 
 jwt = JWTManager(app)
+
+socketio.init_app(app, cors_allowed_origins="*") 
+
+app.register_blueprint(api_bp, url_prefix="/api") # 將 API 藍圖註冊到 app 中
 
 with app.app_context():
     init_admin() 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    socketio.run(app, port=5000, debug=True)

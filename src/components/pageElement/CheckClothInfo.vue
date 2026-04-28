@@ -24,6 +24,12 @@
         <div class="cloth-info">提供者: {{ selectedCloth.pName }}</div>
         <div class="cloth-info">取衣地點: {{ selectedCloth.place }}</div>
         <div class="cloth-info">取衣時間: {{ selectedCloth.time }}</div>
+
+        <i
+          class="fa-regular fa-message"
+          id="contact"
+          @click="ClickChat(selectedCloth.pName, selectedCloth.email)"
+        ></i>
       </div>
     </div>
     <div class="btn" @click="ClickPickup">我要取衣</div>
@@ -37,6 +43,7 @@ import { errorUiStore } from "@/store/error";
 import { likeUiStore } from "@/store/like";
 import { mapUiStore } from "@/store/map";
 import { pickupUiStore } from "@/store/pickup";
+import { chatUiStore } from "@/store/chat";
 
 import { selectedCloth, showElePage } from "../../components/ClothPage.vue";
 
@@ -48,6 +55,7 @@ export default {
     const likeStore = likeUiStore();
     const mapStore = mapUiStore();
     const pickupStore = pickupUiStore();
+    const chatStore = chatUiStore();
 
     const type = ref("");
     const selectedList = ref({});
@@ -122,6 +130,13 @@ export default {
       window.location.reload();
     };
 
+    const ClickChat = (name, email) => {
+      chatStore.showElePage = true;
+
+      chatStore.chatReceiver = name;
+      chatStore.chatReceiverEmail = email;
+    };
+
     watch(selectedCloth, async (newVal) => {
       selectedList.value = newVal;
 
@@ -148,9 +163,11 @@ export default {
       selectedList,
       inLike,
       mapStore,
+      chatStore,
       ClickHeart,
       TransformType,
       ClickPickup,
+      ClickChat,
     };
   },
 };
@@ -183,6 +200,7 @@ export default {
   gap: 30px;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 .cloth-info-frame {
   width: 100%;
@@ -219,6 +237,26 @@ img {
 .cloth-dis {
   font-size: 20px;
   margin: 10px 0;
+}
+#contact {
+  width: 45px;
+  height: 45px;
+  color: #ffffff;
+  font-size: 22px;
+  text-align: center;
+  line-height: 45px;
+  background-color: #849c7d;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0px;
+  right: 20px;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+#contact:hover {
+  background-color: #3b5131;
+  cursor: pointer;
+  transform: scale(1.1);
 }
 .btn {
   width: 150px;

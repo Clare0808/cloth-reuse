@@ -62,17 +62,28 @@
   <transition name="slide-ele">
     <UploadCloth class="ele-page" v-show="clothStore.showElePage" />
   </transition>
+
+  <div
+    class="chat-overlay"
+    v-show="chatStore.showElePage"
+    @click="chatStore.showElePage = false"
+  ></div>
+  <transition name="slide-ele-right">
+    <ChatEle class="chat-page" v-show="chatStore.showElePage" />
+  </transition>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 
 import { clothUiStore } from "@/store/cloth";
+import { chatUiStore } from "@/store/chat";
 
 import OptionsDataRaw from "@/assets/data/optionsData.json";
 
 import CheckClothInfo from "./pageElement/CheckClothInfo.vue";
 import UploadCloth from "./pageElement/UploadCloth.vue";
+import ChatEle from "./pageElement/ChatEle.vue";
 
 export const selectedCloth = ref({});
 export const showElePage = ref(false);
@@ -82,6 +93,7 @@ export default {
   components: {
     CheckClothInfo,
     UploadCloth,
+    ChatEle,
   },
   setup() {
     const showText = ref(false);
@@ -91,6 +103,7 @@ export default {
     const showNone = ref(false);
 
     const clothStore = clothUiStore();
+    const chatStore = chatUiStore();
 
     const OptionsData = ref(OptionsDataRaw); // 修正成 reactive 狀態
 
@@ -166,6 +179,7 @@ export default {
       filteredList,
       showNone,
       clothStore,
+      chatStore,
       OptionsData,
       GetDishData,
       ClickOption,
@@ -302,7 +316,8 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 99;
 }
-.overlay {
+.overlay,
+.chat-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -310,6 +325,16 @@ export default {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 98;
+}
+.chat-overlay {
+  z-index: 100;
+}
+.chat-page {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translate(0%, -50%);
+  z-index: 101;
 }
 
 .fade-enter-active,
@@ -351,5 +376,19 @@ export default {
 .slide-ele-leave-from {
   opacity: 1;
   transform: translate(-50%, -50%) translateY(0);
+}
+.slide-ele-right-enter-active,
+.slide-ele-right-leave-active {
+  transition: all 1s ease;
+}
+.slide-ele-right-enter-from,
+.slide-ele-right-leave-to {
+  opacity: 0;
+  transform: translate(0%, -50%) translateX(20px);
+}
+.slide-ele-right-enter-to,
+.slide-ele-right-leave-from {
+  opacity: 1;
+  transform: translate(0%, -50%) translateX(0);
 }
 </style>
