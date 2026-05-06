@@ -39,6 +39,12 @@
     </div>
   </div>
 
+  <i
+    class="fa-regular fa-circle-question"
+    id="help-btn"
+    @click="showClothDetailSitemap = true"
+  ></i>
+
   <transition name="fade">
     <div
       class="add-btn"
@@ -71,6 +77,24 @@
   <transition name="slide-ele-right">
     <ChatEle class="chat-page" v-show="chatStore.showElePage" />
   </transition>
+
+  <div
+    class="overlay"
+    v-if="showClothDetailSitemap"
+    @click="showClothDetailSitemap = false"
+  ></div>
+  <transition name="slide-sitemap">
+    <ClothDetailSiteMap class="ele-page" v-if="showClothDetailSitemap" />
+  </transition>
+
+  <div
+    class="overlay"
+    v-if="showClothStoreSitemap"
+    @click="showClothStoreSitemap = false"
+  ></div>
+  <transition name="slide-sitemap">
+    <ClothStoreSitemap class="ele-page" v-if="showClothStoreSitemap" />
+  </transition>
 </template>
 
 <script>
@@ -84,6 +108,8 @@ import OptionsDataRaw from "@/assets/data/optionsData.json";
 import CheckClothInfo from "./pageElement/CheckClothInfo.vue";
 import UploadCloth from "./pageElement/UploadCloth.vue";
 import ChatEle from "./pageElement/ChatEle.vue";
+import ClothDetailSiteMap from "./sitemap/ClothDetailSiteMap.vue";
+import ClothStoreSitemap from "./sitemap/ClothStoreSitemap.vue";
 
 export const selectedCloth = ref({});
 export const showElePage = ref(false);
@@ -94,10 +120,15 @@ export default {
     CheckClothInfo,
     UploadCloth,
     ChatEle,
+    ClothDetailSiteMap,
+    ClothStoreSitemap,
   },
   setup() {
     const showText = ref(false);
     const showElement = ref(false);
+    const showClothDetailSitemap = ref(false);
+    const showClothStoreSitemap = ref(false);
+
     const dataList = ref([]);
     const filteredList = ref([]);
     const showNone = ref(false);
@@ -107,7 +138,7 @@ export default {
 
     const OptionsData = ref(OptionsDataRaw); // 修正成 reactive 狀態
 
-    const GetDishData = async () => {
+    const GetClothData = async () => {
       const response = await fetch("/data/clothData.json");
       const data = await response.json();
 
@@ -155,8 +186,16 @@ export default {
     onMounted(async () => {
       showText.value = true;
       showElement.value = true;
+      showClothDetailSitemap.value = true;
 
-      await GetDishData();
+      const clothStoreState = localStorage.getItem("ClothStoreSitemap");
+      if (clothStoreState === "true") {
+        showClothStoreSitemap.value = true;
+
+        localStorage.setItem("ClothStoreSitemap", "false");
+      }
+
+      await GetClothData();
 
       filteredList.value = dataList.value;
 
@@ -175,13 +214,15 @@ export default {
       showElePage,
       showText,
       showElement,
+      showClothDetailSitemap,
+      showClothStoreSitemap,
       dataList,
       filteredList,
       showNone,
       clothStore,
       chatStore,
       OptionsData,
-      GetDishData,
+      GetClothData,
       ClickOption,
       ClickCloth,
     };
@@ -308,6 +349,15 @@ export default {
   cursor: pointer;
   transform: scale(1.1);
 }
+#help-btn {
+  font-size: 26px;
+  color: #849c7d;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2;
+  cursor: pointer;
+}
 
 .ele-page {
   position: fixed;
@@ -390,5 +440,19 @@ export default {
 .slide-ele-right-leave-from {
   opacity: 1;
   transform: translate(0%, -50%) translateX(0);
+}
+.slide-sitemap-enter-active,
+.slide-sitemap-leave-active {
+  transition: all 1s ease;
+}
+.slide-sitemap-enter-from,
+.slide-sitemap-leave-to {
+  opacity: 0;
+  transform: translateX(-100%) translate(-50%, -50%);
+}
+.slide-sitemap-enter-to,
+.slide-sitemap-leave-from {
+  opacity: 1;
+  transform: translateX(0) translate(-50%, -50%);
 }
 </style>
