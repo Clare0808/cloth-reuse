@@ -28,6 +28,12 @@
     @click="contactStore.showElePage = true"
   ></i>
 
+  <i
+    class="fa-regular fa-circle-question"
+    id="help-btn"
+    @click="showSitemap = true"
+  ></i>
+
   <div
     class="overlay"
     v-show="contactStore.showElePage"
@@ -35,6 +41,12 @@
   ></div>
   <transition name="slide-ele">
     <ContactEle class="ele-page" v-show="contactStore.showElePage" />
+  </transition>
+
+  <div class="overlay" v-show="showSitemap" @click="showSitemap = false"></div>
+  <div class="overlay" v-if="showSitemap" @click="showSitemap = false"></div>
+  <transition name="slide-sitemap">
+    <ServerContactSitemap class="ele-page" v-if="showSitemap" />
   </transition>
 </template>
 
@@ -46,16 +58,19 @@ import { contactUiStore } from "@/store/contact";
 import QuestionDataRaw from "../assets/data/questionData.json";
 
 import ContactEle from "./pageElement/ContactEle.vue";
+import ServerContactSitemap from "./sitemap/ServerContactSitemap.vue";
 
 export default {
   name: "ProblemPage",
   components: {
     ContactEle,
+    ServerContactSitemap,
   },
   setup() {
     const questionData = ref(QuestionDataRaw);
     const showSlide = ref(false);
     const showFade = ref(false);
+    const showSitemap = ref(false);
 
     const contactStore = contactUiStore();
 
@@ -78,6 +93,7 @@ export default {
     onMounted(async () => {
       showSlide.value = true;
       showFade.value = true;
+      showSitemap.value = true;
     });
 
     return {
@@ -85,6 +101,7 @@ export default {
       questionData,
       showSlide,
       showFade,
+      showSitemap,
       contactStore,
       HandleShowAnswer,
     };
@@ -180,6 +197,15 @@ export default {
   cursor: pointer;
   transform: scale(1.1);
 }
+#help-btn {
+  font-size: 26px;
+  color: #849c7d;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2;
+  cursor: pointer;
+}
 
 .ele-page {
   position: fixed;
@@ -251,6 +277,20 @@ export default {
 .slide-ele-leave-from {
   opacity: 1;
   transform: translate(-50%, -50%) translateY(0);
+}
+.slide-sitemap-enter-active,
+.slide-sitemap-leave-active {
+  transition: all 1s ease;
+}
+.slide-sitemap-enter-from,
+.slide-sitemap-leave-to {
+  opacity: 0;
+  transform: translateX(-100%) translate(-50%, -50%);
+}
+.slide-sitemap-enter-to,
+.slide-sitemap-leave-from {
+  opacity: 1;
+  transform: translateX(0) translate(-50%, -50%);
 }
 
 @media (max-width: 500px) {

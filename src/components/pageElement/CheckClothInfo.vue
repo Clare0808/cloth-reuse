@@ -126,6 +126,8 @@ export default {
 
       errorStore.LoadSuccess("取衣申請成功!");
 
+      localStorage.setItem("ClothStoreSitemap", "true");
+
       await errorStore.CloseLoadEle();
       window.location.reload();
     };
