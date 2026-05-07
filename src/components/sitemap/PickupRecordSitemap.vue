@@ -2,11 +2,11 @@
   <div class="ele">
     <div class="title">使用導覽</div>
     <div class="box-frame">
-      <i class="fa-solid fa-shirt" id="shirt"></i>
+      <i class="fa-solid fa-shirt"></i>
       <i class="fa-solid fa-heart"></i>
-      <i class="fa-solid fa-user"></i>
+      <i class="fa-solid fa-user" id="user"></i>
     </div>
-    <div class="sec-title">申請紀錄可在取衣專區中查看!</div>
+    <div class="sec-title">取衣紀錄可在使用者中心中查看!</div>
   </div>
 </template>
 
@@ -42,7 +42,7 @@
 .box-frame i {
   margin: 0 20px;
 }
-#shirt {
+#user {
   animation: shake 0.8s infinite alternate;
 }
 .sec-title {

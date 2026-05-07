@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="map"></div>
-
     <div class="search-frame">
       <div class="search-box">
         <input
@@ -23,6 +22,9 @@
           </div>
         </div>
       </div>
+      <transition name="fade">
+        <div class="no-item" v-if="showNone">這裡是空的!</div>
+      </transition>
     </div>
 
     <div
@@ -51,6 +53,17 @@
       </div>
     </transition>
   </div>
+
+  <i
+    class="fa-regular fa-circle-question"
+    id="help-btn"
+    @click="showSitemap = true"
+  ></i>
+
+  <div class="overlay" v-if="showSitemap" @click="showSitemap = false"></div>
+  <transition name="slide-sitemap">
+    <MapSitemap class="ele-page" v-if="showSitemap" />
+  </transition>
 </template>
 
 <script>
@@ -58,8 +71,13 @@ import { ref, onMounted } from "vue";
 
 import { mapUiStore } from "@/store/map";
 
+import MapSitemap from "./sitemap/MapSitemap.vue";
+
 export default {
   name: "MapPage",
+  components: {
+    MapSitemap,
+  },
   setup() {
     const map = ref(null);
     const showSelected = ref(false);
@@ -69,6 +87,8 @@ export default {
     const markerList = ref({});
     const placeData = ref([]);
     const listClick = ref("");
+    const showSitemap = ref(false);
+    const showNone = ref(false);
 
     const mapStore = mapUiStore();
 
@@ -104,6 +124,12 @@ export default {
     };
 
     onMounted(async () => {
+      showSitemap.value = true;
+
+      if (filteredData.value.length === 0) {
+        showNone.value = true;
+      }
+
       await GetPlaceData();
 
       L = await import("leaflet"); // 動態載入，避免 SSR
@@ -176,6 +202,8 @@ export default {
       markerList,
       placeData,
       listClick,
+      showSitemap,
+      showNone,
       GetPlaceData,
       FilteredResult,
       ClickSearchResult,
@@ -257,6 +285,11 @@ input:focus {
   text-align: right;
   margin-top: 10px;
 }
+.no-item {
+  color: #adadad;
+  font-size: 26px;
+  margin-top: 30px;
+}
 .overlay {
   position: fixed;
   top: 0;
@@ -295,7 +328,48 @@ input:focus {
 .info {
   margin: 5px 0;
 }
+#help-btn {
+  font-size: 26px;
+  color: #849c7d;
+  background-color: #ffffff;
+  border-radius: 50%;
+  padding: 5px;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2;
+  cursor: pointer;
+}
 
+.ele-page {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 99;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
 .y-slide-enter-active,
 .y-slide-leave-active {
   transition: all 1s ease;
@@ -309,5 +383,19 @@ input:focus {
 .y-slide-leave-from {
   transform: translateY(0) translate(-50%, -50%);
   opacity: 1;
+}
+.slide-sitemap-enter-active,
+.slide-sitemap-leave-active {
+  transition: all 1s ease;
+}
+.slide-sitemap-enter-from,
+.slide-sitemap-leave-to {
+  opacity: 0;
+  transform: translateX(-100%) translate(-50%, -50%);
+}
+.slide-sitemap-enter-to,
+.slide-sitemap-leave-from {
+  opacity: 1;
+  transform: translateX(0) translate(-50%, -50%);
 }
 </style>

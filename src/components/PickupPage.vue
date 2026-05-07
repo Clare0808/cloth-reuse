@@ -39,6 +39,12 @@
     </transition>
   </div>
 
+  <i
+    class="fa-regular fa-circle-question"
+    id="help-btn"
+    @click="showSitemap = true"
+  ></i>
+
   <div
     class="overlay"
     v-show="pickupStore.showElePage"
@@ -56,6 +62,11 @@
   <transition name="slide-ele">
     <FinishCheck class="ele-page" v-show="finishStore.showElePage" />
   </transition>
+
+  <div class="overlay" v-if="showSitemap" @click="showSitemap = false"></div>
+  <transition name="slide-sitemap">
+    <PickupRecordSitemap class="ele-page" v-if="showSitemap" />
+  </transition>
 </template>
 
 <script>
@@ -66,18 +77,21 @@ import { finishUiStore } from "@/store/finish";
 
 import PickupCancleCheck from "./pageElement/PickupCancleCheck.vue";
 import FinishCheck from "./pageElement/FinishCheck.vue";
+import PickupRecordSitemap from "./sitemap/PickupRecordSitemap.vue";
 
 export default {
   name: "PickupPage",
   components: {
     PickupCancleCheck,
     FinishCheck,
+    PickupRecordSitemap,
   },
   setup() {
     const showFade = ref(false);
     const showSlide = ref(true);
     const dataList = ref([]);
     const showNone = ref(false);
+    const showSitemap = ref(false);
 
     const pickupStore = pickupUiStore();
     const finishStore = finishUiStore();
@@ -112,6 +126,13 @@ export default {
       showFade.value = true;
       showSlide.value = true;
 
+      const pickupRecordState = localStorage.getItem("PickupRecordSitemap");
+      if (pickupRecordState === "true") {
+        showSitemap.value = true;
+
+        localStorage.setItem("PickupRecordSitemap", "false");
+      }
+
       await GetData();
     });
 
@@ -120,6 +141,7 @@ export default {
       showSlide,
       dataList,
       showNone,
+      showSitemap,
       pickupStore,
       finishStore,
       DeleteData,
@@ -228,6 +250,15 @@ img {
   cursor: pointer;
   transform: scale(1.1);
 }
+#help-btn {
+  font-size: 26px;
+  color: #849c7d;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2;
+  cursor: pointer;
+}
 
 .ele-page {
   position: fixed;
@@ -285,5 +316,19 @@ img {
 .slide-ele-leave-from {
   opacity: 1;
   transform: translate(-50%, -50%) translateY(0);
+}
+.slide-sitemap-enter-active,
+.slide-sitemap-leave-active {
+  transition: all 1s ease;
+}
+.slide-sitemap-enter-from,
+.slide-sitemap-leave-to {
+  opacity: 0;
+  transform: translateX(-100%) translate(-50%, -50%);
+}
+.slide-sitemap-enter-to,
+.slide-sitemap-leave-from {
+  opacity: 1;
+  transform: translateX(0) translate(-50%, -50%);
 }
 </style>
