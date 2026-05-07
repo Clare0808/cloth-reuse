@@ -9,7 +9,7 @@
       </div>
       <i class="fa-solid fa-arrow-pointer" id="pointer"></i>
     </div>
-    <div class="sec-title">點擊餐點可查看詳細資訊!</div>
+    <div class="sec-title">點擊服飾可查看詳細資訊!</div>
   </div>
 </template>
 

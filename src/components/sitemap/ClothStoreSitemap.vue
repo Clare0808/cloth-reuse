@@ -6,7 +6,7 @@
       <i class="fa-solid fa-heart"></i>
       <i class="fa-solid fa-user"></i>
     </div>
-    <div class="sec-title">餐點可在購物車內查看!</div>
+    <div class="sec-title">申請紀錄可在取衣專區中查看!</div>
   </div>
 </template>
 
