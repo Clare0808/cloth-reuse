@@ -53,6 +53,8 @@ export default {
 
       errorStore.LoadSuccess("取衣完成!");
 
+      localStorage.setItem("PickupRecordSitemap", "true");
+
       await errorStore.CloseLoadEle();
       window.location.reload();
     };
