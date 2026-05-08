@@ -42,7 +42,7 @@
   <i
     class="fa-regular fa-circle-question"
     id="help-btn"
-    @click="showClothDetailSitemap = true"
+    @click="showClothAllSitemap = true"
   ></i>
 
   <transition name="fade">
@@ -95,6 +95,22 @@
   <transition name="slide-sitemap">
     <ClothStoreSitemap class="ele-page" v-if="showClothStoreSitemap" />
   </transition>
+
+  <div
+    class="overlay"
+    v-if="showClothAllSitemap"
+    @click="showClothAllSitemap = false"
+  ></div>
+  <div
+    class="cancel-btn"
+    v-if="showClothAllSitemap"
+    @click="showClothAllSitemap = false"
+  >
+    X
+  </div>
+  <transition name="slide-sitemap">
+    <ClothAllSitemap class="ele-page" v-if="showClothAllSitemap" />
+  </transition>
 </template>
 
 <script>
@@ -110,6 +126,7 @@ import UploadCloth from "./pageElement/UploadCloth.vue";
 import ChatEle from "./pageElement/ChatEle.vue";
 import ClothDetailSiteMap from "./sitemap/ClothDetailSiteMap.vue";
 import ClothStoreSitemap from "./sitemap/ClothStoreSitemap.vue";
+import ClothAllSitemap from "./sitemap/ClothAllSitemap.vue";
 
 export const selectedCloth = ref({});
 export const showElePage = ref(false);
@@ -122,12 +139,14 @@ export default {
     ChatEle,
     ClothDetailSiteMap,
     ClothStoreSitemap,
+    ClothAllSitemap,
   },
   setup() {
     const showText = ref(false);
     const showElement = ref(false);
     const showClothDetailSitemap = ref(false);
     const showClothStoreSitemap = ref(false);
+    const showClothAllSitemap = ref(false);
 
     const dataList = ref([]);
     const filteredList = ref([]);
@@ -216,6 +235,7 @@ export default {
       showElement,
       showClothDetailSitemap,
       showClothStoreSitemap,
+      showClothAllSitemap,
       dataList,
       filteredList,
       showNone,
@@ -385,6 +405,28 @@ export default {
   right: 20px;
   transform: translate(0%, -50%);
   z-index: 101;
+}
+.cancel-btn {
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 50px;
+  color: #ffffff;
+  background-color: #d3dcba;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px 5px #d3dcba;
+  transition: all 0.5s ease;
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  z-index: 100;
+}
+.cancel-btn:hover {
+  cursor: pointer;
+  background-color: #3b5131;
+  box-shadow: 0px 0px 5px 5px #3b5131;
+  transform: scale(1.05);
 }
 
 .fade-enter-active,
