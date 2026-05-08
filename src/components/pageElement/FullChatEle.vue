@@ -1,37 +1,39 @@
 <template>
   <div class="ele">
     <div class="user-choose-box">
-      <div v-for="(index, user) in userList" :key="index">
-        <div class="user">
+      <div v-for="(user, index) in userList" :key="index">
+        <div class="user" @click="ChooseUser(user.senderEmail, user.name)">
           <div class="user-inframe">
             <div class="name">{{ user.name }}</div>
-            <div class="last-time"></div>
+            <div class="last-time">{{ user.latestMsg.time }}</div>
           </div>
-          <div class="msg"></div>
+          <div class="msg">{{ user.latestMsg.content }}</div>
         </div>
       </div>
     </div>
-    <div class="chat-box-outframe">
-      <div class="title">aaa</div>
-      <div class="chat-box" ref="chatContainer">
-        <div v-for="(msg, index) in allMessages" :key="index">
-          <div class="chat-sender-box" v-if="msg.fromSender">
-            <div class="time">{{ msg.time }}</div>
-            <div class="chat-ele">{{ msg.message }}</div>
+    <transition name="slide-ele-right">
+      <div class="chat-box-outframe" v-if="showChatBox">
+        <div class="title">{{ selectedUser }}</div>
+        <div class="chat-box" ref="chatContainer">
+          <div v-for="(msg, index) in allMessages" :key="index">
+            <div class="chat-sender-box" v-if="msg.fromSender">
+              <div class="time">{{ msg.time }}</div>
+              <div class="chat-ele">{{ msg.message }}</div>
+            </div>
+            <div class="chat-receiver-box" v-else>
+              <div class="chat-ele">{{ msg.message }}</div>
+              <div class="time">{{ msg.time }}</div>
+            </div>
           </div>
-          <div class="chat-receiver-box" v-else>
-            <div class="chat-ele">{{ msg.message }}</div>
-            <div class="time">{{ msg.time }}</div>
+        </div>
+        <div class="input-frame">
+          <input type="text" v-model.trim="inputMsg" />
+          <div class="send-btn" @click="AddMessages">
+            <i class="fa-solid fa-paper-plane"></i>
           </div>
         </div>
       </div>
-      <div class="input-frame">
-        <input type="text" v-model.trim="inputMsg" />
-        <div class="send-btn" @click="AddMessages">
-          <i class="fa-solid fa-paper-plane"></i>
-        </div>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -53,6 +55,8 @@ export default {
     const chatContainer = ref(null);
     const allMessages = ref([]);
     const userList = ref([]);
+    const selectedUser = ref("");
+    const showChatBox = ref(false);
 
     // 生成聊天室識別碼
     const getRoomId = (id1, id2) => {
@@ -169,14 +173,82 @@ export default {
 
       const userData = await loginStore.getUserInfo();
 
-      userList.value = filteredData.map((item) => {
+      const sendList = [];
+
+      for (let i = 0; i < filteredData.length; i++) {
+        const sendData = filteredData[i];
+
+        const existing = sendList.find(
+          (item) => item.sender === sendData.sender_email
+        );
+
+        const formatTime = (timeStr) => {
+          const formattedTime = new Intl.DateTimeFormat("zh-TW", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+            timeZone: "Asia/Taipei",
+          })
+            .format(new Date(timeStr))
+            .replace("AM", "上午")
+            .replace("PM", "下午");
+
+          return formattedTime;
+        };
+
+        if (existing) {
+          existing.messages.push({
+            content: sendData.message,
+            time: formatTime(sendData.time),
+          });
+
+          existing.latestMsg = {
+            content: sendData.message,
+            time: formatTime(sendData.time),
+          };
+        } else {
+          sendList.push({
+            sender: sendData.sender_email,
+            messages: [
+              {
+                content: sendData.message,
+                time: formatTime(sendData.time),
+              },
+            ],
+            latestMsg: {
+              content: sendData.message,
+              time: formatTime(sendData.time),
+            },
+          });
+        }
+      }
+
+      userList.value = sendList.map((item) => {
         return {
-          item,
-          name: userData.find((user) => user.email === item.sender_email).name,
+          senderEmail: item.sender,
+          name: userData.find((user) => user.email === item.sender).name,
+          message: item.messages,
+          latestMsg: item.latestMsg,
         };
       });
+    };
 
-      console.log(userList.value);
+    const ChooseUser = async (email, name) => {
+      selectedUser.value = name;
+      chatStore.chatReceiverEmail = email;
+
+      showChatBox.value = true;
+
+      const roomId = getRoomId(userEmail.value, email);
+      socket.emit("join_room", { room: roomId });
+
+      // await FetchHistory();
+
+      nextTick(() => {
+        if (chatContainer.value) {
+          chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+        }
+      });
     };
 
     watch(
@@ -247,10 +319,13 @@ export default {
       chatContainer,
       allMessages,
       userList,
+      selectedUser,
+      showChatBox,
       AddMessages,
       SendMessage,
       FetchHistory,
       GetSenderList,
+      ChooseUser,
     };
   },
 };
@@ -299,7 +374,9 @@ export default {
 }
 .chat-box-outframe {
   width: calc(100% - 40px);
-  height: calc(90% - 50px);
+  height: calc(100% - 40px);
+  background-color: #ffffff;
+  border-radius: 6px;
   padding: 20px;
 }
 .title {
@@ -312,9 +389,12 @@ export default {
 }
 .chat-box {
   width: calc(100% - 20px);
-  height: 100%;
-  background-color: #ffffff;
+  height: 540px;
+  max-height: 540px;
+  overflow-y: auto;
   padding: 0 10px;
+  padding-right: 20px;
+  padding-top: 15px;
 }
 .chat-sender-box,
 .chat-receiver-box {
@@ -323,7 +403,7 @@ export default {
   font-size: 20px;
   text-align: left;
   line-height: 30px;
-  margin: 15px 0;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
 }
@@ -353,6 +433,7 @@ export default {
 .input-frame {
   width: 100%;
   padding: 10px;
+  padding-bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -379,5 +460,20 @@ input:focus {
   color: #ffffff;
   cursor: pointer;
   transform: scale(1.05);
+}
+
+.slide-ele-right-enter-active,
+.slide-ele-right-leave-active {
+  transition: all 1s ease;
+}
+.slide-ele-right-enter-from,
+.slide-ele-right-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-ele-right-enter-to,
+.slide-ele-right-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>
