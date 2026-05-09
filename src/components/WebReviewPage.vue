@@ -285,4 +285,15 @@ export default {
   opacity: 1;
   transform: translateX(0) translate(-50%, -50%);
 }
+
+@media (max-width: 1100px) {
+  .review-box-frame {
+    grid-template-columns: repeat(2, 350px);
+  }
+}
+@media (max-width: 750px) {
+  .review-box-frame {
+    grid-template-columns: 330px;
+  }
+}
 </style>

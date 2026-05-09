@@ -424,4 +424,33 @@ img {
   opacity: 1;
   transform: translate(0%, -50%) translateX(0);
 }
+@media (max-width: 990px) {
+  .user-info {
+    font-size: 20px;
+  }
+  .user-info i {
+    font-size: 16px;
+    margin-left: 5px;
+  }
+  .btn {
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+    line-height: 30px;
+  }
+}
+@media (max-width: 900px) {
+  img {
+    width: 150px;
+    height: 150px;
+  }
+  .func-outframe {
+    display: block;
+  }
+}
+@media (max-width: 500px) {
+  .cloth-info {
+    display: block;
+  }
+}
 </style>

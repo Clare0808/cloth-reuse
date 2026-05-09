@@ -227,4 +227,25 @@ textarea:focus {
 .cancel-btn:hover {
   border: 1px solid #849c7d;
 }
+
+@media (max-width: 540px) {
+  .title {
+    font-size: 30px;
+  }
+  .sec-title {
+    font-size: 20px;
+  }
+  .stars-frame i {
+    font-size: 22px;
+  }
+  .submit-btn,
+  .cancel-btn {
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+    line-height: 30px;
+    margin: 0 10px;
+    margin-top: 20px;
+  }
+}
 </style>

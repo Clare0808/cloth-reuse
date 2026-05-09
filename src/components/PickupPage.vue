@@ -328,4 +328,47 @@ img {
   opacity: 1;
   transform: translateX(0) translate(-50%, -50%);
 }
+
+@media (max-width: 1000px) {
+  img {
+    width: 100px;
+  }
+  .cloth-title-info {
+    font-size: 20px;
+  }
+}
+@media (max-width: 900px) {
+  .pickup-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  img {
+    width: 200px;
+  }
+  .title-frame {
+    display: block;
+    position: relative;
+  }
+  .icon-box {
+    position: absolute;
+    bottom: 10px;
+    right: 0px;
+  }
+  .cloth-info-frame {
+    width: 100%;
+  }
+}
+@media (max-width: 500px) {
+  .icon-box {
+    font-size: 18px;
+  }
+  .btn {
+    width: 100px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 30px;
+  }
+}
 </style>
