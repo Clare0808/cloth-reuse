@@ -22,11 +22,7 @@
     </transition>
   </div>
 
-  <i
-    class="fa-regular fa-message"
-    id="contact"
-    @click="contactStore.showElePage = true"
-  ></i>
+  <i class="fa-regular fa-message" id="contact" @click="CheckLogin"></i>
 
   <i
     class="fa-regular fa-circle-question"
@@ -52,8 +48,11 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 import { contactUiStore } from "@/store/contact";
+import { loginUiStore } from "@/store/login";
+import { errorUiStore } from "@/store/error";
 
 import QuestionDataRaw from "../assets/data/questionData.json";
 
@@ -73,6 +72,10 @@ export default {
     const showSitemap = ref(false);
 
     const contactStore = contactUiStore();
+    const loginStore = loginUiStore();
+    const errorStore = errorUiStore();
+
+    const router = useRouter();
 
     const HandleShowAnswer = (index) => {
       questionData.value[index].show = !questionData.value[index].show;
@@ -90,10 +93,20 @@ export default {
       }
     };
 
+    const CheckLogin = () => {
+      if (loginStore.isAuthenticated) {
+        contactStore.showElePage = true;
+      } else {
+        errorStore.LoadError("請先登入!");
+
+        router.push("/login");
+      }
+    };
+
     onMounted(async () => {
       showSlide.value = true;
       showFade.value = true;
-      showSitemap.value = true;
+      // showSitemap.value = true;
     });
 
     return {
@@ -104,6 +117,7 @@ export default {
       showSitemap,
       contactStore,
       HandleShowAnswer,
+      CheckLogin,
     };
   },
 };

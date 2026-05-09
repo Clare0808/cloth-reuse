@@ -22,10 +22,7 @@
                 <div class="cloth-title-info">{{ pickup.time }}</div>
                 <div class="icon-box">
                   <i class="fa-solid fa-map"></i>
-                  <i
-                    class="fa-solid fa-trash"
-                    @click="DeleteData(pickup.id)"
-                  ></i>
+                  <i class="fa-solid fa-trash" @click="DeleteData(pickup)"></i>
                 </div>
               </div>
               <div class="cloth-info">類型: {{ pickup.type }}</div>
@@ -126,12 +123,12 @@ export default {
       showFade.value = true;
       showSlide.value = true;
 
-      const pickupRecordState = localStorage.getItem("PickupRecordSitemap");
-      if (pickupRecordState === "true") {
-        showSitemap.value = true;
+      // const pickupRecordState = localStorage.getItem("PickupRecordSitemap");
+      // if (pickupRecordState === "true") {
+      //   showSitemap.value = true;
 
-        localStorage.setItem("PickupRecordSitemap", "false");
-      }
+      //   localStorage.setItem("PickupRecordSitemap", "false");
+      // }
 
       await GetData();
     });
@@ -330,5 +327,48 @@ img {
 .slide-sitemap-leave-from {
   opacity: 1;
   transform: translateX(0) translate(-50%, -50%);
+}
+
+@media (max-width: 1000px) {
+  img {
+    width: 100px;
+  }
+  .cloth-title-info {
+    font-size: 20px;
+  }
+}
+@media (max-width: 900px) {
+  .pickup-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  img {
+    width: 200px;
+  }
+  .title-frame {
+    display: block;
+    position: relative;
+  }
+  .icon-box {
+    position: absolute;
+    bottom: 10px;
+    right: 0px;
+  }
+  .cloth-info-frame {
+    width: 100%;
+  }
+}
+@media (max-width: 500px) {
+  .icon-box {
+    font-size: 18px;
+  }
+  .btn {
+    width: 100px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 30px;
+  }
 }
 </style>

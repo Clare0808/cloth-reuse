@@ -124,7 +124,7 @@ export default {
     };
 
     onMounted(async () => {
-      showSitemap.value = true;
+      // showSitemap.value = true;
 
       if (filteredData.value.length === 0) {
         showNone.value = true;

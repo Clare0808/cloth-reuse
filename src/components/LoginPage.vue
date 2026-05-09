@@ -203,8 +203,10 @@ export default {
       window.location.href = "http://localhost:5000/api/auth-google";
     };
 
-    onMounted(() => {
+    onMounted(async () => {
       showLogin.value = true;
+
+      await errorStore.CloseLoadEle();
     });
 
     return {

@@ -105,7 +105,7 @@ export default {
         image: data.image,
       });
 
-      await likeStore.DeleteLike(data.name);
+      await likeStore.DeleteLike(data.id);
       await pickupStore.ModifyFile(data.name);
 
       errorStore.LoadSuccess("取衣申請成功!");
@@ -267,5 +267,43 @@ img {
 .slide-leave-from {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (max-width: 1090px) {
+  img {
+    width: 250px;
+  }
+}
+@media (max-width: 950px) {
+  img {
+    width: 200px;
+  }
+}
+@media (max-width: 760px) {
+  .like-box {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .cloth-info-frame {
+    width: 100%;
+  }
+  .title-frame i {
+    font-size: 18px;
+  }
+  .cloth-name {
+    font-size: 24px;
+  }
+  .cloth-info {
+    font-size: 18px;
+  }
+  .btn {
+    width: 100px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 30px;
+  }
 }
 </style>

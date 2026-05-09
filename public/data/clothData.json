@@ -10,7 +10,7 @@
     "place": "台北市信義區xx路",
     "time": "9:00~11:00 AM",
     "category": "cloth",
-    "lock": false
+    "lock": true
   },
   {
     "id": 2,
@@ -101,7 +101,7 @@
     "place": "test2",
     "time": "tTime2",
     "category": "skirt",
-    "lock": true
+    "lock": false
   },
   {
     "id": 9,
@@ -114,6 +114,6 @@
     "place": "tLocation1",
     "time": "tTime",
     "category": "cloth",
-    "lock": true
+    "lock": false
   }
 ]

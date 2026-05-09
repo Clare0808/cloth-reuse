@@ -42,17 +42,11 @@
   <i
     class="fa-regular fa-circle-question"
     id="help-btn"
-    @click="showClothDetailSitemap = true"
+    @click="showClothAllSitemap = true"
   ></i>
 
   <transition name="fade">
-    <div
-      class="add-btn"
-      @click="clothStore.showElePage = true"
-      v-if="showElement"
-    >
-      +
-    </div>
+    <div class="add-btn" @click="CheckLogin" v-if="showElement">+</div>
   </transition>
 
   <div class="overlay" v-show="showElePage" @click="showElePage = false"></div>
@@ -95,13 +89,32 @@
   <transition name="slide-sitemap">
     <ClothStoreSitemap class="ele-page" v-if="showClothStoreSitemap" />
   </transition>
+
+  <div
+    class="overlay"
+    v-if="showClothAllSitemap"
+    @click="showClothAllSitemap = false"
+  ></div>
+  <div
+    class="cancel-btn"
+    v-if="showClothAllSitemap"
+    @click="showClothAllSitemap = false"
+  >
+    X
+  </div>
+  <transition name="slide-sitemap">
+    <ClothAllSitemap class="ele-page" v-if="showClothAllSitemap" />
+  </transition>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 import { clothUiStore } from "@/store/cloth";
 import { chatUiStore } from "@/store/chat";
+import { loginUiStore } from "@/store/login";
+import { errorUiStore } from "@/store/error";
 
 import OptionsDataRaw from "@/assets/data/optionsData.json";
 
@@ -110,6 +123,7 @@ import UploadCloth from "./pageElement/UploadCloth.vue";
 import ChatEle from "./pageElement/ChatEle.vue";
 import ClothDetailSiteMap from "./sitemap/ClothDetailSiteMap.vue";
 import ClothStoreSitemap from "./sitemap/ClothStoreSitemap.vue";
+import ClothAllSitemap from "./sitemap/ClothAllSitemap.vue";
 
 export const selectedCloth = ref({});
 export const showElePage = ref(false);
@@ -122,12 +136,14 @@ export default {
     ChatEle,
     ClothDetailSiteMap,
     ClothStoreSitemap,
+    ClothAllSitemap,
   },
   setup() {
     const showText = ref(false);
     const showElement = ref(false);
     const showClothDetailSitemap = ref(false);
     const showClothStoreSitemap = ref(false);
+    const showClothAllSitemap = ref(false);
 
     const dataList = ref([]);
     const filteredList = ref([]);
@@ -135,6 +151,10 @@ export default {
 
     const clothStore = clothUiStore();
     const chatStore = chatUiStore();
+    const loginStore = loginUiStore();
+    const errorStore = errorUiStore();
+
+    const router = useRouter();
 
     const OptionsData = ref(OptionsDataRaw); // 修正成 reactive 狀態
 
@@ -183,17 +203,27 @@ export default {
       showElePage.value = true;
     };
 
+    const CheckLogin = () => {
+      if (loginStore.isAuthenticated) {
+        clothStore.showElePage = true;
+      } else {
+        errorStore.LoadError("請先登入!");
+
+        router.push("/login");
+      }
+    };
+
     onMounted(async () => {
       showText.value = true;
       showElement.value = true;
-      showClothDetailSitemap.value = true;
+      // showClothDetailSitemap.value = true;
 
-      const clothStoreState = localStorage.getItem("ClothStoreSitemap");
-      if (clothStoreState === "true") {
-        showClothStoreSitemap.value = true;
+      // const clothStoreState = localStorage.getItem("ClothStoreSitemap");
+      // if (clothStoreState === "true") {
+      //   showClothStoreSitemap.value = true;
 
-        localStorage.setItem("ClothStoreSitemap", "false");
-      }
+      //   localStorage.setItem("ClothStoreSitemap", "false");
+      // }
 
       await GetClothData();
 
@@ -216,6 +246,7 @@ export default {
       showElement,
       showClothDetailSitemap,
       showClothStoreSitemap,
+      showClothAllSitemap,
       dataList,
       filteredList,
       showNone,
@@ -225,6 +256,7 @@ export default {
       GetClothData,
       ClickOption,
       ClickCloth,
+      CheckLogin,
     };
   },
 };
@@ -385,6 +417,28 @@ export default {
   right: 20px;
   transform: translate(0%, -50%);
   z-index: 101;
+}
+.cancel-btn {
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 50px;
+  color: #ffffff;
+  background-color: #d3dcba;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px 5px #d3dcba;
+  transition: all 0.5s ease;
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  z-index: 100;
+}
+.cancel-btn:hover {
+  cursor: pointer;
+  background-color: #3b5131;
+  box-shadow: 0px 0px 5px 5px #3b5131;
+  transform: scale(1.05);
 }
 
 .fade-enter-active,

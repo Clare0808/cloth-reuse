@@ -35,13 +35,7 @@
     ></i>
 
     <transition name="fade">
-      <div
-        class="add-btn"
-        @click="reviewStore.showElePage = true"
-        v-if="showFade"
-      >
-        +
-      </div>
+      <div class="add-btn" @click="CheckLogin" v-if="showFade">+</div>
     </transition>
   </div>
 
@@ -63,8 +57,11 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 import { reviewUiStore } from "@/store/review";
+import { loginUiStore } from "@/store/login";
+import { errorUiStore } from "@/store/error";
 
 import WriteWebReview from "./pageElement/WriteWebReview.vue";
 import WebReviewSitemap from "./sitemap/WebReviewSitemap.vue";
@@ -83,11 +80,25 @@ export default {
     const showSitemap = ref(false);
 
     const reviewStore = reviewUiStore();
+    const loginStore = loginUiStore();
+    const errorStore = errorUiStore();
+
+    const router = useRouter();
+
+    const CheckLogin = () => {
+      if (loginStore.isAuthenticated) {
+        reviewStore.showElePage = true;
+      } else {
+        errorStore.LoadError("請先登入!");
+
+        router.push("/login");
+      }
+    };
 
     onMounted(async () => {
       showSlide.value = true;
       showFade.value = true;
-      showSitemap.value = true;
+      // showSitemap.value = true;
 
       dataList.value = await reviewStore.GetReviewData();
 
@@ -103,6 +114,7 @@ export default {
       showNone,
       showSitemap,
       reviewStore,
+      CheckLogin,
     };
   },
 };
@@ -272,5 +284,16 @@ export default {
 .slide-sitemap-leave-from {
   opacity: 1;
   transform: translateX(0) translate(-50%, -50%);
+}
+
+@media (max-width: 1100px) {
+  .review-box-frame {
+    grid-template-columns: repeat(2, 350px);
+  }
+}
+@media (max-width: 750px) {
+  .review-box-frame {
+    grid-template-columns: 330px;
+  }
 }
 </style>
