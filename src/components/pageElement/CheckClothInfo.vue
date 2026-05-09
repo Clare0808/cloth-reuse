@@ -38,12 +38,14 @@
 
 <script>
 import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
 
 import { errorUiStore } from "@/store/error";
 import { likeUiStore } from "@/store/like";
 import { mapUiStore } from "@/store/map";
 import { pickupUiStore } from "@/store/pickup";
 import { chatUiStore } from "@/store/chat";
+import { loginUiStore } from "@/store/login";
 
 import { selectedCloth, showElePage } from "../../components/ClothPage.vue";
 
@@ -56,6 +58,9 @@ export default {
     const mapStore = mapUiStore();
     const pickupStore = pickupUiStore();
     const chatStore = chatUiStore();
+    const loginStore = loginUiStore();
+
+    const router = useRouter();
 
     const type = ref("");
     const selectedList = ref({});
@@ -103,33 +108,39 @@ export default {
     };
 
     const ClickPickup = async () => {
-      const userEmail = localStorage.getItem("userEmail");
-      const userName = localStorage.getItem("userName");
+      if (loginStore.isAuthenticated) {
+        const userEmail = localStorage.getItem("userEmail");
+        const userName = localStorage.getItem("userName");
 
-      await pickupStore.SendPickupData({
-        rEmail: userEmail,
-        rName: userName,
-        name: selectedList.value.name,
-        type: type.value,
-        size: selectedList.value.size,
-        situation: selectedList.value.description,
-        time: selectedList.value.time,
-        place: selectedList.value.place,
-        pEmail: selectedCloth.value.email,
-        pName: selectedCloth.value.pName,
-        image: selectedList.value.image,
-      });
+        await pickupStore.SendPickupData({
+          rEmail: userEmail,
+          rName: userName,
+          name: selectedList.value.name,
+          type: type.value,
+          size: selectedList.value.size,
+          situation: selectedList.value.description,
+          time: selectedList.value.time,
+          place: selectedList.value.place,
+          pEmail: selectedCloth.value.email,
+          pName: selectedCloth.value.pName,
+          image: selectedList.value.image,
+        });
 
-      await pickupStore.ModifyFile(selectedList.value.name);
+        await pickupStore.ModifyFile(selectedList.value.name);
 
-      showElePage.value = false;
+        showElePage.value = false;
 
-      errorStore.LoadSuccess("取衣申請成功!");
+        errorStore.LoadSuccess("取衣申請成功!");
 
-      localStorage.setItem("ClothStoreSitemap", "true");
+        localStorage.setItem("ClothStoreSitemap", "true");
 
-      await errorStore.CloseLoadEle();
-      window.location.reload();
+        await errorStore.CloseLoadEle();
+        window.location.reload();
+      } else {
+        errorStore.LoadError("請先登入!");
+
+        router.push("/login");
+      }
     };
 
     const ClickChat = (name, email) => {

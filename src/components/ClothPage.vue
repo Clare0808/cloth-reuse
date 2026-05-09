@@ -46,13 +46,7 @@
   ></i>
 
   <transition name="fade">
-    <div
-      class="add-btn"
-      @click="clothStore.showElePage = true"
-      v-if="showElement"
-    >
-      +
-    </div>
+    <div class="add-btn" @click="CheckLogin" v-if="showElement">+</div>
   </transition>
 
   <div class="overlay" v-show="showElePage" @click="showElePage = false"></div>
@@ -115,9 +109,12 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 import { clothUiStore } from "@/store/cloth";
 import { chatUiStore } from "@/store/chat";
+import { loginUiStore } from "@/store/login";
+import { errorUiStore } from "@/store/error";
 
 import OptionsDataRaw from "@/assets/data/optionsData.json";
 
@@ -154,6 +151,10 @@ export default {
 
     const clothStore = clothUiStore();
     const chatStore = chatUiStore();
+    const loginStore = loginUiStore();
+    const errorStore = errorUiStore();
+
+    const router = useRouter();
 
     const OptionsData = ref(OptionsDataRaw); // 修正成 reactive 狀態
 
@@ -202,6 +203,16 @@ export default {
       showElePage.value = true;
     };
 
+    const CheckLogin = () => {
+      if (loginStore.isAuthenticated) {
+        clothStore.showElePage = true;
+      } else {
+        errorStore.LoadError("請先登入!");
+
+        router.push("/login");
+      }
+    };
+
     onMounted(async () => {
       showText.value = true;
       showElement.value = true;
@@ -245,6 +256,7 @@ export default {
       GetClothData,
       ClickOption,
       ClickCloth,
+      CheckLogin,
     };
   },
 };

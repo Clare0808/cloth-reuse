@@ -88,7 +88,7 @@
     "place": "test1",
     "time": "test1",
     "category": "cloth",
-    "lock": false
+    "lock": true
   },
   {
     "id": 8,

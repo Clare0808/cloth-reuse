@@ -13,13 +13,13 @@
     </div>
     <div class="func-icon">
       <router-link to="/pickup">
-        <i class="fa-solid fa-shirt"></i>
+        <i class="fa-solid fa-shirt" v-if="loginStore.isAuthenticated"></i>
       </router-link>
       <router-link to="/like">
-        <i class="fa-solid fa-heart"></i>
+        <i class="fa-solid fa-heart" v-if="loginStore.isAuthenticated"></i>
       </router-link>
       <router-link to="/user">
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-user" v-if="loginStore.isAuthenticated"></i>
       </router-link>
       <i
         class="fa-solid fa-arrow-right-from-bracket"
