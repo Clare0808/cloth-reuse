@@ -216,14 +216,14 @@ export default {
     onMounted(async () => {
       showText.value = true;
       showElement.value = true;
-      showClothDetailSitemap.value = true;
+      // showClothDetailSitemap.value = true;
 
-      const clothStoreState = localStorage.getItem("ClothStoreSitemap");
-      if (clothStoreState === "true") {
-        showClothStoreSitemap.value = true;
+      // const clothStoreState = localStorage.getItem("ClothStoreSitemap");
+      // if (clothStoreState === "true") {
+      //   showClothStoreSitemap.value = true;
 
-        localStorage.setItem("ClothStoreSitemap", "false");
-      }
+      //   localStorage.setItem("ClothStoreSitemap", "false");
+      // }
 
       await GetClothData();
 

@@ -106,7 +106,7 @@ export default {
     onMounted(async () => {
       showSlide.value = true;
       showFade.value = true;
-      showSitemap.value = true;
+      // showSitemap.value = true;
     });
 
     return {

@@ -21,8 +21,9 @@ export default {
 
     const ClickCancelPickup = async () => {
       const deleteData = pickupStore.dataList;
-      await pickupStore.DeletePickup(deleteData);
-      await pickupStore.ModifyFile(deleteData);
+
+      await pickupStore.DeletePickup(deleteData.id);
+      await pickupStore.ModifyFile(deleteData.name);
 
       pickupStore.showElePage = false;
 

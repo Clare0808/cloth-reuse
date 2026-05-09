@@ -88,7 +88,7 @@
     "place": "test1",
     "time": "test1",
     "category": "cloth",
-    "lock": true
+    "lock": false
   },
   {
     "id": 8,
@@ -101,7 +101,7 @@
     "place": "test2",
     "time": "tTime2",
     "category": "skirt",
-    "lock": true
+    "lock": false
   },
   {
     "id": 9,
@@ -114,6 +114,6 @@
     "place": "tLocation1",
     "time": "tTime",
     "category": "cloth",
-    "lock": true
+    "lock": false
   }
 ]

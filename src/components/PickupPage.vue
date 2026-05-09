@@ -22,10 +22,7 @@
                 <div class="cloth-title-info">{{ pickup.time }}</div>
                 <div class="icon-box">
                   <i class="fa-solid fa-map"></i>
-                  <i
-                    class="fa-solid fa-trash"
-                    @click="DeleteData(pickup.id)"
-                  ></i>
+                  <i class="fa-solid fa-trash" @click="DeleteData(pickup)"></i>
                 </div>
               </div>
               <div class="cloth-info">類型: {{ pickup.type }}</div>
@@ -126,12 +123,12 @@ export default {
       showFade.value = true;
       showSlide.value = true;
 
-      const pickupRecordState = localStorage.getItem("PickupRecordSitemap");
-      if (pickupRecordState === "true") {
-        showSitemap.value = true;
+      // const pickupRecordState = localStorage.getItem("PickupRecordSitemap");
+      // if (pickupRecordState === "true") {
+      //   showSitemap.value = true;
 
-        localStorage.setItem("PickupRecordSitemap", "false");
-      }
+      //   localStorage.setItem("PickupRecordSitemap", "false");
+      // }
 
       await GetData();
     });
