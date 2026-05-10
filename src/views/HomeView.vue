@@ -45,7 +45,7 @@
       <div class="next-cloth-page" @click="ChangeClothPage(1)">〉</div>
     </div>
   </div>
-  <div class="sub-page">
+  <div class="sub-page-special">
     <div class="page-title">選擇我們!</div>
     <div class="special-outframe" id="slide">
       <div class="special-box">
@@ -122,6 +122,8 @@ import { ref, onMounted } from "vue";
 import { reviewUiStore } from "@/store/review";
 
 import OptionData from "@/assets/data/optionsData.json";
+
+import { showMobileMenu } from "@/App.vue";
 
 export default {
   name: "HomePage",
@@ -216,6 +218,7 @@ export default {
 
     onMounted(async () => {
       showEle.value = true;
+      showMobileMenu.value = false;
 
       await GetClothData();
 
@@ -227,6 +230,7 @@ export default {
     });
 
     return {
+      showMobileMenu,
       showEle,
       clothList,
       clothData,
@@ -248,7 +252,8 @@ export default {
 <style scoped>
 .page,
 .sub-page-info,
-.sub-page {
+.sub-page,
+.sub-page-special {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -385,7 +390,7 @@ export default {
   box-shadow: 0px 0px 5px 5px #adadad;
 }
 
-.sub-page {
+.sub-page-special {
   justify-content: center;
 }
 .special-outframe {
@@ -526,5 +531,51 @@ export default {
 #slide.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (max-width: 1150px) {
+  .info-frame {
+    display: flex;
+    flex-direction: column;
+  }
+  .info-frame img {
+    margin-bottom: 20px;
+  }
+  .sub-page-special {
+    height: 170vh;
+  }
+  .special-outframe {
+    grid-template-columns: 100%;
+  }
+}
+@media (max-width: 650px) {
+  .info-frame img {
+    width: 240px;
+    height: 240px;
+  }
+  .name {
+    font-size: 26px;
+  }
+  .info-box {
+    font-size: 18px;
+  }
+}
+@media (max-width: 500px) {
+  .title {
+    font-size: 60px;
+  }
+  .sub-page {
+    height: 75vh;
+  }
+  .review-box {
+    padding: 20px;
+    margin: 0px 15px;
+  }
+  .last-cloth-page,
+  .next-cloth-page,
+  .last-review-page,
+  .next-review-page {
+    margin: 15px;
+  }
 }
 </style>

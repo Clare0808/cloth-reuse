@@ -293,4 +293,15 @@ img {
 .title-frame i.inLikeCSS {
   color: #3b5131;
 }
+
+@media (max-width: 900px) {
+  img {
+    width: 180px;
+  }
+}
+@media (max-width: 810px) {
+  .info-box {
+    flex-direction: column;
+  }
+}
 </style>

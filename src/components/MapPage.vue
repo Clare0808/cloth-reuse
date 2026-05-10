@@ -73,6 +73,8 @@ import { mapUiStore } from "@/store/map";
 
 import MapSitemap from "./sitemap/MapSitemap.vue";
 
+import { showMobileMenu } from "@/App.vue";
+
 export default {
   name: "MapPage",
   components: {
@@ -125,6 +127,7 @@ export default {
 
     onMounted(async () => {
       // showSitemap.value = true;
+      showMobileMenu.value = false;
 
       if (filteredData.value.length === 0) {
         showNone.value = true;
@@ -194,6 +197,7 @@ export default {
     });
 
     return {
+      showMobileMenu,
       map,
       showSelected,
       selectedRestaurant,

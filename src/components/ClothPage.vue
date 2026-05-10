@@ -125,6 +125,8 @@ import ClothDetailSiteMap from "./sitemap/ClothDetailSiteMap.vue";
 import ClothStoreSitemap from "./sitemap/ClothStoreSitemap.vue";
 import ClothAllSitemap from "./sitemap/ClothAllSitemap.vue";
 
+import { showMobileMenu } from "@/App.vue";
+
 export const selectedCloth = ref({});
 export const showElePage = ref(false);
 
@@ -216,6 +218,7 @@ export default {
     onMounted(async () => {
       showText.value = true;
       showElement.value = true;
+      showMobileMenu.value = false;
       // showClothDetailSitemap.value = true;
 
       // const clothStoreState = localStorage.getItem("ClothStoreSitemap");
@@ -241,6 +244,7 @@ export default {
     });
 
     return {
+      showMobileMenu,
       showElePage,
       showText,
       showElement,
@@ -508,5 +512,72 @@ export default {
 .slide-sitemap-leave-from {
   opacity: 1;
   transform: translateX(0) translate(-50%, -50%);
+}
+
+@media (max-width: 1150px) {
+  .cloth-box-frame {
+    width: auto;
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: auto;
+    gap: 30px;
+  }
+}
+@media (max-width: 775px) {
+  .container {
+    flex-direction: row;
+    align-items: start;
+    position: relative;
+  }
+  .options-frame {
+    flex-direction: column;
+    position: absolute;
+    top: 0px;
+    left: 20px;
+  }
+  .cloth-box-frame {
+    width: auto;
+    grid-template-columns: 100%;
+    grid-template-rows: auto;
+    gap: 30px;
+    position: absolute;
+    top: 0px;
+    left: 160px;
+  }
+}
+@media (max-width: 530px) {
+  .option {
+    width: 60px;
+    font-size: 18px;
+  }
+  .cloth-box-frame {
+    position: absolute;
+    top: 0px;
+    left: 130px;
+  }
+  .cloth-frame {
+    width: 200px;
+  }
+  .cloth-box-frame img {
+    width: 200px;
+    height: 200px;
+  }
+}
+@media (max-width: 400px) {
+  .option {
+    width: 45px;
+    font-size: 16px;
+  }
+  .cloth-box-frame {
+    position: absolute;
+    top: 0px;
+    left: 115px;
+  }
+  .cloth-frame {
+    width: 180px;
+  }
+  .cloth-box-frame img {
+    width: 180px;
+    height: 180px;
+  }
 }
 </style>
