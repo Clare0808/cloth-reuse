@@ -2,14 +2,14 @@ import { defineStore } from "pinia";
 
 export const likeUiStore = defineStore("like", () => {
   const GetLikeData = async () => {
-    const response = await fetch("http://localhost:5000/api/get-like");
+    const response = await fetch("https://cloth-reuse.onrender.com/api/get-like");
     const data = await response.json();
 
     return data.data;
   };
 
   const SendLikeData = async (likeData) => {
-    const responsePost = await fetch("http://localhost:5000/api/store-like", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/store-like", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const likeUiStore = defineStore("like", () => {
   };
 
   const DeleteLike = async (likeData) => {
-    const responsePost = await fetch("http://localhost:5000/api/delete-like", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/delete-like", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

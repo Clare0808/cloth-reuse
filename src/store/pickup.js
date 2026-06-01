@@ -6,14 +6,14 @@ export const pickupUiStore = defineStore("pickup", () => {
   const showElePage = ref(false);
 
   const GetPickupData = async () => {
-    const response = await fetch("http://localhost:5000/api/get-pickup");
+    const response = await fetch("https://cloth-reuse.onrender.com/api/get-pickup");
     const data = await response.json();
 
     return data.data;
   };
 
   const SendPickupData = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/send-pickup", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/send-pickup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const pickupUiStore = defineStore("pickup", () => {
 
   const DeletePickup = async (data) => {
     const responsePost = await fetch(
-      "http://localhost:5000/api/delete-pickup",
+      "https://cloth-reuse.onrender.com/api/delete-pickup",
       {
         method: "POST",
         headers: {
@@ -44,7 +44,7 @@ export const pickupUiStore = defineStore("pickup", () => {
   };
 
   const ModifyFile = async (data) => {
-    const responsePost = await fetch("http://localhost:5000/api/modify-file", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/modify-file", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -7,7 +7,7 @@ export const contactUiStore = defineStore("contact", () => {
   const deleteData = ref("");
 
   const SendContact = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/send-contact", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/send-contact", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export const contactUiStore = defineStore("contact", () => {
   };
 
   const GetContactData = async () => {
-    const response = await fetch("http://localhost:5000/api/get-contact");
+    const response = await fetch("https://cloth-reuse.onrender.com/api/get-contact");
     const data = await response.json();
 
     return data.data;
@@ -29,7 +29,7 @@ export const contactUiStore = defineStore("contact", () => {
 
   const DeleteContact = async (inputData) => {
     const responsePost = await fetch(
-      "http://localhost:5000/api/delete-contact",
+      "https://cloth-reuse.onrender.com/api/delete-contact",
       {
         method: "POST",
         headers: {

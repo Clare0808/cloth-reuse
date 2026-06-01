@@ -7,7 +7,7 @@ export const clothUiStore = defineStore("cloth", () => {
   const modifyList = ref({});
 
   const UploadNewCloth = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/upload-cloth", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/upload-cloth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export const clothUiStore = defineStore("cloth", () => {
   };
 
   const DeleteCloth = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/delete-cloth", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/delete-cloth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const clothUiStore = defineStore("cloth", () => {
   };
 
   const ModifyCloth = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/modify-cloth", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/modify-cloth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

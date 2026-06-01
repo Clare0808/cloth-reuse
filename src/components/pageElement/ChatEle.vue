@@ -76,7 +76,7 @@ export default {
     };
 
     // 建立 WebSocket 連線
-    const socket = io("http://localhost:5000", {
+    const socket = io("https://cloth-reuse.onrender.com/", {
       transports: ["websocket"],
     });
 
@@ -132,7 +132,7 @@ export default {
       try {
         // 根據ID取得聊天歷史紀錄
         const response = await fetch(
-          `http://localhost:5000/api/chat-history?sender_email=${userEmail.value}&receiver_email=${chatStore.chatReceiverEmail}`
+          `https://cloth-reuse.onrender.com/api/chat-history?sender_email=${userEmail.value}&receiver_email=${chatStore.chatReceiverEmail}`
         );
         const history = await response.json();
 

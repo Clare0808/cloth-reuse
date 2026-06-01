@@ -9,7 +9,7 @@ export const modifyUiStore = defineStore("modify", () => {
   const showModifyEle = ref(false);
 
   const ModifyUserRole = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/modify-user", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/modify-user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -6,14 +6,14 @@ export const finishUiStore = defineStore("finish", () => {
   const showElePage = ref(false);
 
   const GetFinishData = async () => {
-    const response = await fetch("http://localhost:5000/api/get-finish");
+    const response = await fetch("https://cloth-reuse.onrender.com/api/get-finish");
     const data = await response.json();
 
     return data.data;
   };
 
   const SendFinishData = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/send-finish", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/send-finish", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const finishUiStore = defineStore("finish", () => {
 
   const DeleteFinish = async (inputData) => {
     const responsePost = await fetch(
-      "http://localhost:5000/api/delete-review",
+      "https://cloth-reuse.onrender.com/api/delete-review",
       {
         method: "POST",
         headers: {

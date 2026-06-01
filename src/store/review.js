@@ -7,7 +7,7 @@ export const reviewUiStore = defineStore("review", () => {
   const deleteData = ref("");
 
   const SendReview = async (inputData) => {
-    const responsePost = await fetch("http://localhost:5000/api/send-review", {
+    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/send-review", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export const reviewUiStore = defineStore("review", () => {
   };
 
   const GetReviewData = async () => {
-    const response = await fetch("http://localhost:5000/api/get-review");
+    const response = await fetch("https://cloth-reuse.onrender.com/api/get-review");
     const data = await response.json();
 
     return data.data;
@@ -29,7 +29,7 @@ export const reviewUiStore = defineStore("review", () => {
 
   const DeleteReview = async (inputData) => {
     const responsePost = await fetch(
-      "http://localhost:5000/api/delete-review",
+      "https://cloth-reuse.onrender.com/api/delete-review",
       {
         method: "POST",
         headers: {
