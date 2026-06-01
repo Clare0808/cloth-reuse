@@ -95,6 +95,8 @@ import { chatUiStore } from "@/store/chat";
 import ModifyUserInfo from "./pageElement/ModifyUserInfo.vue";
 import FullChatEle from "./pageElement/FullChatEle.vue";
 
+import { showMobileMenu } from "@/App.vue";
+
 export default {
   name: "UserPage",
   components: {
@@ -164,6 +166,7 @@ export default {
     onMounted(async () => {
       showFade.value = true;
       showSlide.value = true;
+      showMobileMenu.value = false;
 
       await GetUserInfo();
 
@@ -171,6 +174,7 @@ export default {
     });
 
     return {
+      showMobileMenu,
       showFade,
       showSlide,
       userName,

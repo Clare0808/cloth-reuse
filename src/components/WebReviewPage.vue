@@ -66,6 +66,8 @@ import { errorUiStore } from "@/store/error";
 import WriteWebReview from "./pageElement/WriteWebReview.vue";
 import WebReviewSitemap from "./sitemap/WebReviewSitemap.vue";
 
+import { showMobileMenu } from "@/App.vue";
+
 export default {
   name: "ReviewPage",
   components: {
@@ -99,6 +101,7 @@ export default {
       showSlide.value = true;
       showFade.value = true;
       // showSitemap.value = true;
+      showMobileMenu.value = false;
 
       dataList.value = await reviewStore.GetReviewData();
 
@@ -108,6 +111,7 @@ export default {
     });
 
     return {
+      showMobileMenu,
       showSlide,
       showFade,
       dataList,

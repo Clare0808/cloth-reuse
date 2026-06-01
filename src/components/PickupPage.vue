@@ -76,6 +76,8 @@ import PickupCancleCheck from "./pageElement/PickupCancleCheck.vue";
 import FinishCheck from "./pageElement/FinishCheck.vue";
 import PickupRecordSitemap from "./sitemap/PickupRecordSitemap.vue";
 
+import { showMobileMenu } from "@/App.vue";
+
 export default {
   name: "PickupPage",
   components: {
@@ -122,6 +124,7 @@ export default {
     onMounted(async () => {
       showFade.value = true;
       showSlide.value = true;
+      showMobileMenu.value = false;
 
       // const pickupRecordState = localStorage.getItem("PickupRecordSitemap");
       // if (pickupRecordState === "true") {
@@ -134,6 +137,7 @@ export default {
     });
 
     return {
+      showMobileMenu,
       showFade,
       showSlide,
       dataList,

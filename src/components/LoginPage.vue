@@ -76,6 +76,8 @@ import { useRouter } from "vue-router";
 import { loginUiStore } from "@/store/login";
 import { errorUiStore } from "@/store/error";
 
+import { showMobileMenu } from "@/App.vue";
+
 export default {
   name: "LoginPage",
   setup() {
@@ -205,11 +207,13 @@ export default {
 
     onMounted(async () => {
       showLogin.value = true;
+      showMobileMenu.value = false;
 
       await errorStore.CloseLoadEle();
     });
 
     return {
+      showMobileMenu,
       showLogin,
       showSignUp,
       email,

@@ -436,4 +436,13 @@ textarea:focus {
   opacity: 1;
   transform: translateY(0);
 }
+
+@media (max-width: 1050px) {
+  .info-frame {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
 </style>

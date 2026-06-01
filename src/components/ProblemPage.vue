@@ -59,6 +59,8 @@ import QuestionDataRaw from "../assets/data/questionData.json";
 import ContactEle from "./pageElement/ContactEle.vue";
 import ServerContactSitemap from "./sitemap/ServerContactSitemap.vue";
 
+import { showMobileMenu } from "@/App.vue";
+
 export default {
   name: "ProblemPage",
   components: {
@@ -107,10 +109,12 @@ export default {
       showSlide.value = true;
       showFade.value = true;
       // showSitemap.value = true;
+      showMobileMenu.value = false;
     });
 
     return {
       QuestionDataRaw,
+      showMobileMenu,
       questionData,
       showSlide,
       showFade,

@@ -1,7 +1,7 @@
 <template>
-  <nav>
+  <div class="ele">
     <div class="title-frame">
-      <img src="./assets/img/logo.png" />
+      <img src="@/assets/img/logo.png" />
       <div class="title">舊衣回收平台</div>
     </div>
     <div class="func-text">
@@ -11,7 +11,7 @@
       <router-link to="/web-review">網站回饋</router-link>
       <router-link to="/problem">疑問中心</router-link>
     </div>
-    <div class="func-icon">
+    <div class="mobile-func-icon">
       <router-link to="/pickup">
         <i class="fa-solid fa-shirt" v-if="loginStore.isAuthenticated"></i>
       </router-link>
@@ -25,7 +25,7 @@
         class="fa-solid fa-arrow-right-from-bracket"
         id="logout"
         v-if="loginStore.isAuthenticated"
-        @click="showLogoutCheck = true"
+        @click="HandleLogout"
       ></i>
       <router-link
         to="/login"
@@ -34,70 +34,31 @@
         >登入/註冊
       </router-link>
     </div>
-    <i
-      class="fa-solid fa-bars"
-      id="mobile-menu"
-      @click="showMobileMenu = true"
-    ></i>
-  </nav>
-  <router-view />
-
-  <transition name="slide-x">
-    <StatusEle class="status-msg" v-show="errorStore.showErrorMsg" />
-  </transition>
-
-  <transition name="slide-ele">
-    <LoadingEle v-if="errorStore.showLoader" />
-  </transition>
-
-  <div
-    class="overlay"
-    v-show="showLogoutCheck"
-    @click="showLogoutCheck = false"
-  ></div>
-  <transition name="slide-ele">
-    <LogoutCheck class="logout-check" v-if="showLogoutCheck" />
-  </transition>
-
-  <div
-    class="overlay"
-    v-show="showMobileMenu"
-    @click="showMobileMenu = false"
-  ></div>
-  <transition name="slide-x">
-    <MobileMenuEle class="mobile-ele" v-if="showMobileMenu" />
-  </transition>
+  </div>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
-import { loginUiStore } from "./store/login";
-import { errorUiStore } from "./store/error";
+import { loginUiStore } from "@/store/login";
+import { errorUiStore } from "@/store/error";
 
-import StatusEle from "../src/components/pageElement/StatusEle.vue";
-import LoadingEle from "../src/components/pageElement/LoadingEle.vue";
-import LogoutCheck from "../src/components/pageElement/LogoutCheck.vue";
-import MobileMenuEle from "./components/pageElement/MobileMenuEle.vue";
-
-export const showLogoutCheck = ref(false);
-export const showMobileMenu = ref(false);
+import { showLogoutCheck, showMobileMenu } from "@/App.vue";
 
 export default {
-  components: {
-    StatusEle,
-    LoadingEle,
-    LogoutCheck,
-    MobileMenuEle,
-  },
   setup() {
     const route = useRoute();
     const router = useRouter();
 
     const loginStore = loginUiStore();
     const errorStore = errorUiStore();
+
+    const HandleLogout = () => {
+      showLogoutCheck.value = true;
+      showMobileMenu.value = false;
+    };
 
     onMounted(async () => {
       if (!loginStore.isAuthenticated) {
@@ -125,40 +86,22 @@ export default {
       route,
       loginStore,
       errorStore,
+      HandleLogout,
     };
   },
 };
 </script>
 
-<style lang="scss">
-#app {
-  font-family: "Pacifico", cursive;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-}
-body {
-  margin: 0;
-  padding: 0;
-}
-
-nav {
-  padding: 15px;
+<style scoped>
+.ele {
+  background-color: #ffffff;
+  border: 1px solid #3b5131;
+  border-radius: 20px;
+  padding: 20px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-}
-nav a {
-  color: #3b5131;
-  font-size: 22px;
-  text-decoration: none;
-  margin: 20px;
-  display: inline-block; // 讓動畫生效
-  transition: all 0.3s ease;
-}
-nav a:hover {
-  color: #849c7d;
-  transform: scale(1.1);
 }
 .title-frame {
   display: flex;
@@ -174,7 +117,20 @@ nav a:hover {
   color: #3b5131;
   font-size: 28px;
 }
-.func-icon a {
+.func-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.func-text a {
+  color: #3b5131;
+  font-size: 22px;
+  margin: 10px 0;
+  text-decoration: none;
+}
+.mobile-func-icon i {
+  color: #3b5131;
   font-size: 20px;
   margin: 10px;
 }
@@ -186,14 +142,6 @@ nav a:hover {
 #logout:hover {
   cursor: pointer;
 }
-#mobile-menu {
-  display: none;
-  transition: all 0.3s ease;
-}
-#mobile-menu:hover {
-  color: #849c7d;
-  transform: scale(1.1);
-}
 .login-sign-btn {
   width: 120px;
   height: 40px;
@@ -204,6 +152,7 @@ nav a:hover {
   background-color: #849c7d;
   border-radius: 20px;
   text-decoration: none;
+  display: block;
   transition: all 0.3s ease;
 }
 .login-sign-btn:hover {
@@ -236,15 +185,6 @@ nav a:hover {
   transform: translate(-50%, -50%);
   z-index: 99;
 }
-.mobile-ele {
-  height: 90vh;
-  margin-top: 20px;
-  position: fixed;
-  top: 0%;
-  left: 0%;
-  transform: translate(0%, 0%);
-  z-index: 99;
-}
 
 .slide-ele-enter-active,
 .slide-ele-leave-active {
@@ -273,16 +213,5 @@ nav a:hover {
 .slide-x-leave-from {
   opacity: 1;
   transform: translateX(0);
-}
-
-@media (max-width: 1075px) {
-  .func-text,
-  .func-icon,
-  .login-sign-btn {
-    display: none;
-  }
-  #mobile-menu {
-    display: block;
-  }
 }
 </style>

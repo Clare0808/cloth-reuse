@@ -50,6 +50,8 @@ import { pickupUiStore } from "@/store/pickup";
 
 import OptionData from "@/assets/data/optionsData.json";
 
+import { showMobileMenu } from "@/App.vue";
+
 export default {
   name: "LikePage",
   setup() {
@@ -117,12 +119,14 @@ export default {
     onMounted(async () => {
       showFade.value = true;
       showSlide.value = true;
+      showMobileMenu.value = false;
 
       await GetData();
     });
 
     return {
       OptionData,
+      showMobileMenu,
       showFade,
       showSlide,
       dataList,
