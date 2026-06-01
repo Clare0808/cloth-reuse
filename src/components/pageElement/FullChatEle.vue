@@ -164,7 +164,9 @@ export default {
     };
 
     const GetSenderList = async () => {
-      const response = await fetch("https://cloth-reuse.onrender.com/api/all-chat");
+      const response = await fetch(
+        "https://cloth-reuse.onrender.com/api/all-chat"
+      );
       const data = await response.json();
 
       const filteredData = data.filter((item) => {

@@ -7,13 +7,16 @@ export const reviewUiStore = defineStore("review", () => {
   const deleteData = ref("");
 
   const SendReview = async (inputData) => {
-    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/send-review", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(inputData),
-    });
+    const responsePost = await fetch(
+      "https://cloth-reuse.onrender.com/api/send-review",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inputData),
+      }
+    );
 
     if (!responsePost.ok) {
       throw new Error("Network response was not ok");
@@ -21,7 +24,9 @@ export const reviewUiStore = defineStore("review", () => {
   };
 
   const GetReviewData = async () => {
-    const response = await fetch("https://cloth-reuse.onrender.com/api/get-review");
+    const response = await fetch(
+      "https://cloth-reuse.onrender.com/api/get-review"
+    );
     const data = await response.json();
 
     return data.data;

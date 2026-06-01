@@ -9,13 +9,16 @@ export const modifyUiStore = defineStore("modify", () => {
   const showModifyEle = ref(false);
 
   const ModifyUserRole = async (inputData) => {
-    const responsePost = await fetch("https://cloth-reuse.onrender.com/api/modify-user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(inputData),
-    });
+    const responsePost = await fetch(
+      "https://cloth-reuse.onrender.com/api/modify-user",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inputData),
+      }
+    );
 
     if (!responsePost.ok) {
       throw new Error("Network response was not ok");
