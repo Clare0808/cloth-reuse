@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from api import api_bp
 from database import init_db
@@ -10,7 +10,7 @@ from extensions import socketio
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # 根目錄
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'upload')
 
-app = Flask(__name__, static_url_path='/upload', static_folder=UPLOAD_FOLDER)
+app = Flask(__name__, static_url_path='/upload', static_folder=UPLOAD_FOLDER, template_folder="templates")
 init_db(app)
 CORS(app, origins="*") # 允許前端從發送請求
 
@@ -23,6 +23,10 @@ app.register_blueprint(api_bp, url_prefix="/api") # 將 API 藍圖註冊到 app 
 
 with app.app_context():
     init_admin() 
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 if __name__ == "__main__":
     socketio.run(app, port=5000, debug=True)
