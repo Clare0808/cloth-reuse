@@ -8,6 +8,6 @@ module.exports = defineConfig({
         changeOrigin: true,
       },
     },
-    allowedHosts: "all"
+    allowedHosts: "all",
   },
 });
