@@ -56,6 +56,10 @@ def deleteReview() :
     id = data.get("id")
 
     review = Review.query.filter_by(review_id = id).first()
+    if not review:
+        return jsonify({
+            "message": "Review not found"
+        }), 404
 
     db.session.delete(review)
     db.session.commit()

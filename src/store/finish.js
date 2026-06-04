@@ -27,7 +27,7 @@ export const finishUiStore = defineStore("finish", () => {
   };
 
   const DeleteFinish = async (inputData) => {
-    const responsePost = await fetch("/api/delete-review", {
+    const responsePost = await fetch("/api/delete-finish", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

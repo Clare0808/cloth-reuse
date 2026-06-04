@@ -100,7 +100,11 @@ export default {
     const errorStore = errorUiStore();
 
     onMounted(async () => {
-      if (!loginStore.isAuthenticated) {
+      const hasGoogleToken = new URLSearchParams(window.location.search).has(
+        "token"
+      );
+
+      if (!loginStore.isAuthenticated && hasGoogleToken) {
         try {
           await loginStore.googleLogin();
 

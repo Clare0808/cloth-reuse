@@ -74,6 +74,10 @@ def deleteFinish() :
     id = data.get("id")
 
     finish = Finish.query.filter_by(finish_id = id).first()
+    if not finish:
+        return jsonify({
+            "message": "Finish not found"
+        }), 404
 
     db.session.delete(finish)
     db.session.commit()

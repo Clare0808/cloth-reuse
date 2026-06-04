@@ -15,12 +15,20 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GOOGLE_CALLBACK_URL = os.getenv("GOOGLE_CALLBACK_URL")
 
+def get_google_callback_url():
+    if GOOGLE_CALLBACK_URL:
+        return GOOGLE_CALLBACK_URL
+
+    return request.host_url.rstrip("/") + "/api/auth-callback"
+
 # 導向 Google 登入頁面
 @api_bp.route("/auth-google", methods=["GET"])
 def googleLogin():
+    callback_url = get_google_callback_url()
+
     params = {
         "client_id": GOOGLE_CLIENT_ID,
-        "redirect_uri": GOOGLE_CALLBACK_URL,
+        "redirect_uri": callback_url,
         "response_type": "code",
         "scope": "openid email profile", # 確保 Google 回傳使用者的基本資料和 email
         "access_type": "offline",
@@ -32,7 +40,14 @@ def googleLogin():
 
 @api_bp.route("/auth-callback", methods=["GET"])
 def googleCallback():
+    if request.args.get("error"):
+        return redirect("/login")
+
     code = request.args.get("code")
+    if not code:
+        return redirect("/login")
+
+    callback_url = get_google_callback_url()
 
     # 用 code 換 token
     token_res = requests.post(
@@ -41,10 +56,16 @@ def googleCallback():
             "client_id": GOOGLE_CLIENT_ID,
             "client_secret": GOOGLE_CLIENT_SECRET,
             "code": code,
-            "redirect_uri": GOOGLE_CALLBACK_URL,
+            "redirect_uri": callback_url,
             "grant_type": "authorization_code",
         }
     ).json()
+
+    if "access_token" not in token_res:
+        return jsonify({
+            "error": "Google token exchange failed",
+            "details": token_res
+        }), 400
 
     access_token = token_res["access_token"]
 
