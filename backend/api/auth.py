@@ -25,11 +25,7 @@ def get_configured_callback_url():
 
     return callback_url
 
-def get_google_callback_url():
-    configured_callback_url = get_configured_callback_url()
-    if configured_callback_url:
-        return configured_callback_url
-
+def get_request_base_url():
     proto = request.headers.get("X-Forwarded-Proto", request.scheme)
     host = request.headers.get("X-Forwarded-Host", request.host)
 
@@ -39,12 +35,17 @@ def get_google_callback_url():
     if host.endswith(".onrender.com"):
         proto = "https"
 
-    request_callback_url = f"{proto}://{host}/api/auth-callback"
+    return proto, host, f"{proto}://{host}"
 
-    if host.endswith(".onrender.com"):
-        return request_callback_url
+def get_google_callback_url():
+    proto, host, base_url = get_request_base_url()
 
-    return request_callback_url
+    if "localhost" in host or "127.0.0.1" in host:
+        configured_callback_url = get_configured_callback_url()
+        if configured_callback_url:
+            return configured_callback_url
+
+    return f"{base_url}/api/auth-callback"
 
 def get_missing_google_config():
     missing = []
@@ -80,6 +81,21 @@ def googleLogin():
 
     url = "https://accounts.google.com/o/oauth2/v2/auth?" + urllib.parse.urlencode(params)
     return redirect(url)
+
+@api_bp.route("/auth-debug", methods=["GET"])
+def authDebug():
+    proto, host, base_url = get_request_base_url()
+
+    return jsonify({
+        "callback_url": get_google_callback_url(),
+        "base_url": base_url,
+        "host": host,
+        "proto": proto,
+        "configured_callback_url": GOOGLE_CALLBACK_URL,
+        "uses_local_configured_callback": "localhost" in host or "127.0.0.1" in host,
+        "has_client_id": bool(GOOGLE_CLIENT_ID),
+        "has_client_secret": bool(GOOGLE_CLIENT_SECRET),
+    }), 200
 
 @api_bp.route("/auth-callback", methods=["GET"])
 def googleCallback():
