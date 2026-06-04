@@ -90,7 +90,7 @@ def googleCallback():
     # 產生 JWT token
     access_token = create_access_token(identity=email)
 
-    return redirect(f"http://localhost:8080/?token={access_token}")
+    return redirect(f"/?token={access_token}")
 
     # return jsonify({
     #     "message": "登入成功!",

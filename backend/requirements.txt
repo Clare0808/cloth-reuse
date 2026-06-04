@@ -10,3 +10,4 @@ SQLAlchemy
 python-engineio
 python-socketio
 gunicorn
+eventlet

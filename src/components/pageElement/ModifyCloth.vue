@@ -152,7 +152,7 @@ export default {
       fd.append("image", e.target.files[0]);
 
       const data = await clothStore.UploadClothImage(fd);
-      tempImage.value = "https://cloth-reuse.onrender.com/upload/cloth/" + data;
+      tempImage.value = "/upload/cloth/" + data;
       tempImageName.value = data;
 
       ExamImage();

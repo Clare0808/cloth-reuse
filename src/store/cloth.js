@@ -7,16 +7,13 @@ export const clothUiStore = defineStore("cloth", () => {
   const modifyList = ref({});
 
   const UploadNewCloth = async (inputData) => {
-    const responsePost = await fetch(
-      "https://cloth-reuse.onrender.com/api/upload-cloth",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(inputData),
-      }
-    );
+    const responsePost = await fetch("/api/upload-cloth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    });
 
     if (!responsePost.ok) {
       throw new Error("Network response was not ok");
@@ -35,16 +32,13 @@ export const clothUiStore = defineStore("cloth", () => {
   };
 
   const DeleteCloth = async (inputData) => {
-    const responsePost = await fetch(
-      "https://cloth-reuse.onrender.com/api/delete-cloth",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: inputData }),
-      }
-    );
+    const responsePost = await fetch("/api/delete-cloth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: inputData }),
+    });
 
     if (!responsePost.ok) {
       throw new Error("Network response was not ok");
@@ -52,16 +46,13 @@ export const clothUiStore = defineStore("cloth", () => {
   };
 
   const ModifyCloth = async (inputData) => {
-    const responsePost = await fetch(
-      "https://cloth-reuse.onrender.com/api/modify-cloth",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(inputData),
-      }
-    );
+    const responsePost = await fetch("/api/modify-cloth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    });
 
     if (!responsePost.ok) {
       throw new Error("Network response was not ok");

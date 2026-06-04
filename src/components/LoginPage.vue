@@ -202,7 +202,7 @@ export default {
     };
 
     const LoginWithGoogle = () => {
-      window.location.href = "https://cloth-reuse.onrender.com/api/auth-google";
+      window.location.href = "/api/auth-google";
     };
 
     onMounted(async () => {

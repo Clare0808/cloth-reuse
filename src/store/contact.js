@@ -7,16 +7,13 @@ export const contactUiStore = defineStore("contact", () => {
   const deleteData = ref("");
 
   const SendContact = async (inputData) => {
-    const responsePost = await fetch(
-      "https://cloth-reuse.onrender.com/api/send-contact",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(inputData),
-      }
-    );
+    const responsePost = await fetch("/api/send-contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    });
 
     if (!responsePost.ok) {
       throw new Error("Network response was not ok");
@@ -24,25 +21,20 @@ export const contactUiStore = defineStore("contact", () => {
   };
 
   const GetContactData = async () => {
-    const response = await fetch(
-      "https://cloth-reuse.onrender.com/api/get-contact"
-    );
+    const response = await fetch("/api/get-contact");
     const data = await response.json();
 
     return data.data;
   };
 
   const DeleteContact = async (inputData) => {
-    const responsePost = await fetch(
-      "https://cloth-reuse.onrender.com/api/delete-contact",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: inputData }),
-      }
-    );
+    const responsePost = await fetch("/api/delete-contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: inputData }),
+    });
 
     if (!responsePost.ok) {
       throw new Error("Network response was not ok");

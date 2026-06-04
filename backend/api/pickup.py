@@ -3,8 +3,10 @@ from . import api_bp
 from database import db
 from model.pickup import Pickup
 import json
+import os
 
-DATA_FILE = "C:\\Users\\user\\Documents\\Self_Practice\\cloth-reuse\\public\\data\\clothData.json"
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+DATA_FILE = os.path.join(BASE_DIR, "backend", "static", "data", "clothData.json")
 
 @api_bp.route("/send-pickup", methods=["POST"])
 def sendPickup():

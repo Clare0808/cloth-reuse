@@ -30,8 +30,17 @@ with app.app_context():
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+@app.route('/data/<path:filename>')
+def data_file(filename):
+    return send_from_directory(os.path.join(app.static_folder, 'data'), filename)
+
+@app.route('/img/cloth/<path:filename>')
+def cloth_image(filename):
+    return send_from_directory(os.path.join(app.static_folder, 'img', 'cloth'), filename)
+
 @app.route("/")
-def index():
+@app.route("/<path:path>")
+def index(path=None):
     return render_template("index.html")
 
 if __name__ == "__main__":
