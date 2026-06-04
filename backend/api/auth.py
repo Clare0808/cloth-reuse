@@ -15,7 +15,21 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GOOGLE_CALLBACK_URL = os.getenv("GOOGLE_CALLBACK_URL")
 
+def get_configured_callback_url():
+    if not GOOGLE_CALLBACK_URL:
+        return None
+
+    callback_url = GOOGLE_CALLBACK_URL.rstrip("/")
+    if "localhost" in callback_url or "127.0.0.1" in callback_url:
+        return None
+
+    return callback_url
+
 def get_google_callback_url():
+    configured_callback_url = get_configured_callback_url()
+    if configured_callback_url:
+        return configured_callback_url
+
     proto = request.headers.get("X-Forwarded-Proto", request.scheme)
     host = request.headers.get("X-Forwarded-Host", request.host)
 
@@ -30,14 +44,29 @@ def get_google_callback_url():
     if host.endswith(".onrender.com"):
         return request_callback_url
 
-    if GOOGLE_CALLBACK_URL:
-        return GOOGLE_CALLBACK_URL.rstrip("/")
-
     return request_callback_url
+
+def get_missing_google_config():
+    missing = []
+
+    if not GOOGLE_CLIENT_ID:
+        missing.append("GOOGLE_CLIENT_ID")
+
+    if not GOOGLE_CLIENT_SECRET:
+        missing.append("GOOGLE_CLIENT_SECRET")
+
+    return missing
 
 # 導向 Google 登入頁面
 @api_bp.route("/auth-google", methods=["GET"])
 def googleLogin():
+    missing_config = get_missing_google_config()
+    if missing_config:
+        return jsonify({
+            "error": "Google OAuth config is missing",
+            "missing": missing_config
+        }), 500
+
     callback_url = get_google_callback_url()
 
     params = {
@@ -54,6 +83,13 @@ def googleLogin():
 
 @api_bp.route("/auth-callback", methods=["GET"])
 def googleCallback():
+    missing_config = get_missing_google_config()
+    if missing_config:
+        return jsonify({
+            "error": "Google OAuth config is missing",
+            "missing": missing_config
+        }), 500
+
     if request.args.get("error"):
         return redirect("/login")
 
