@@ -16,10 +16,24 @@ GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GOOGLE_CALLBACK_URL = os.getenv("GOOGLE_CALLBACK_URL")
 
 def get_google_callback_url():
-    if GOOGLE_CALLBACK_URL:
-        return GOOGLE_CALLBACK_URL
+    proto = request.headers.get("X-Forwarded-Proto", request.scheme)
+    host = request.headers.get("X-Forwarded-Host", request.host)
 
-    return request.host_url.rstrip("/") + "/api/auth-callback"
+    proto = proto.split(",")[0].strip()
+    host = host.split(",")[0].strip()
+
+    if host.endswith(".onrender.com"):
+        proto = "https"
+
+    request_callback_url = f"{proto}://{host}/api/auth-callback"
+
+    if host.endswith(".onrender.com"):
+        return request_callback_url
+
+    if GOOGLE_CALLBACK_URL:
+        return GOOGLE_CALLBACK_URL.rstrip("/")
+
+    return request_callback_url
 
 # 導向 Google 登入頁面
 @api_bp.route("/auth-google", methods=["GET"])

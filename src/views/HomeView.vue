@@ -87,7 +87,7 @@
       <div class="last-review-page" @click="ChangeReviewPage(-1)">〈</div>
       <div class="review-box">
         <div class="review-stars">
-          <div v-for="i in reviewData.star" :key="i">
+          <div v-for="i in reviewStars" :key="i">
             <i class="fa-solid fa-star"></i>
           </div>
         </div>
@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { computed, ref, onMounted } from "vue";
 
 import { reviewUiStore } from "@/store/review";
 
@@ -134,8 +134,17 @@ export default {
     const pageCloth = ref(0);
     const type = ref("");
     const reviewList = ref([]);
-    const reviewData = ref({});
+    const reviewData = ref({
+      star: 0,
+      content: "",
+      name: "",
+      data: "",
+    });
     const pageReview = ref(0);
+    const reviewStars = computed(() => {
+      const star = Number(reviewData.value?.star || 0);
+      return Number.isFinite(star) && star > 0 ? star : 0;
+    });
 
     const reviewStore = reviewUiStore();
 
@@ -200,7 +209,12 @@ export default {
         lastEle.classList.remove("noChange");
       }
 
-      reviewData.value = reviewList.value[pageReview.value];
+      reviewData.value = reviewList.value[pageReview.value] || {
+        star: 0,
+        content: "",
+        name: "",
+        data: "",
+      };
     };
 
     // 元素進入視窗後顯示動畫
@@ -239,6 +253,7 @@ export default {
       reviewList,
       reviewData,
       pageReview,
+      reviewStars,
       GetClothData,
       CheckFadeIn,
       TransformType,

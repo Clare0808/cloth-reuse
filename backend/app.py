@@ -6,12 +6,14 @@ from flask_jwt_extended import JWTManager
 import os
 from api.login import init_admin
 from extensions import socketio
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # 根目錄
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'upload')
 
 # app = Flask(__name__, static_url_path='/upload', static_folder=UPLOAD_FOLDER, template_folder="templates")
 app = Flask(__name__, static_folder='static', static_url_path='/static', template_folder='templates') # add
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 init_db(app)
 CORS(app, origins="*") # 允許前端從發送請求
 
