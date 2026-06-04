@@ -79,7 +79,7 @@ export default {
           content: reviewContent.value,
           star: starClick.value,
           date: reviewDate.value,
-          image: "/img/user.jpg",
+          image: "/static/img/user.jpg",
         });
 
         reviewStore.showElePage = false;
