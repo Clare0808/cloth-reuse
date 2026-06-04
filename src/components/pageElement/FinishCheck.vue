@@ -14,6 +14,7 @@ import { ref } from "vue";
 import { errorUiStore } from "@/store/error";
 import { pickupUiStore } from "@/store/pickup";
 import { finishUiStore } from "@/store/finish";
+import { reloadAppPage } from "@/utils/navigation";
 
 import { showLogoutCheck } from "@/App.vue";
 
@@ -56,7 +57,7 @@ export default {
       localStorage.setItem("PickupRecordSitemap", "true");
 
       await errorStore.CloseLoadEle();
-      window.location.reload();
+      reloadAppPage();
     };
 
     const CreateDate = () => {

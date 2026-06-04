@@ -33,6 +33,7 @@ import { ref } from "vue";
 
 import { errorUiStore } from "@/store/error";
 import { reviewUiStore } from "@/store/review";
+import { reloadAppPage } from "@/utils/navigation";
 
 export default {
   setup() {
@@ -87,7 +88,7 @@ export default {
         errorStore.LoadSuccess("留言成功!");
 
         await errorStore.CloseLoadEle();
-        window.location.reload();
+        reloadAppPage();
       }
 
       errorStore.CloseEle();

@@ -11,6 +11,7 @@
 <script>
 import { errorUiStore } from "@/store/error";
 import { pickupUiStore } from "@/store/pickup";
+import { reloadAppPage } from "@/utils/navigation";
 
 import { showLogoutCheck } from "@/App.vue";
 
@@ -30,7 +31,7 @@ export default {
       errorStore.LoadSuccess("成功取消申請!");
 
       await errorStore.CloseLoadEle();
-      window.location.reload();
+      reloadAppPage();
     };
     return {
       showLogoutCheck,

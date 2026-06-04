@@ -19,6 +19,7 @@ import { ref, onMounted } from "vue";
 
 import { errorUiStore } from "@/store/error";
 import { contactUiStore } from "@/store/contact";
+import { reloadAppPage } from "@/utils/navigation";
 
 export default {
   setup() {
@@ -48,7 +49,7 @@ export default {
       errorStore.LoadSuccess("成功送出線上客服表單!");
 
       await errorStore.CloseLoadEle();
-      window.location.reload();
+      reloadAppPage();
     };
 
     const CreateDate = () => {

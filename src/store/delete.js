@@ -6,6 +6,7 @@ import { reviewUiStore } from "./review";
 import { contactUiStore } from "./contact";
 import { finishUiStore } from "./finish";
 import { clothUiStore } from "./cloth";
+import { reloadAppPage } from "@/utils/navigation";
 
 export const deleteUiStore = defineStore("delete", {
   state: () => ({
@@ -49,7 +50,7 @@ export const deleteUiStore = defineStore("delete", {
       errorStore.LoadSuccess("成功刪除!");
 
       await errorStore.CloseLoadEle();
-      window.location.reload();
+      reloadAppPage();
     },
   },
 });

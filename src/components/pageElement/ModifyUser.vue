@@ -29,6 +29,7 @@ import { ref, watch } from "vue";
 
 import { errorUiStore } from "@/store/error";
 import { modifyUiStore } from "@/store/modify";
+import { reloadAppPage } from "@/utils/navigation";
 
 export default {
   setup() {
@@ -62,7 +63,7 @@ export default {
         errorStore.LoadSuccess("資料修改成功!");
 
         await errorStore.CloseLoadEle();
-        window.location.reload();
+        reloadAppPage();
       }
     };
 

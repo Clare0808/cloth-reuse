@@ -40,6 +40,10 @@ def data_file(filename):
 def cloth_image(filename):
     return send_from_directory(os.path.join(app.static_folder, 'img', 'cloth'), filename)
 
+@app.route("/static/")
+def static_index():
+    return render_template("index.html")
+
 @app.route("/")
 @app.route("/<path:path>")
 def index(path=None):

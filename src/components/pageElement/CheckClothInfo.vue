@@ -46,6 +46,7 @@ import { mapUiStore } from "@/store/map";
 import { pickupUiStore } from "@/store/pickup";
 import { chatUiStore } from "@/store/chat";
 import { loginUiStore } from "@/store/login";
+import { reloadAppPage } from "@/utils/navigation";
 
 import { selectedCloth, showElePage } from "../../components/ClothPage.vue";
 
@@ -135,7 +136,7 @@ export default {
         localStorage.setItem("ClothStoreSitemap", "true");
 
         await errorStore.CloseLoadEle();
-        window.location.reload();
+        reloadAppPage();
       } else {
         errorStore.LoadError("請先登入!");
 

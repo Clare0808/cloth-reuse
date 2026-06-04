@@ -130,16 +130,26 @@ export default {
   setup() {
     const showEle = ref(false);
     const clothList = ref([]);
-    const clothData = ref({});
+    const createEmptyCloth = () => ({
+      image: "",
+      name: "",
+      category: "",
+      size: "",
+      description: "",
+      place: "",
+      time: "",
+    });
+    const clothData = ref(createEmptyCloth());
     const pageCloth = ref(0);
     const type = ref("");
     const reviewList = ref([]);
-    const reviewData = ref({
+    const createEmptyReview = () => ({
       star: 0,
       content: "",
       name: "",
       data: "",
     });
+    const reviewData = ref(createEmptyReview());
     const pageReview = ref(0);
     const reviewStars = computed(() => {
       const star = Number(reviewData.value?.star || 0);
@@ -157,10 +167,12 @@ export default {
       });
     };
 
-    const TransformType = (list) => {
-      type.value = OptionData.find((item) => {
+    const TransformType = (list = {}) => {
+      const selectedType = OptionData.find((item) => {
         return item.label === list.category;
-      }).name;
+      });
+
+      type.value = selectedType?.name || "";
     };
 
     const ChangeClothPage = (num) => {
@@ -184,7 +196,7 @@ export default {
         lastEle.classList.remove("noChange");
       }
 
-      clothData.value = clothList.value[pageCloth.value];
+      clothData.value = clothList.value[pageCloth.value] || createEmptyCloth();
       TransformType(clothData.value);
     };
 
@@ -209,12 +221,7 @@ export default {
         lastEle.classList.remove("noChange");
       }
 
-      reviewData.value = reviewList.value[pageReview.value] || {
-        star: 0,
-        content: "",
-        name: "",
-        data: "",
-      };
+      reviewData.value = reviewList.value[pageReview.value] || createEmptyReview();
     };
 
     // 元素進入視窗後顯示動畫
@@ -236,11 +243,11 @@ export default {
 
       await GetClothData();
 
-      clothData.value = clothList.value[pageCloth.value];
+      clothData.value = clothList.value[pageCloth.value] || createEmptyCloth();
       TransformType(clothData.value);
 
       reviewList.value = await reviewStore.GetReviewData();
-      reviewData.value = reviewList.value[pageReview.value];
+      reviewData.value = reviewList.value[pageReview.value] || createEmptyReview();
     });
 
     return {

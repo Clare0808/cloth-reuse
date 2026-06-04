@@ -47,6 +47,7 @@ import { errorUiStore } from "@/store/error";
 import { likeUiStore } from "@/store/like";
 import { mapUiStore } from "@/store/map";
 import { pickupUiStore } from "@/store/pickup";
+import { reloadAppPage } from "@/utils/navigation";
 
 import OptionData from "@/assets/data/optionsData.json";
 
@@ -86,7 +87,7 @@ export default {
       errorStore.LoadSuccess("成功刪除!");
 
       await errorStore.CloseLoadEle();
-      window.location.reload();
+      reloadAppPage();
     };
 
     const ClickPickup = async (data) => {
@@ -113,7 +114,7 @@ export default {
       errorStore.LoadSuccess("取衣申請成功!");
 
       await errorStore.CloseLoadEle();
-      window.location.reload();
+      reloadAppPage();
     };
 
     onMounted(async () => {
