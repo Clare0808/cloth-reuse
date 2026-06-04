@@ -113,14 +113,23 @@ export default {
     };
 
     const ClickLock = async (data) => {
-      await clothStore.ModifyCloth({
-        id: data.id,
-        lock: !data.lock,
-      });
+      try {
+        const nextLock = !data.lock;
 
-      clothStore.showModifyPage = false;
+        await clothStore.ModifyCloth({
+          id: data.id,
+          lock: nextLock,
+        });
 
-      errorStore.LoadSuccess("修改成功!");
+        data.lock = nextLock;
+        clothStore.showModifyPage = false;
+
+        errorStore.LoadSuccess("修改成功!");
+        await errorStore.CloseLoadEle();
+      } catch (err) {
+        errorStore.LoadError(err.message);
+        await errorStore.CloseLoadEle();
+      }
     };
 
     onMounted(async () => {

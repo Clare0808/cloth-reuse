@@ -6,6 +6,17 @@ export const clothUiStore = defineStore("cloth", () => {
   const showModifyPage = ref(false);
   const modifyList = ref({});
 
+  const getErrorMessage = async (response) => {
+    const fallback = `${response.status} ${response.statusText}`;
+
+    try {
+      const data = await response.json();
+      return data.message || data.error || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
   const UploadNewCloth = async (inputData) => {
     const responsePost = await fetch("/api/upload-cloth", {
       method: "POST",
@@ -16,7 +27,7 @@ export const clothUiStore = defineStore("cloth", () => {
     });
 
     if (!responsePost.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error(await getErrorMessage(responsePost));
     }
   };
 
@@ -25,6 +36,10 @@ export const clothUiStore = defineStore("cloth", () => {
       method: "POST",
       body: inputData,
     });
+
+    if (!res.ok) {
+      throw new Error(await getErrorMessage(res));
+    }
 
     const data = await res.json();
 
@@ -41,7 +56,7 @@ export const clothUiStore = defineStore("cloth", () => {
     });
 
     if (!responsePost.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error(await getErrorMessage(responsePost));
     }
   };
 
@@ -55,7 +70,7 @@ export const clothUiStore = defineStore("cloth", () => {
     });
 
     if (!responsePost.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error(await getErrorMessage(responsePost));
     }
   };
 

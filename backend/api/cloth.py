@@ -13,6 +13,8 @@ STATIC_CLOTH_DIR = os.path.join(BASE_DIR, "backend", "static", "img", "cloth")
 @api_bp.route("/upload-cloth", methods=["POST"])
 def uploadCloth():
     data = request.get_json()
+    if not data:
+        return jsonify({"message": "Missing request body"}), 400
 
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         cloths = json.load(f)
@@ -53,6 +55,8 @@ def uploadCloth():
 def uploadClothImage():
     image = request.files.get("image")  # 圖片檔案
     name = request.form.get("name") 
+    if not image or not name:
+        return jsonify({"message": "Missing image or name"}), 400
 
     original_name = secure_filename(image.filename)  # 安全處理原始檔名
     ext = os.path.splitext(original_name)[1]        # 取得副檔名 (.jpg, .png...)
@@ -71,6 +75,8 @@ def uploadClothImage():
 @api_bp.route("/delete-cloth", methods=['POST'])
 def deleteCloth():
     data = request.get_json()
+    if not data:
+        return jsonify({"message": "Missing request body"}), 400
 
     id = data.get("id")
 
@@ -89,13 +95,15 @@ def deleteCloth():
 @api_bp.route("/modify-cloth", methods=['POST'])
 def modifyCloth():
     data = request.get_json()
+    if not data:
+        return jsonify({"message": "Missing request body"}), 400
 
     id = data.get("id")
 
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         cloths = json.load(f)
 
-    id = data.get("id")
+    found = False
     for cloth in cloths:
         if cloth.get("id") == id:
             cloth["name"] = data.get("name", cloth["name"])
@@ -106,8 +114,12 @@ def modifyCloth():
             cloth["time"] = data.get("time", cloth["time"])
             cloth["category"] = data.get("category", cloth["category"])
             cloth["lock"] = data.get("lock", cloth["lock"])
+            found = True
             
             break
+
+    if not found:
+        return jsonify({"message": "Cloth item not found"}), 404
 
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(cloths, f, ensure_ascii=False, indent=2)

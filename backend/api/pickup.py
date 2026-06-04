@@ -48,16 +48,23 @@ def sendPickup():
 @api_bp.route("/modify-file", methods=["POST"])
 def modifyFile():
     data = request.get_json()
+    if not data:
+        return jsonify({"message": "Missing request body"}), 400
 
     name = data.get("name")
     
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         cloths = json.load(f)
 
+    found = False
     for item in cloths:
         if item["name"] == name:
             item["lock"] = not item["lock"]
+            found = True
             break
+
+    if not found:
+        return jsonify({"message": "Cloth item not found"}), 404
 
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(cloths, f, ensure_ascii=False, indent=2)

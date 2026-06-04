@@ -105,26 +105,32 @@ export default {
         const userEmail = localStorage.getItem("userEmail");
         const userName = localStorage.getItem("userName");
 
-        await clothStore.UploadNewCloth({
-          id: newId.value,
-          name: name.value,
-          situation: situation.value,
-          size: size.value,
-          image: tempImageName.value,
-          pEmail: userEmail,
-          pName: userName,
-          place: place.value,
-          time: time.value,
-          type: type.value,
-          lock: false,
-        });
+        try {
+          await clothStore.UploadNewCloth({
+            id: newId.value,
+            name: name.value,
+            situation: situation.value,
+            size: size.value,
+            image: tempImageName.value,
+            pEmail: userEmail,
+            pName: userName,
+            place: place.value,
+            time: time.value,
+            type: type.value,
+            lock: false,
+          });
 
-        clothStore.showElePage = false;
+          clothStore.showElePage = false;
 
-        errorStore.LoadSuccess("收藏成功!");
+          errorStore.LoadSuccess("收藏成功!");
+          await errorStore.CloseLoadEle();
+        } catch (err) {
+          errorStore.LoadError(err.message);
+          await errorStore.CloseLoadEle();
+        }
       }
 
-      await errorStore.CloseEle();
+      errorStore.CloseEle();
     };
 
     const CleanInput = () => {

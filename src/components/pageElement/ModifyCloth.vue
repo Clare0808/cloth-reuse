@@ -113,23 +113,29 @@ export default {
       if (!errorStore.errorType) {
         ExamInput();
 
-        await clothStore.ModifyCloth({
-          id: dataList.value.id,
-          name: name.value,
-          situation: situation.value,
-          size: size.value,
-          image: tempImageName.value,
-          place: place.value,
-          time: time.value,
-          category: type.value,
-        });
+        try {
+          await clothStore.ModifyCloth({
+            id: dataList.value.id,
+            name: name.value,
+            situation: situation.value,
+            size: size.value,
+            image: tempImageName.value,
+            place: place.value,
+            time: time.value,
+            category: type.value,
+          });
 
-        clothStore.showModifyPage = false;
+          clothStore.showModifyPage = false;
 
-        errorStore.LoadSuccess("修改成功!");
+          errorStore.LoadSuccess("修改成功!");
+          await errorStore.CloseLoadEle();
+        } catch (err) {
+          errorStore.LoadError(err.message);
+          await errorStore.CloseLoadEle();
+        }
       }
 
-      await errorStore.CloseEle();
+      errorStore.CloseEle();
     };
 
     const CleanInput = () => {
