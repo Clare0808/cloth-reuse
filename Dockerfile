@@ -18,4 +18,4 @@ COPY --from=frontend-builder /app/upload ./upload
 ENV PORT=10000
 EXPOSE 10000
 
-CMD ["sh", "-c", "gunicorn --worker-class eventlet -w 1 --chdir backend app:app --bind 0.0.0.0:${PORT}"]
+CMD ["sh", "-c", "gunicorn -w 1 --threads 100 --chdir backend app:app --bind 0.0.0.0:${PORT}"]
