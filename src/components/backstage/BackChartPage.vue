@@ -31,7 +31,12 @@ export default {
   setup() {
     const reviewData = ref([]);
     const reviewCanvas = ref(null);
-    const reuseData = ref([]);
+    const reuseData = ref([
+      { time: "2026-02", total: 8 },
+      { time: "2026-03", total: 39 },
+      { time: "2026-04", total: 46 },
+      { time: "2026-05", total: 14 }
+    ]);
     const reuseCanvas = ref(null);
 
     let reviewChart = null;
