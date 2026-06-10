@@ -391,7 +391,7 @@ export default {
 }
 .chat-box {
   width: calc(100% - 20px);
-  height: 540px;
+  height: 460px;
   max-height: 540px;
   overflow-y: auto;
   padding: 0 10px;
